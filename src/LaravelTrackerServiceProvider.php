@@ -60,6 +60,9 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     public function boot()
     {
         parent::boot();
+
+        $this->publishConfig();
+        $this->publishMigrations();
     }
 
     /**

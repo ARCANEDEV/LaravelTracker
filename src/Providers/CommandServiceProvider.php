@@ -1,5 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Providers;
 
+use Arcanedev\LaravelTracker\Console;
 use Arcanedev\Support\ServiceProvider;
 
 /**
@@ -15,7 +16,7 @@ class CommandServiceProvider extends ServiceProvider
      | ------------------------------------------------------------------------------------------------
      */
     protected $commands = [
-        //
+        Console\PublishCommand::class,
     ];
 
     /* ------------------------------------------------------------------------------------------------

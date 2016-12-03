@@ -3,7 +3,7 @@
 [![Travis Status][badge_build]](https://travis-ci.org/ARCANEDEV/LaravelTracker)
 [![Coverage Status][badge_coverage]](https://scrutinizer-ci.com/g/ARCANEDEV/LaravelTracker/?branch=master)
 [![Scrutinizer Code Quality][badge_quality]](https://scrutinizer-ci.com/g/ARCANEDEV/LaravelTracker/?branch=master)
-[![SensioLabs Insight][badge_insight]](https://insight.sensiolabs.com/projects/[id])
+[![SensioLabs Insight][badge_insight]](https://insight.sensiolabs.com/projects/4365bee2-c7be-423e-bb45-123826da343c)
 [![Github Issues][badge_issues]](https://github.com/ARCANEDEV/LaravelTracker/issues)
 
 [![Packagist][badge_package]](https://packagist.org/packages/arcanedev/laravel-tracker)
@@ -34,7 +34,7 @@ Any ideas are welcome. Feel free to submit any issues or pull requests, please c
 [badge_build]:     https://img.shields.io/travis/ARCANEDEV/LaravelTracker.svg?style=flat-square
 [badge_coverage]:  https://img.shields.io/scrutinizer/coverage/g/ARCANEDEV/LaravelTracker.svg?style=flat-square
 [badge_quality]:   https://img.shields.io/scrutinizer/g/ARCANEDEV/LaravelTracker.svg?style=flat-square
-[badge_insight]:   https://img.shields.io/sensiolabs/i/[id].svg?style=flat-square
+[badge_insight]:   https://img.shields.io/sensiolabs/i/4365bee2-c7be-423e-bb45-123826da343c.svg?style=flat-square
 [badge_issues]:    https://img.shields.io/github/issues/ARCANEDEV/LaravelTracker.svg?style=flat-square
 
 [badge_package]:   https://img.shields.io/badge/package-arcanedev/laravel--tracker-blue.svg?style=flat-square

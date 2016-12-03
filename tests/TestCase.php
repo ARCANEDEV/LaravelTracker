@@ -49,6 +49,15 @@ abstract class TestCase extends BaseTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
-        //
+        $this->settingConfigs($app['config']);
+    }
+
+    /**
+     * Setting the configs.
+     * @param  \Illuminate\Contracts\Config\Repository  $config
+     */
+    private function settingConfigs($config)
+    {
+        $config->set('laravel-tracker.enabled', true);
     }
 }

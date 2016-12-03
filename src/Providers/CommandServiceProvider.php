@@ -10,5 +10,33 @@ use Arcanedev\Support\ServiceProvider;
  */
 class CommandServiceProvider extends ServiceProvider
 {
-    //
+    /* ------------------------------------------------------------------------------------------------
+     |  Properties
+     | ------------------------------------------------------------------------------------------------
+     */
+    protected $commands = [
+        //
+    ];
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Main Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Register the commands.
+     */
+    public function register()
+    {
+        $this->commands($this->commands);
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return $this->commands;
+    }
 }

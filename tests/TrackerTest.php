@@ -80,4 +80,12 @@ class TrackerTest extends TestCase
 
         $this->assertTrue($this->tracker->isEnabled());
     }
+
+    /** @test */
+    public function it_can_track()
+    {
+        $this->call('GET', '/');
+
+        // TODO: Complete the implementation
+    }
 }

@@ -50,14 +50,32 @@ abstract class TestCase extends BaseTestCase
     protected function getEnvironmentSetUp($app)
     {
         $this->settingConfigs($app['config']);
+        $this->settingRoutes($app['router']);
     }
 
     /**
      * Setting the configs.
+     *
      * @param  \Illuminate\Contracts\Config\Repository  $config
      */
     private function settingConfigs($config)
     {
         $config->set('laravel-tracker.enabled', true);
+    }
+
+    /**
+     * Setting the routes.
+     *
+     * @param  \Illuminate\Routing\Router  $router
+     */
+    private function settingRoutes($router)
+    {
+        $router->middleware('tracked', \Arcanedev\LaravelTracker\Middleware\Tracking::class);
+
+        $router->group(['middleware' => ['tracked']], function () use ($router) {
+            $router->get('/', function () {
+                return 'Tracked route';
+            });
+        });
     }
 }

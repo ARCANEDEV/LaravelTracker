@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Contracts;
 
+use Illuminate\Http\Request;
+
 /**
  * Interface  Tracker
  *
@@ -17,6 +19,13 @@ interface Tracker
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Start the tracking.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     */
+    public function track(Request $request);
+
     /**
      * Enable the tracker.
      */

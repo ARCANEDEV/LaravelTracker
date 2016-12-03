@@ -51,6 +51,8 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         if ($this->app->runningInConsole())
             $this->app->register(Providers\CommandServiceProvider::class);
 
+        $this->registerDetectors();
+
         $this->registerTracker();
     }
 
@@ -82,6 +84,25 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      |  Other Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Register the detectors.
+     */
+    private function registerDetectors()
+    {
+        $this->singleton(Contracts\Detectors\LanguageDetector::class, function ($app) {
+            return new Detectors\LanguageDetector($app['agent']);
+        });
+
+        $this->singleton(Contracts\Detectors\CrawlerDetector::class, function ($app) {
+            $crawler = new \Jaybizzle\CrawlerDetect\CrawlerDetect(
+                $app['request']->headers->all(),
+                $app['request']->server('HTTP_USER_AGENT')
+            );
+
+            return new Detectors\CrawlerDetector($crawler);
+        });
+    }
+
     /**
      * Register the tracker.
      */

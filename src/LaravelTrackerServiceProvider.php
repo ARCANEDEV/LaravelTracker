@@ -52,7 +52,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             $this->app->register(Providers\CommandServiceProvider::class);
 
         $this->registerDetectors();
-
+        $this->registerParsers();
         $this->registerTracker();
     }
 
@@ -100,6 +100,16 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             );
 
             return new Detectors\CrawlerDetector($crawler);
+        });
+    }
+
+    private function registerParsers()
+    {
+        $this->singleton(Contracts\Parsers\UserAgentParser::class, function ($app) {
+            return new Parsers\UserAgentParser(
+                \UAParser\Parser::create(),
+                $app->make('path.base')
+            );
         });
     }
 

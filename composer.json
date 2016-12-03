@@ -20,7 +20,8 @@
         "arcanedev/support":        "~3.0",
         "jaybizzle/crawler-detect": "~1.0",
         "jenssegers/agent":         "~2.0",
-        "ramsey/uuid":              "~3.0"
+        "ramsey/uuid":              "~3.0",
+        "ua-parser/uap-php" :       "~3.0"
     },
     "require-dev": {
         "phpunit/phpcov":  "~3.0",

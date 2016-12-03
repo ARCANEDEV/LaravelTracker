@@ -1,0 +1,47 @@
+{
+    "name":        "arcanedev/laravel-tracker",
+    "description": "Tracker package for Laravel.",
+    "homepage":    "https://github.com/ARCANEDEV/LaravelTracker",
+    "keywords":    [
+        "laravel", "arcanedev", "tracker", "tracking", "logging", "visitor"
+    ],
+    "authors":  [
+        {
+            "name":     "ARCANEDEV",
+            "email":    "arcanedev.maroc@gmail.com",
+            "homepage": "https://github.com/arcanedev-maroc",
+            "role":     "Developer"
+        }
+    ],
+    "type":    "library",
+    "license": "MIT",
+    "require": {
+        "php":                      ">=5.6.4",
+        "arcanedev/support":        "~3.0",
+        "jaybizzle/crawler-detect": "~1.0",
+        "jenssegers/agent":         "~2.0",
+        "ramsey/uuid":              "~3.0"
+    },
+    "require-dev": {
+        "phpunit/phpcov":  "~3.0",
+        "phpunit/phpunit": "~5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Arcanedev\\LaravelTracker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Arcanedev\\LaravelTracker\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "testbench": "composer require --dev \"orchestra/testbench=~3.0\""
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}

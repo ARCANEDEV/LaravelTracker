@@ -20,6 +20,13 @@ interface UserAgentParser
     public function getOperatingSystemVersion();
 
     /**
+     * Get the OS Family.
+     *
+     * @return string|null
+     */
+    public function getOperatingSystemFamily();
+
+    /**
      * Get the user agent version.
      *
      * @return string

@@ -58,6 +58,21 @@ class UserAgentParser implements UserAgentParserContract
     }
 
     /**
+     * Get the OS Family.
+     *
+     * @return string|null
+     */
+    public function getOperatingSystemFamily()
+    {
+        try {
+            return $this->parser->os->family;
+        }
+        catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    /**
      * Get the user agent version.
      *
      * @return string

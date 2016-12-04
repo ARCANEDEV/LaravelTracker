@@ -27,6 +27,13 @@ interface UserAgentParser
     public function getOperatingSystemFamily();
 
     /**
+     * Get the browser.
+     *
+     * @return string
+     */
+    public function getBrowser();
+
+    /**
      * Get the user agent version.
      *
      * @return string

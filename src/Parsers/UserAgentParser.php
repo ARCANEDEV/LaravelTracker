@@ -73,6 +73,16 @@ class UserAgentParser implements UserAgentParserContract
     }
 
     /**
+     * Get the browser.
+     *
+     * @return string
+     */
+    public function getBrowser()
+    {
+        return $this->getUserAgent()->family;
+    }
+
+    /**
      * Get the user agent version.
      *
      * @return string

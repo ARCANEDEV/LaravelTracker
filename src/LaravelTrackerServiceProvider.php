@@ -89,10 +89,6 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      */
     private function registerDetectors()
     {
-        $this->singleton(Contracts\Detectors\LanguageDetector::class, function ($app) {
-            return new Detectors\LanguageDetector($app['agent']);
-        });
-
         $this->singleton(Contracts\Detectors\CrawlerDetector::class, function ($app) {
             $crawler = new \Jaybizzle\CrawlerDetect\CrawlerDetect(
                 $app['request']->headers->all(),
@@ -100,6 +96,18 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             );
 
             return new Detectors\CrawlerDetector($crawler);
+        });
+
+        $this->singleton(Contracts\Detectors\DeviceDetector::class, function ($app) {
+            return new Detectors\DeviceDetector($app['agent']);
+        });
+
+        $this->singleton(Contracts\Detectors\LanguageDetector::class, function ($app) {
+            return new Detectors\LanguageDetector($app['agent']);
+        });
+
+        $this->singleton(Contracts\Detectors\UserDetector::class, function ($app) {
+            return new Detectors\UserDetector($app);
         });
     }
 

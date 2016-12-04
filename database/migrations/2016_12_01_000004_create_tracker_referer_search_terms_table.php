@@ -4,11 +4,11 @@ use Arcanedev\LaravelTracker\Bases\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
- * Class     CreateTrackerReferrersTable
+ * Class     CreateTrackerRefererSearchTermsTable
  *
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class CreateTrackerReferrersTable extends Migration
+class CreateTrackerRefererSearchTermsTable extends Migration
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -19,7 +19,7 @@ class CreateTrackerReferrersTable extends Migration
      *
      * @var string
      */
-    protected $table = 'referrers';
+    protected $table = 'referers_search_terms';
 
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
@@ -32,12 +32,8 @@ class CreateTrackerReferrersTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('domain_id', false, true)->index();
-            $table->string('url')->index();
-            $table->string('host');
-            $table->string('medium')->nullable()->index();
-            $table->string('source')->nullable()->index();
-            $table->string('search_terms_hash')->nullable()->index();
+            $table->bigInteger('referer_id', false, true)->index();
+            $table->string('search_term')->index();
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();
         });

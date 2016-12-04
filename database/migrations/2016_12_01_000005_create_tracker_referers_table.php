@@ -4,11 +4,11 @@ use Arcanedev\LaravelTracker\Bases\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
- * Class     CreateTrackerSessionsTable
+ * Class     CreateTrackerReferersTable
  *
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class CreateTrackerSessionsTable extends Migration
+class CreateTrackerReferersTable extends Migration
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -19,7 +19,7 @@ class CreateTrackerSessionsTable extends Migration
      *
      * @var string
      */
-    protected $table = 'sessions';
+    protected $table = 'referers';
 
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
@@ -32,16 +32,12 @@ class CreateTrackerSessionsTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('uuid')->unique()->index();
-            $table->bigInteger('user_id', false, true)->nullable()->index();
-            $table->bigInteger('device_id', false, true)->nullable()->index();
-            $table->bigInteger('agent_id', false, true)->nullable()->index();
-            $table->string('client_ip')->index();
-            $table->bigInteger('referrer_id', false, true)->nullable()->index();
-            $table->bigInteger('cookie_id', false, true)->nullable()->index();
-            $table->bigInteger('geoip_id', false, true)->nullable()->index();
-            $table->bigInteger('language_id', false, true)->nullable()->index();
-            $table->boolean('is_robot')->default(false);
+            $table->bigInteger('domain_id', false, true)->index();
+            $table->string('url')->index();
+            $table->string('host');
+            $table->string('medium')->nullable()->index();
+            $table->string('source')->nullable()->index();
+            $table->string('search_terms_hash')->nullable()->index();
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();
         });

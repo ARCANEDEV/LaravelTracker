@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 /**
- * Class     Referrer
+ * Class     Referer
  *
  * @package  Arcanedev\LaravelTracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
@@ -18,7 +18,7 @@
  *
  * @property  \Arcanedev\LaravelTracker\Models\Domain  domain
  */
-class Referrer extends Model
+class Referer extends Model
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -29,7 +29,7 @@ class Referrer extends Model
      *
      * @var string
      */
-    protected $table = 'referrers';
+    protected $table = 'referers';
 
     /**
      * The attributes that are mass assignable.

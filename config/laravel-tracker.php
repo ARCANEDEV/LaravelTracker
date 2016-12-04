@@ -22,15 +22,16 @@ return [
      | ------------------------------------------------------------------------------------------------
      */
     'models' => [
-        'agent'    => \Arcanedev\LaravelTracker\Models\Agent::class,
-        'cookie'   => \Arcanedev\LaravelTracker\Models\Cookie::class,
-        'device'   => \Arcanedev\LaravelTracker\Models\Device::class,
-        'domain'   => \Arcanedev\LaravelTracker\Models\Domain::class,
-        'geoip'    => \Arcanedev\LaravelTracker\Models\GeoIp::class,
-        'language' => \Arcanedev\LaravelTracker\Models\Language::class,
-        'referrer' => \Arcanedev\LaravelTracker\Models\Referrer::class,
-        'session'  => \Arcanedev\LaravelTracker\Models\Session::class,
-        'user'     => \Illuminate\Foundation\Auth\User::class,
+        'agent'               => \Arcanedev\LaravelTracker\Models\Agent::class,
+        'cookie'              => \Arcanedev\LaravelTracker\Models\Cookie::class,
+        'device'              => \Arcanedev\LaravelTracker\Models\Device::class,
+        'domain'              => \Arcanedev\LaravelTracker\Models\Domain::class,
+        'geoip'               => \Arcanedev\LaravelTracker\Models\GeoIp::class,
+        'language'            => \Arcanedev\LaravelTracker\Models\Language::class,
+        'referer'             => \Arcanedev\LaravelTracker\Models\Referer::class,
+        'referer-search-term' => \Arcanedev\LaravelTracker\Models\RefererSearchTerm::class,
+        'session'             => \Arcanedev\LaravelTracker\Models\Session::class,
+        'user'                => \Illuminate\Foundation\Auth\User::class,
     ],
 
     /* ------------------------------------------------------------------------------------------------
@@ -40,6 +41,7 @@ return [
     'tracking' => [
         'devices'     => true,
         'geoip'       => true,
+        'referers'    => true,
         'users'       => true,
         'user-agents' => true,
     ],

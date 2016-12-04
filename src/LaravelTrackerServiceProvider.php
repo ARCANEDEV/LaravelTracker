@@ -116,8 +116,17 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         });
     }
 
+    /**
+     * Register the parsers.
+     */
     private function registerParsers()
     {
+        $this->singleton(Contracts\Parsers\RefererParser::class, function () {
+            return new Parsers\RefererParser(
+                new \Snowplow\RefererParser\Parser
+            );
+        });
+
         $this->singleton(Contracts\Parsers\UserAgentParser::class, function ($app) {
             return new Parsers\UserAgentParser(
                 \UAParser\Parser::create(),

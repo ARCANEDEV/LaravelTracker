@@ -23,7 +23,7 @@
  * @property  \Illuminate\Foundation\Auth\User           user
  * @property  \Arcanedev\LaravelTracker\Models\Device    device
  * @property  \Arcanedev\LaravelTracker\Models\Agent     agent
- * @property  \Arcanedev\LaravelTracker\Models\Referrer  referrer
+ * @property  \Arcanedev\LaravelTracker\Models\Referer   referer
  * @property  \Arcanedev\LaravelTracker\Models\Cookie    cookie
  * @property  \Arcanedev\LaravelTracker\Models\GeoIp     geo_ip
  * @property  \Arcanedev\LaravelTracker\Models\Language  language
@@ -54,7 +54,7 @@ class Session extends Model
         'agent_id',
         'client_ip',
         'cookie_id',
-        'referrer_id',
+        'referer_id',
         'geoip_id',
         'is_robot',
     ];
@@ -70,7 +70,7 @@ class Session extends Model
         'language_id' => 'integer',
         'agent_id'    => 'integer',
         'cookie_id'   => 'integer',
-        'referrer_id' => 'integer',
+        'referer_id'  => 'integer',
         'geoip_id'    => 'integer',
         'is_robot'    => 'boolean',
     ];
@@ -116,14 +116,14 @@ class Session extends Model
     }
 
     /**
-     * Referrer relationship.
+     * Referer relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function referrer()
+    public function referer()
     {
         return $this->belongsTo(
-            $this->getConfig('models.referrer', Referrer::class)
+            $this->getConfig('models.referer', Referer::class)
         );
     }
 

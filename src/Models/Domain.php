@@ -11,7 +11,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  *
- * @property  \Illuminate\Database\Eloquent\Collection  referrers
+ * @property  \Illuminate\Database\Eloquent\Collection  referers
  */
 class Domain extends Model
 {
@@ -47,14 +47,14 @@ class Domain extends Model
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Referrer relationship.
+     * Referer relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function referrers()
+    public function referers()
     {
         return $this->hasMany(
-            $this->getConfig('models.referrer', Referrer::class)
+            $this->getConfig('models.referer', Referer::class)
         );
     }
 }

@@ -372,9 +372,13 @@ class Tracker implements TrackerContract
 
     private function getLanguageId()
     {
-        $this->app[LanguageDetector::class];
+        if ($this->getConfig('tracking.languages', false)) {
+            $languages = $this->app[LanguageDetector::class]->detect();
 
-        return 0;
+            return Models\Language::firstOrCreate($languages)->id;
+        }
+
+        return null;
     }
 
     /**

@@ -44,7 +44,7 @@ class LanguageDetector implements LanguageDetectorContract
     {
         return [
             'preference'     => $this->getLanguagePreference(),
-            'language-range' => $this->getLanguageRange(),
+            'language_range' => $this->getLanguageRange(),
         ];
     }
 

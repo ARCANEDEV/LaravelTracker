@@ -42,6 +42,7 @@ return [
         'cookies'     => true,
         'devices'     => true,
         'geoip'       => true,
+        'languages'   => true,
         'referers'    => true,
         'users'       => true,
         'user-agents' => true,

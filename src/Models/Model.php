@@ -19,7 +19,7 @@ abstract class Model extends BaseModel
      *
      * @param  array  $attributes
      */
-    public function __construct(array $attributes)
+    public function __construct(array $attributes = [])
     {
         $this->setConnection($this->getConfig('database.connection', null))
              ->setPrefix($this->getConfig('database.prefix', 'tracker_'));

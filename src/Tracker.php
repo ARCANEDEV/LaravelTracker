@@ -357,7 +357,17 @@ class Tracker implements TrackerContract
 
     private function getCookieId()
     {
-        return 0;
+        if ($this->getConfig('tracking.cookies', false)) {
+            if ( ! $cookie = $this->request->cookie($this->getConfig('cookie.name'))) {
+                $cookie = (string) \Ramsey\Uuid\Uuid::uuid4();
+
+                $this->app['cookie']->queue($this->getConfig('cookie.name'), $cookie, 0);
+            }
+
+            return Models\Cookie::firstOrCreate(['uuid' => $cookie])->id;
+        }
+
+        return null;
     }
 
     private function getLanguageId()

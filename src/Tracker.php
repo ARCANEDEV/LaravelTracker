@@ -7,7 +7,6 @@ use Arcanedev\LaravelTracker\Contracts\Detectors\LanguageDetector;
 use Arcanedev\LaravelTracker\Contracts\Detectors\UserDetector;
 use Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser;
 use Arcanedev\LaravelTracker\Contracts\Tracker as TrackerContract;
-use Arcanedev\LaravelTracker\Parsers\RefererParser;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -173,6 +172,11 @@ class Tracker implements TrackerContract
         ];
     }
 
+    protected function getSessionId($updateLastActivity = false)
+    {
+        return 0;
+    }
+
     /**
      * @return array
      */
@@ -189,17 +193,10 @@ class Tracker implements TrackerContract
             'language_id'  => $this->getLanguageId(),
             'is_robot'     => $this->isRobot(),
 
-            // The key user_agent is not present in the sessions table, but
-            // it's internally used to check if the user agent changed
-            // during a session.
+            // The key user_agent is not present in the sessions table, but it's internally used to check
+            // if the user agent changed during a session.
             'user_agent'   => $this->getCurrentUserAgent(),
         ];
-    }
-
-    protected function getSessionId($updateLastActivity = false)
-    {
-        dd($this->makeSessionData());
-        return 0;
     }
 
     private function getPathId()

@@ -102,6 +102,11 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             return new Detectors\DeviceDetector($app['agent']);
         });
 
+        $this->singleton(
+            Contracts\Detectors\GeoIpDetector::class,
+            Detectors\GeoIpDetector::class
+        );
+
         $this->singleton(Contracts\Detectors\LanguageDetector::class, function ($app) {
             return new Detectors\LanguageDetector($app['agent']);
         });

@@ -19,7 +19,7 @@ class CreateTrackerRefererSearchTermsTable extends Migration
      *
      * @var string
      */
-    protected $table = 'referers_search_terms';
+    protected $table = 'referer_search_terms';
 
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions

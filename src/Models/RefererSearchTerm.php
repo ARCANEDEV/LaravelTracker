@@ -17,7 +17,7 @@ class RefererSearchTerm extends Model
      *
      * @var string
      */
-    protected $table = 'referers_search_terms';
+    protected $table = 'referer_search_terms';
 
     /**
      * The attributes that are mass assignable.

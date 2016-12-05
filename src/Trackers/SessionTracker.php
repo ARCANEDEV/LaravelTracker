@@ -90,11 +90,10 @@ class SessionTracker
      * Track the session.
      *
      * @param  array  $data
-     * @param  bool   $updateLastActivity
      *
      * @return int
      */
-    public function track(array $data, $updateLastActivity)
+    public function track(array $data)
     {
         $this->setSessionData($data);
 

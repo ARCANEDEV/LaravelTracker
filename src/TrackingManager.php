@@ -107,11 +107,10 @@ class TrackingManager
      * Track the session.
      *
      * @param  array  $data
-     * @param  bool   $updateLastActivity
      */
-    public function trackSession(array $data, $updateLastActivity)
+    public function trackSession(array $data)
     {
-        return (new Trackers\SessionTracker)->track($data, $updateLastActivity);
+        return (new Trackers\SessionTracker)->track($data);
     }
 
     /**

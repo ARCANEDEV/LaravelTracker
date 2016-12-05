@@ -85,7 +85,6 @@ class SessionTracker implements SessionTrackerContract
     private function setSessionId($id)
     {
         $this->sessionInfo['id'] = $id;
-        $this->storeSession();
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -248,15 +247,12 @@ class SessionTracker implements SessionTrackerContract
             $session->updated_at = Carbon::now();
             $session->save();
 
-            $this->sessionInfo['id'] = $id;
+            $this->setSessionId($id);
         }
         else {
-            var_dump(
-                Arr::only($this->sessionInfo, ['uuid']),
-                $this->sessionInfo
-            );
             $session = Session::firstOrCreate(Arr::only($this->sessionInfo, ['uuid']), $this->sessionInfo);
             $this->setSessionId($session->id);
+            $this->storeSession();
         }
 
         return $known;

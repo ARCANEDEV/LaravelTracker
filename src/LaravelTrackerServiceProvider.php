@@ -141,48 +141,14 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      */
     private function registerTrackers()
     {
-        $this->singleton(Contracts\Trackers\CookieTracker::class, function () {
-            return new Trackers\CookieTracker;
-        });
-
-        $this->singleton(Contracts\Trackers\DeviceTracker::class, function ($app) {
-            return new Trackers\DeviceTracker(
-                $app[Contracts\Detectors\DeviceDetector::class],
-                $app[Contracts\Parsers\UserAgentParser::class]
-            );
-        });
-
-        $this->singleton(Contracts\Trackers\GeoIpTracker::class, function ($app) {
-            return new Trackers\GeoIpTracker(
-                $app[Contracts\Detectors\GeoIpDetector::class]
-            );
-        });
-
-        $this->singleton(Contracts\Trackers\LanguageTracker::class, function ($app) {
-            return new Trackers\LanguageTracker(
-                $app[Contracts\Detectors\LanguageDetector::class]
-            );
-        });
-
-        $this->singleton(Contracts\Trackers\RefererTracker::class, function ($app) {
-            return new Trackers\RefererTracker(
-                $app[Contracts\Parsers\RefererParser::class]
-            );
-        });
-
-        $this->singleton(Contracts\Trackers\SessionTracker::class, function () {
-            return new Trackers\SessionTracker;
-        });
-
-        $this->singleton(Contracts\Trackers\UserAgentTracker::class, function ($app) {
-            return new Trackers\UserAgentTracker(
-                $app[Contracts\Parsers\UserAgentParser::class]
-            );
-        });
-
-        $this->singleton(Contracts\Trackers\UserTracker::class, function ($app) {
-            return new Trackers\UserTracker($app);
-        });
+        $this->singleton(Contracts\Trackers\CookieTracker::class,    Trackers\CookieTracker::class);
+        $this->singleton(Contracts\Trackers\DeviceTracker::class,    Trackers\DeviceTracker::class);
+        $this->singleton(Contracts\Trackers\GeoIpTracker::class,     Trackers\GeoIpTracker::class);
+        $this->singleton(Contracts\Trackers\LanguageTracker::class,  Trackers\LanguageTracker::class);
+        $this->singleton(Contracts\Trackers\RefererTracker::class,   Trackers\RefererTracker::class);
+        $this->singleton(Contracts\Trackers\SessionTracker::class,   Trackers\SessionTracker::class);
+        $this->singleton(Contracts\Trackers\UserAgentTracker::class, Trackers\UserAgentTracker::class);
+        $this->singleton(Contracts\Trackers\UserTracker::class,      Trackers\UserTracker::class);
 
         // Register the trackers manager
         $this->singleton(Contracts\TrackingManager::class, TrackingManager::class);

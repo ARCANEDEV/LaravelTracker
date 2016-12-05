@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\LanguageDetector;
+use Arcanedev\LaravelTracker\Contracts\Trackers\LanguageTracker as LanguageTrackerContract;
 use Arcanedev\LaravelTracker\Models\Language;
 
 /**
@@ -9,14 +10,14 @@ use Arcanedev\LaravelTracker\Models\Language;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class LanguageTracker
+class LanguageTracker implements LanguageTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
     /** @var \Arcanedev\LaravelTracker\Contracts\Detectors\LanguageDetector */
-    protected $detector;
+    private $languageDetector;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -24,10 +25,12 @@ class LanguageTracker
      */
     /**
      * LanguageTracker constructor.
+     *
+     * @param  \Arcanedev\LaravelTracker\Contracts\Detectors\LanguageDetector  $languageDetector
      */
-    public function __construct()
+    public function __construct(LanguageDetector $languageDetector)
     {
-        $this->detector = app(LanguageDetector::class);
+        $this->languageDetector = $languageDetector;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -41,7 +44,7 @@ class LanguageTracker
      */
     public function track()
     {
-        $languages = $this->detector->detect();
+        $languages = $this->languageDetector->detect();
 
         return Language::firstOrCreate($languages)->id;
     }

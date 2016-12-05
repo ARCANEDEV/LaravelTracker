@@ -1,5 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
+use Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker as SessionTrackerContract;
 use Arcanedev\LaravelTracker\Models\Session;
 use Arcanedev\LaravelTracker\Support\PhpSession;
 use Carbon\Carbon;
@@ -12,7 +13,7 @@ use Ramsey\Uuid\Uuid;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class SessionTracker
+class SessionTracker implements SessionTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -21,11 +22,15 @@ class SessionTracker
     /** @var PhpSession */
     private $session;
 
+    /** @var array */
     private $sessionInfo = [];
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
      | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * SessionTracker constructor.
      */
     public function __construct()
     {

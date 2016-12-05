@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
+use Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser;
+use Arcanedev\LaravelTracker\Contracts\Trackers\RefererTracker as RefererTrackerContract;
 use Arcanedev\LaravelTracker\Models\Domain;
 use Arcanedev\LaravelTracker\Models\Referer;
 use Arcanedev\LaravelTracker\Models\RefererSearchTerm;
@@ -11,26 +13,27 @@ use Illuminate\Support\Arr;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RefererTracker
+class RefererTracker implements RefererTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /**
-     * The referer parser.
-     *
-     * @var  \Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser
-     */
-    protected $parser;
+    /** @var \Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser */
+    private $refererParser;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
      | ------------------------------------------------------------------------------------------------
      */
-    public function __construct()
+    /**
+     * RefererTracker constructor.
+     *
+     * @param  \Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser  $refererParser
+     */
+    public function __construct(RefererParser $refererParser)
     {
-        $this->parser = app(\Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser::class);
+        $this->refererParser = $refererParser;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -47,25 +50,25 @@ class RefererTracker
      */
     public function track($refererUrl, $pageUrl)
     {
-        $parsed = $this->parser->parseUrl($refererUrl);
+        $firstParsed = $this->refererParser->parseUrl($refererUrl);
 
-        if ($parsed) {
-            $domainId   = $this->getDomainId($parsed['domain']);
+        if ($firstParsed) {
+            $domainId   = $this->trackDomain($firstParsed['domain']);
             $attributes = [
-                'url'               => $parsed['url'],
-                'host'              => $parsed['host'],
+                'url'               => $firstParsed['url'],
+                'host'              => $firstParsed['host'],
                 'domain_id'         => $domainId,
                 'medium'            => null,
                 'source'            => null,
                 'search_terms_hash' => null,
             ];
 
-            $parsed = $this->parser->parse($parsed['url'], $pageUrl);
+            $secondParsed = $this->refererParser->parse($firstParsed['url'], $pageUrl);
 
-            if ($parsed->isKnown()) {
-                $attributes['medium']            = $parsed->getMedium();
-                $attributes['source']            = $parsed->getSource();
-                $attributes['search_terms_hash'] = sha1($parsed->getSearchTerm());
+            if ($secondParsed->isKnown()) {
+                $attributes['medium']            = $secondParsed->getMedium();
+                $attributes['source']            = $secondParsed->getSource();
+                $attributes['search_terms_hash'] = sha1($secondParsed->getSearchTerm());
             }
 
             $referer = Referer::firstOrCreate(
@@ -73,8 +76,8 @@ class RefererTracker
                 $attributes
             );
 
-            if ($parsed->isKnown()) {
-                $this->storeSearchTerms($referer->id, $parsed->getSearchTerm());
+            if ($secondParsed->isKnown()) {
+                $this->trackRefererSearchTerms($referer->id, $secondParsed->getSearchTerm());
             }
 
             return $referer->id;
@@ -84,13 +87,13 @@ class RefererTracker
     }
 
     /**
-     * Get the domain id.
+     * Track the domain and get the id.
      *
      * @param  string  $name
      *
      * @return int
      */
-    private function getDomainId($name)
+    private function trackDomain($name)
     {
         $data = compact('name');
 
@@ -103,7 +106,7 @@ class RefererTracker
      * @param  int     $refererId
      * @param  string  $searchTerms
      */
-    private function storeSearchTerms($refererId, $searchTerms)
+    private function trackRefererSearchTerms($refererId, $searchTerms)
     {
         foreach (explode(' ', $searchTerms) as $term) {
             $attributes = [

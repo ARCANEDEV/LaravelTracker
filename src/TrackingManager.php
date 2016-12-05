@@ -1,13 +1,79 @@
 <?php namespace Arcanedev\LaravelTracker;
 
+use Arcanedev\LaravelTracker\Contracts\TrackingManager as TrackingManagerContract;
+
 /**
  * Class     TrackingManager
  *
  * @package  Arcanedev\LaravelTracker
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class TrackingManager
+class TrackingManager implements TrackingManagerContract
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Properties
+     | ------------------------------------------------------------------------------------------------
+     */
+    /** @var Contracts\Trackers\CookieTracker */
+    private $cookieTracker;
+
+    /** @var Contracts\Trackers\DeviceTracker */
+    private $deviceTracker;
+
+    /** @var Contracts\Trackers\GeoIpTracker */
+    private $geoIpTracker;
+
+    /** @var Contracts\Trackers\LanguageTracker */
+    private $languageTracker;
+
+    /** @var Contracts\Trackers\RefererTracker */
+    private $refererTracker;
+
+    /** @var Contracts\Trackers\SessionTracker */
+    private $sessionTracker;
+
+    /** @var Contracts\Trackers\UserAgentTracker */
+    private $userAgentTracker;
+
+    /** @var Contracts\Trackers\UserTracker */
+    private $userTracker;
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Constructor
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * TrackingManager constructor.
+     *
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\CookieTracker     $cookieTracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\DeviceTracker     $deviceTracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\GeoIpTracker      $geoIpTracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\LanguageTracker   $languageTracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\RefererTracker    $refererTracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker    $sessionTracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\UserAgentTracker  $userAgentTracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\UserTracker       $userTracker
+     */
+    public function __construct(
+        Contracts\Trackers\CookieTracker $cookieTracker,
+        Contracts\Trackers\DeviceTracker $deviceTracker,
+        Contracts\Trackers\GeoIpTracker $geoIpTracker,
+        Contracts\Trackers\LanguageTracker $languageTracker,
+        Contracts\Trackers\RefererTracker $refererTracker,
+        Contracts\Trackers\SessionTracker $sessionTracker,
+        Contracts\Trackers\UserAgentTracker $userAgentTracker,
+        Contracts\Trackers\UserTracker $userTracker
+    ) {
+        $this->cookieTracker    = $cookieTracker;
+        $this->deviceTracker    = $deviceTracker;
+        $this->geoIpTracker     = $geoIpTracker;
+        $this->languageTracker  = $languageTracker;
+        $this->refererTracker   = $refererTracker;
+        $this->sessionTracker   = $sessionTracker;
+        $this->userAgentTracker = $userAgentTracker;
+        $this->userTracker      = $userTracker;
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
@@ -15,11 +81,11 @@ class TrackingManager
     /**
      * Get the user agent tracker.
      *
-     * @return Trackers\UserAgentTracker
+     * @return Contracts\Trackers\UserAgentTracker
      */
     public function getUserAgentTracker()
     {
-        return new Trackers\UserAgentTracker;
+        return $this->userAgentTracker;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -33,7 +99,7 @@ class TrackingManager
      */
     public function trackUser()
     {
-        return (new Trackers\UserTracker)->track();
+        return $this->userTracker->track();
     }
 
     /**
@@ -43,7 +109,7 @@ class TrackingManager
      */
     public function trackDevice()
     {
-        return (new Trackers\DeviceTracker)->track();
+        return $this->deviceTracker->track();
     }
 
     /**
@@ -55,7 +121,7 @@ class TrackingManager
      */
     public function trackGeoIp($ipAddress)
     {
-        return (new Trackers\GeoIpTracker)->track($ipAddress);
+        return $this->geoIpTracker->track($ipAddress);
     }
 
     /**
@@ -78,7 +144,7 @@ class TrackingManager
      */
     public function trackReferer($refererUrl, $pageUrl)
     {
-        return (new Trackers\RefererTracker)->track($refererUrl, $pageUrl);
+        return $this->refererTracker->track($refererUrl, $pageUrl);
     }
 
     /**
@@ -90,7 +156,7 @@ class TrackingManager
      */
     public function trackCookie($cookie)
     {
-        return (new Trackers\CookieTracker)->track($cookie);
+        return $this->cookieTracker->track($cookie);
     }
 
     /**
@@ -100,17 +166,19 @@ class TrackingManager
      */
     public function trackLanguage()
     {
-        return (new Trackers\LanguageTracker)->track();
+        return $this->languageTracker->track();
     }
 
     /**
      * Track the session.
      *
      * @param  array  $data
+     *
+     * @return int
      */
     public function trackSession(array $data)
     {
-        return (new Trackers\SessionTracker)->track($data);
+        return $this->sessionTracker->track($data);
     }
 
     /**
@@ -123,6 +191,6 @@ class TrackingManager
      */
     public function checkSessionData(array $data, array $currentData)
     {
-        return (new Trackers\SessionTracker)->checkData($data, $currentData);
+        return $this->sessionTracker->checkData($data, $currentData);
     }
 }

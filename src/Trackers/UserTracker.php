@@ -1,12 +1,15 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
+use Arcanedev\LaravelTracker\Contracts\Trackers\UserTracker as UserTrackerContract;
+use Illuminate\Contracts\Foundation\Application;
+
 /**
  * Class     UserTracker
  *
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UserTracker
+class UserTracker implements UserTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -24,12 +27,24 @@ class UserTracker
      */
     /**
      * UserTracker constructor.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      */
-    public function __construct()
+    public function __construct(Application $app)
     {
-        $this->app = app();
+        $this->app = $app;
 
         $this->instantiateAuthentication();
+    }
+
+    /**
+     * Grab all the authentication bindings.
+     */
+    private function instantiateAuthentication()
+    {
+        foreach ((array) $this->getConfig('auth.bindings', []) as $binding) {
+            $this->auths[] = $this->app->make($binding);
+        }
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -54,7 +69,7 @@ class UserTracker
      *
      * @return mixed
      */
-    protected function getConfig($key, $default = null)
+    private function getConfig($key, $default = null)
     {
         return $this->config()->get("laravel-tracker.$key", $default);
     }
@@ -75,6 +90,10 @@ class UserTracker
             : null;
     }
 
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
     /**
      * Check if the user is authenticated.
      *
@@ -93,20 +112,6 @@ class UserTracker
     protected function user()
     {
         return $this->executeAuthMethod($this->getConfig('auth.methods.user'));
-    }
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * Grab all the authentication bindings.
-     */
-    private function instantiateAuthentication()
-    {
-        foreach ((array) $this->getConfig('auth.bindings', []) as $binding) {
-            $this->auths[] = $this->app->make($binding);
-        }
     }
 
     /**

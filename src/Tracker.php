@@ -2,6 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\CrawlerDetector;
 use Arcanedev\LaravelTracker\Contracts\Tracker as TrackerContract;
+use Arcanedev\LaravelTracker\Contracts\TrackingManager as TrackingManagerContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
 
@@ -34,7 +35,7 @@ class Tracker implements TrackerContract
     /**
      * The tracking manager.
      *
-     * @var \Arcanedev\LaravelTracker\TrackingManager
+     * @var \Arcanedev\LaravelTracker\Contracts\TrackingManager
      */
     private $trackingManager;
 
@@ -57,13 +58,14 @@ class Tracker implements TrackerContract
     /**
      * Tracker constructor.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Foundation\Application         $app
+     * @param  \Arcanedev\LaravelTracker\Contracts\TrackingManager  $trackingManager
      */
-    public function __construct(Application $app)
+    public function __construct(Application $app, TrackingManagerContract $trackingManager)
     {
         $this->app             = $app;
+        $this->trackingManager = $trackingManager;
         $this->enabled         = $this->getConfig('enabled', $this->enabled);
-        $this->trackingManager = new TrackingManager;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -114,7 +116,7 @@ class Tracker implements TrackerContract
      */
     public function getUserAgentParser()
     {
-        return $this->trackingManager->getUserAgentTracker()->getParser();
+        return $this->trackingManager->getUserAgentTracker()->getUserAgentParser();
     }
 
     /* ------------------------------------------------------------------------------------------------

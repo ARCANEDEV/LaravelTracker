@@ -2,6 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector;
 use Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser;
+use Arcanedev\LaravelTracker\Contracts\Trackers\DeviceTracker as DeviceTrackerContract;
 use Arcanedev\LaravelTracker\Models\Device;
 
 /**
@@ -10,36 +11,32 @@ use Arcanedev\LaravelTracker\Models\Device;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DeviceTracker
+class DeviceTracker implements DeviceTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var  \Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector */
-    protected $detector;
+    /** @var \Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector */
+    private $deviceDetector;
+
+    /** @var \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser */
+    private $userAgentParser;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
      | ------------------------------------------------------------------------------------------------
      */
-    public function __construct()
-    {
-        $this->detector = app(DeviceDetector::class);
-    }
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
-     | ------------------------------------------------------------------------------------------------
-     */
     /**
-     * Get the user agent parser.
+     * DeviceTracker constructor.
      *
-     * @return \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser
+     * @param  \Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector  $deviceDetector
+     * @param  \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser   $userAgentParser
      */
-    private function getUserAgentParser()
+    public function __construct(DeviceDetector $deviceDetector, UserAgentParser $userAgentParser)
     {
-        return app(UserAgentParser::class);
+        $this->deviceDetector  = $deviceDetector;
+        $this->userAgentParser = $userAgentParser;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -59,18 +56,20 @@ class DeviceTracker
         return $model->id;
     }
 
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
     /**
      * Get the current device properties.
      *
      * @return array
      */
-    public function getCurrentDeviceProperties()
+    private function getCurrentDeviceProperties()
     {
-        if ($properties = $this->detector->detect()) {
-            $ua = $this->getUserAgentParser();
-
-            $properties['platform']         = $ua->getOperatingSystemFamily();
-            $properties['platform_version'] = $ua->getOperatingSystemVersion();
+        if ($properties = $this->deviceDetector->detect()) {
+            $properties['platform']         = $this->userAgentParser->getOperatingSystemFamily();
+            $properties['platform_version'] = $this->userAgentParser->getOperatingSystemVersion();
         }
 
         return $properties;

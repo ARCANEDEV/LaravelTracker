@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector;
+use Arcanedev\LaravelTracker\Contracts\Trackers\GeoIpTracker as GeoIpTrackerContract;
 use Arcanedev\LaravelTracker\Models\GeoIp;
 use Illuminate\Support\Arr;
 
@@ -10,14 +11,14 @@ use Illuminate\Support\Arr;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class GeoIpTracker
+class GeoIpTracker implements GeoIpTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
     /** @var \Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector */
-    protected $detector;
+    private $geoIpDetector;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -25,10 +26,12 @@ class GeoIpTracker
      */
     /**
      * GeoIpTracker constructor.
+     *
+     * @param  \Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector  $geoIpDetector
      */
-    public function __construct()
+    public function __construct(GeoIpDetector $geoIpDetector)
     {
-        $this->detector = app(GeoIpDetector::class);
+        $this->geoIpDetector = $geoIpDetector;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -44,9 +47,7 @@ class GeoIpTracker
      */
     public function track($ipAddress)
     {
-        $data = $this->detector->search($ipAddress);
-
-        if ($data) {
+        if ($data = $this->geoIpDetector->search($ipAddress)) {
             $model = GeoIp::firstOrCreate(Arr::only($data, ['latitude', 'longitude']), $data);
 
             return $model->id;

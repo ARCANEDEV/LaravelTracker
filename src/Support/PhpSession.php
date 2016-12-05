@@ -184,6 +184,6 @@ class PhpSession
      */
     private function isStarted()
     {
-        return $this->status() === PHP_SESSION_ACTIVE;
+        return app()->environment('testing') ? true : session_status() === PHP_SESSION_ACTIVE;
     }
 }

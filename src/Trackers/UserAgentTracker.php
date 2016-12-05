@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser;
+use Arcanedev\LaravelTracker\Contracts\Trackers\UserAgentTracker as UserAgentTrackerContract;
 use Arcanedev\LaravelTracker\Models\Agent;
 
 /**
@@ -9,14 +10,14 @@ use Arcanedev\LaravelTracker\Models\Agent;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UserAgentTracker
+class UserAgentTracker implements UserAgentTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
     /** @var \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser */
-    protected $parser;
+    protected $userAgentParser;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -24,10 +25,12 @@ class UserAgentTracker
      */
     /**
      * UserAgentTracker constructor.
+     *
+     * @param  \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser  $userAgentParser
      */
-    public function __construct()
+    public function __construct(UserAgentParser $userAgentParser)
     {
-        $this->parser = app(UserAgentParser::class);
+        $this->userAgentParser = $userAgentParser;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -39,9 +42,9 @@ class UserAgentTracker
      *
      * @return \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser
      */
-    public function getParser()
+    public function getUserAgentParser()
     {
-        return $this->parser;
+        return $this->userAgentParser;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -55,14 +58,24 @@ class UserAgentTracker
      */
     public function track()
     {
-        $data = [
-            'name'            => $this->parser->getOriginalUserAgent() ?: 'Other',
-            'browser'         => $this->parser->getBrowser(),
-            'browser_version' => $this->parser->getUserAgentVersion(),
+        return Agent::firstOrCreate($data = $this->prepareData(), $data)->id;
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Prepare the data.
+     *
+     * @return array
+     */
+    private function prepareData()
+    {
+        return [
+            'name'            => $this->userAgentParser->getOriginalUserAgent() ?: 'Other',
+            'browser'         => $this->userAgentParser->getBrowser(),
+            'browser_version' => $this->userAgentParser->getUserAgentVersion(),
         ];
-
-        $model = Agent::firstOrCreate($data, $data);
-
-        return $model->id;
     }
 }

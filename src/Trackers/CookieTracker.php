@@ -1,5 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
+use Arcanedev\LaravelTracker\Contracts\Trackers\CookieTracker as CookieTrackerContract;
 use Arcanedev\LaravelTracker\Models\Cookie;
 use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 use Ramsey\Uuid\Uuid;
@@ -10,11 +11,35 @@ use Ramsey\Uuid\Uuid;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class CookieTracker
+class CookieTracker implements CookieTrackerContract
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Properties
+     | ------------------------------------------------------------------------------------------------
+     */
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Constructor
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * CookieTracker constructor.
+     */
+    public function __construct()
+    {
+        //
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Track the cookie.
+     *
+     * @param  mixed  $cookie
+     *
+     * @return int
      */
     public function track($cookie)
     {

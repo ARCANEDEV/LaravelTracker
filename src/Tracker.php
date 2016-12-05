@@ -1,15 +1,9 @@
 <?php namespace Arcanedev\LaravelTracker;
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\CrawlerDetector;
-use Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector;
-use Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector;
-use Arcanedev\LaravelTracker\Contracts\Detectors\LanguageDetector;
-use Arcanedev\LaravelTracker\Contracts\Detectors\UserDetector;
-use Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser;
 use Arcanedev\LaravelTracker\Contracts\Tracker as TrackerContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 
 /**
  * Class     Tracker
@@ -38,9 +32,23 @@ class Tracker implements TrackerContract
     private $request;
 
     /**
+     * The tracking manager.
+     *
+     * @var \Arcanedev\LaravelTracker\TrackingManager
+     */
+    private $trackingManager;
+
+    /**
      * @var bool
      */
     protected $enabled = false;
+
+    /**
+     * The current session data.
+     *
+     * @var array
+     */
+    protected $sessionData = [];
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -53,8 +61,9 @@ class Tracker implements TrackerContract
      */
     public function __construct(Application $app)
     {
-        $this->app     = $app;
-        $this->enabled = $this->getConfig('enabled', $this->enabled);
+        $this->app             = $app;
+        $this->enabled         = $this->getConfig('enabled', $this->enabled);
+        $this->trackingManager = new TrackingManager;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -96,6 +105,16 @@ class Tracker implements TrackerContract
         $this->request = $request;
 
         return $this;
+    }
+
+    /**
+     * Get the user agent parser.
+     *
+     * @return \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser
+     */
+    public function getUserAgentParser()
+    {
+        return $this->trackingManager->getUserAgentTracker()->getParser();
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -160,7 +179,7 @@ class Tracker implements TrackerContract
     protected function getSessionActivityData()
     {
         return [
-            'session_id'  => $this->getSessionId(true),
+            'session_id'  => $this->getSessionId(),
             'method'      => $this->request->method(),
             'path_id'     => $this->getPathId(),
             'query_id'    => $this->getQueryId(),
@@ -172,9 +191,16 @@ class Tracker implements TrackerContract
         ];
     }
 
-    protected function getSessionId($updateLastActivity = false)
+    /**
+     * Get the stored session id.
+     *
+     * @return int
+     */
+    protected function getSessionId()
     {
-        return 0;
+        return $this->trackingManager->trackSession(
+            $this->makeSessionData()
+        );
     }
 
     /**
@@ -182,7 +208,7 @@ class Tracker implements TrackerContract
      */
     protected function makeSessionData()
     {
-        return [
+        return $this->sessionData = $this->trackingManager->checkSessionData([
             'user_id'      => $this->getUserId(),
             'device_id'    => $this->getDeviceId(),
             'client_ip'    => $this->request->getClientIp(),
@@ -195,8 +221,8 @@ class Tracker implements TrackerContract
 
             // The key user_agent is not present in the sessions table, but it's internally used to check
             // if the user agent changed during a session.
-            'user_agent'   => $this->getCurrentUserAgent(),
-        ];
+            'user_agent'   => $this->getUserAgentParser()->getOriginalUserAgent(),
+        ], $this->sessionData);
     }
 
     private function getPathId()
@@ -217,168 +243,85 @@ class Tracker implements TrackerContract
     private function getUserId()
     {
         return $this->getConfig('tracking.users', false)
-            ? $this->app[UserDetector::class]->getCurrentUserId()
+            ? (new TrackingManager)->trackUser()
             : null;
     }
 
     /**
-     * Get the device id.
+     * Get the tracked device id.
      *
      * @return int|null
      */
     private function getDeviceId()
     {
-        if ($this->getConfig('tracking.devices', false)) {
-
-            $data  = $this->getCurrentDeviceProperties();
-            $model = Models\Device::firstOrCreate($data, $data);
-
-            return $model->id;
-        }
-
-        return null;
+        return $this->getConfig('tracking.devices', false)
+            ? $this->trackingManager->trackDevice()
+            : null;
     }
 
     /**
-     * Get the current device properties.
+     * Get the tracked ip address ip.
      *
-     * @return array
+     * @return int|null
      */
-    public function getCurrentDeviceProperties()
-    {
-        if ($properties = $this->app[DeviceDetector::class]->detect()) {
-            $ua = $this->getUserAgentParser();
-
-            $properties['platform']         = $ua->getOperatingSystemFamily();
-            $properties['platform_version'] = $ua->getOperatingSystemVersion();
-        }
-
-        return $properties;
-    }
-
     private function getGeoIpId()
     {
-        if ($this->getConfig('tracking.geoip', false)) {
-            $data = $this->app[GeoIpDetector::class]->search(
-                $this->request->getClientIp()
-            );
-
-            if ($data) {
-                $model = Models\GeoIp::firstOrCreate(Arr::only($data, ['latitude', 'longitude']), $data);
-
-                return $model->id;
-            }
-        }
-
-        return null;
+        return $this->getConfig('tracking.geoip', false)
+            ? $this->trackingManager->trackGeoIp($this->request->getClientIp())
+            : null;
     }
 
+    /**
+     * Get the tracked user agent id.
+     *
+     * @return int|null
+     */
     private function getAgentId()
     {
-        if ($this->getConfig('tracking.user-agents', false)) {
-            $data  = $this->getCurrentUserAgentData();
-            $model = Models\Agent::firstOrCreate($data, $data);
-
-            return $model->id;
-        }
-
-        return null;
+        return $this->getConfig('tracking.user-agents', false)
+            ? $this->trackingManager->trackUserAgent()
+            : null;
     }
 
+    /**
+     * Get the tracked referer id.
+     *
+     * @return int|null
+     */
     private function getRefererId()
     {
-        if ($this->getConfig('tracking.referers', false)) {
-            /** @var  \Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser  $parser */
-            $parser = $this->app[\Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser::class];
-            $parsed = $parser->parseUrl($this->request->headers->get('referer'));
-
-            if ($parsed) {
-                $domainId   = $this->getDomainId($parsed['domain']);
-                $attributes = [
-                    'url'               => $parsed['url'],
-                    'host'              => $parsed['host'],
-                    'domain_id'         => $domainId,
-                    'medium'            => null,
-                    'source'            => null,
-                    'search_terms_hash' => null,
-                ];
-
-                $parsed = $parser->parse($parsed['url'], $this->request->url());
-
-                if ($parsed->isKnown()) {
-                    $attributes['medium']            = $parsed->getMedium();
-                    $attributes['source']            = $parsed->getSource();
-                    $attributes['search_terms_hash'] = sha1($parsed->getSearchTerm());
-                }
-
-                $referer = Models\Referer::firstOrCreate(
-                    Arr::only($attributes, ['url', 'search_terms_hash']),
-                    $attributes
-                );
-
-                if ($parsed->isKnown()) {
-                    $this->storeSearchTerms($referer->id, $parsed->getSearchTerm());
-                }
-
-                return $referer->id;
-            }
-        }
-
-        return null;
+        return $this->getConfig('tracking.referers', false)
+            ? $this->trackingManager->trackReferer($this->request->headers->get('referer'), $this->request->url())
+            : null;
     }
 
     /**
-     * Get the domain id.
+     * Get the tracked cookie id.
      *
-     * @param  string  $name
-     *
-     * @return int
+     * @return int|null
      */
-    private function getDomainId($name)
-    {
-        $data = compact('name');
-
-        return Models\Domain::firstOrCreate($data, $data)->id;
-    }
-
-    private function storeSearchTerms($refererId, $searchTerms)
-    {
-        foreach (explode(' ', $searchTerms) as $term) {
-            $attributes = [
-                'referer_id'  => $refererId,
-                'search_term' => $term,
-            ];
-            Models\RefererSearchTerm::firstOrCreate($attributes, $attributes);
-        }
-    }
-
     private function getCookieId()
     {
-        if ($this->getConfig('tracking.cookies', false)) {
-            if ( ! $cookie = $this->request->cookie($this->getConfig('cookie.name'))) {
-                $cookie = (string) \Ramsey\Uuid\Uuid::uuid4();
-
-                $this->app['cookie']->queue($this->getConfig('cookie.name'), $cookie, 0);
-            }
-
-            return Models\Cookie::firstOrCreate(['uuid' => $cookie])->id;
-        }
-
-        return null;
-    }
-
-    private function getLanguageId()
-    {
-        if ($this->getConfig('tracking.languages', false)) {
-            $languages = $this->app[LanguageDetector::class]->detect();
-
-            return Models\Language::firstOrCreate($languages)->id;
-        }
-
-        return null;
+        return $this->getConfig('tracking.cookies', false)
+            ? $this->trackingManager->trackCookie($this->request->cookie($this->getConfig('cookie.name')))
+            : null;
     }
 
     /**
+     * Get the tracked language id.
+     *
+     * @return int|null
+     */
+    private function getLanguageId()
+    {
+        return $this->getConfig('tracking.languages', false)
+            ? $this->trackingManager->trackLanguage()
+            : null;
+    }
+
+    /**
+     * Check if the visitor is a robot.
+     *
      * @return bool
      */
     protected function isRobot()
@@ -387,29 +330,5 @@ class Tracker implements TrackerContract
         $crawler = $this->app[CrawlerDetector::class];
 
         return $crawler->isRobot();
-    }
-
-    /**
-     * Get the user agent parser.
-     *
-     * @return \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser
-     */
-    public function getUserAgentParser()
-    {
-        return $this->app[UserAgentParser::class];
-    }
-
-    private function getCurrentUserAgent()
-    {
-        return $this->getUserAgentParser()->getOriginalUserAgent();
-    }
-
-    private function getCurrentUserAgentData()
-    {
-        return [
-            'name'            => $this->getUserAgentParser()->getOriginalUserAgent() ?: 'Other',
-            'browser'         => $this->getUserAgentParser()->getBrowser(),
-            'browser_version' => $this->getUserAgentParser()->getUserAgentVersion(),
-        ];
     }
 }

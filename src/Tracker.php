@@ -245,7 +245,7 @@ class Tracker implements TrackerContract
     private function getUserId()
     {
         return $this->getConfig('tracking.users', false)
-            ? (new TrackingManager)->trackUser()
+            ? $this->trackingManager->trackUser()
             : null;
     }
 

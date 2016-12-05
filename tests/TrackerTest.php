@@ -22,6 +22,7 @@ class TrackerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+        $this->migrate();
 
         $this->tracker = $this->app->make('arcanedev.tracker');
     }

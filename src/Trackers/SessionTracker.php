@@ -2,8 +2,8 @@
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker as SessionTrackerContract;
 use Arcanedev\LaravelTracker\Models\Session;
-use Arcanedev\LaravelTracker\Support\PhpSession;
 use Carbon\Carbon;
+use Illuminate\Session\Store as SessionStore;
 use Illuminate\Support\Arr;
 use Ramsey\Uuid\Uuid;
 
@@ -19,7 +19,7 @@ class SessionTracker implements SessionTrackerContract
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var PhpSession */
+    /** @var \Illuminate\Session\Store */
     private $session;
 
     /** @var array */
@@ -31,10 +31,12 @@ class SessionTracker implements SessionTrackerContract
      */
     /**
      * SessionTracker constructor.
+     *
+     * @param  \Illuminate\Session\Store  $session
      */
-    public function __construct()
+    public function __construct(SessionStore $session)
     {
-        $this->session = new PhpSession;
+        $this->session = $session;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -83,7 +85,6 @@ class SessionTracker implements SessionTrackerContract
     private function setSessionId($id)
     {
         $this->sessionInfo['id'] = $id;
-
         $this->storeSession();
     }
 
@@ -210,7 +211,9 @@ class SessionTracker implements SessionTrackerContract
      */
     private function putSessionData($data)
     {
-        $this->session->put($this->getSessionKey(), $data);
+        $this->session->put([
+            $this->getSessionKey() => $data
+        ]);
     }
 
     /**
@@ -248,6 +251,10 @@ class SessionTracker implements SessionTrackerContract
             $this->sessionInfo['id'] = $id;
         }
         else {
+            var_dump(
+                Arr::only($this->sessionInfo, ['uuid']),
+                $this->sessionInfo
+            );
             $session = Session::firstOrCreate(Arr::only($this->sessionInfo, ['uuid']), $this->sessionInfo);
             $this->setSessionId($session->id);
         }

@@ -1,15 +1,12 @@
-<?php namespace Arcanedev\LaravelTracker\Detectors;
-
-use Arcanedev\LaravelTracker\Contracts\Detectors\UserDetector as UserDetectorContract;
-use Illuminate\Contracts\Foundation\Application;
+<?php namespace Arcanedev\LaravelTracker\Trackers;
 
 /**
- * Class     UserDetector
+ * Class     UserTracker
  *
- * @package  Arcanedev\LaravelTracker\Detectors
+ * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UserDetector implements UserDetectorContract
+class UserTracker
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -26,13 +23,11 @@ class UserDetector implements UserDetectorContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * UserDetector constructor.
-     *
-     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * UserTracker constructor.
      */
-    public function __construct(Application $app)
+    public function __construct()
     {
-        $this->app = $app;
+        $this->app = app();
 
         $this->instantiateAuthentication();
     }
@@ -69,11 +64,23 @@ class UserDetector implements UserDetectorContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Track the current authenticated user id.
+     *
+     * @return int|null
+     */
+    public function track()
+    {
+        return $this->check()
+            ? $this->user()->{$this->getConfig('auth.columns.id', 'id')}
+            : null;
+    }
+
+    /**
      * Check if the user is authenticated.
      *
      * @return bool
      */
-    public function check()
+    protected function check()
     {
         return $this->executeAuthMethod($this->getConfig('auth.methods.check'));
     }
@@ -83,21 +90,9 @@ class UserDetector implements UserDetectorContract
      *
      * @return false|mixed
      */
-    public function user()
+    protected function user()
     {
         return $this->executeAuthMethod($this->getConfig('auth.methods.user'));
-    }
-
-    /**
-     * Get the current authenticated user id.
-     *
-     * @return int|null
-     */
-    public function getCurrentUserId()
-    {
-        return $this->check()
-            ? $this->user()->{$this->getConfig('auth.columns.id', 'id')}
-            : null;
     }
 
     /* ------------------------------------------------------------------------------------------------

@@ -152,7 +152,7 @@ class SessionTracker implements SessionTrackerContract
     {
         $data = $this->session->get($this->getSessionKey());
 
-        return is_null($column) ? Arr::get($data, $column, null) : $data;
+        return is_null($column) ? $data : Arr::get($data, $column, null);
     }
 
     /**

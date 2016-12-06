@@ -50,7 +50,9 @@ class MigrationsTest extends TestCase
      */
     private function getTablesNames($prefix = 'tracker_')
     {
-        $tables = [
+        $tables = array_map(function ($table) use ($prefix) {
+            return $prefix.$table;
+        }, [
             'agents',
             'cookies',
             'devices',
@@ -58,14 +60,14 @@ class MigrationsTest extends TestCase
             'geoip',
             'languages',
             'paths',
+            'queries',
+            'query_arguments',
             'referers',
             'referer_search_terms',
             'sessions',
-        ];
+        ]);
 
-        return array_map(function ($table) use ($prefix) {
-                return $prefix.$table;
-            }, $tables) + [
+        return $tables + [
             // Fixture tables
             'users',
         ];

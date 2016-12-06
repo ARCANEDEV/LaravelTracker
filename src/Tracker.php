@@ -198,19 +198,9 @@ class Tracker implements TrackerContract
      *
      * @return int
      */
-    protected function getSessionId()
+    private function getSessionId()
     {
-        return $this->trackingManager->trackSession(
-            $this->makeSessionData()
-        );
-    }
-
-    /**
-     * @return array
-     */
-    protected function makeSessionData()
-    {
-        return $this->sessionData = $this->trackingManager->checkSessionData([
+        $this->sessionData = $this->trackingManager->checkSessionData([
             'user_id'      => $this->getUserId(),
             'device_id'    => $this->getDeviceId(),
             'client_ip'    => $this->request->getClientIp(),
@@ -220,11 +210,12 @@ class Tracker implements TrackerContract
             'cookie_id'    => $this->getCookieId(),
             'language_id'  => $this->getLanguageId(),
             'is_robot'     => $this->isRobot(),
-
-            // The key user_agent is not present in the sessions table, but it's internally used to check
+            // The key `user_agent` is not present in the sessions table, but it's internally used to check
             // if the user agent changed during a session.
             'user_agent'   => $this->getUserAgentParser()->getOriginalUserAgent(),
         ], $this->sessionData);
+
+        return $this->trackingManager->trackSession($this->sessionData);
     }
 
     /**
@@ -241,9 +232,18 @@ class Tracker implements TrackerContract
         });
     }
 
+    /**
+     * Track the query.
+     *
+     * @return int|null
+     */
     private function getQueryId()
     {
-        return 0;
+        return $this->trackIfEnabled('path-queries', function () {
+            return $this->trackingManager->trackQuery(
+                $this->request->query()
+            );
+        });
     }
 
     /**

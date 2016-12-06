@@ -28,6 +28,8 @@ return [
         'domain'              => \Arcanedev\LaravelTracker\Models\Domain::class,
         'geoip'               => \Arcanedev\LaravelTracker\Models\GeoIp::class,
         'language'            => \Arcanedev\LaravelTracker\Models\Language::class,
+        'query'               => \Arcanedev\LaravelTracker\Models\Query::class,
+        'query-argument'      => \Arcanedev\LaravelTracker\Models\QueryArgument::class,
         'referer'             => \Arcanedev\LaravelTracker\Models\Referer::class,
         'referer-search-term' => \Arcanedev\LaravelTracker\Models\RefererSearchTerm::class,
         'session'             => \Arcanedev\LaravelTracker\Models\Session::class,
@@ -39,14 +41,15 @@ return [
      | ------------------------------------------------------------------------------------------------
      */
     'tracking' => [
-        'cookies'     => true,
-        'devices'     => true,
-        'geoip'       => true,
-        'languages'   => true,
-        'paths'       => true,
-        'referers'    => true,
-        'users'       => true,
-        'user-agents' => true,
+        'cookies'      => true,
+        'devices'      => true,
+        'geoip'        => true,
+        'languages'    => true,
+        'paths'        => true,
+        'path-queries' => true,
+        'referers'     => true,
+        'users'        => true,
+        'user-agents'  => true,
     ],
 
     /* ------------------------------------------------------------------------------------------------

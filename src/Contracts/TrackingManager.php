@@ -33,6 +33,15 @@ interface TrackingManager
     public function trackPath($path);
 
     /**
+     * Track the query.
+     *
+     * @param  array  $queries
+     *
+     * @return int|null
+     */
+    public function trackQuery(array $queries);
+
+    /**
      * Track the user.
      *
      * @return int|null

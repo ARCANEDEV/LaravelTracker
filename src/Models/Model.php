@@ -8,6 +8,8 @@ use Arcanedev\Support\Bases\Model as BaseModel;
  * @package  Arcanedev\LaravelTracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
+ * @property  int             id
+ *
  * @method  static  Model  firstOrCreate(array $attributes, array $values = [])
  */
 abstract class Model extends BaseModel

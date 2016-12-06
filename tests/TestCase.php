@@ -83,6 +83,7 @@ abstract class TestCase extends BaseTestCase
             'devices'     => true,
             'geoip'       => true,
             'languages'   => true,
+            'paths'       => true,
             'referers'    => true,
             'users'       => true,
             'user-agents' => true,

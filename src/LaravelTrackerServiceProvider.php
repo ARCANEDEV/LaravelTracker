@@ -143,6 +143,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         $this->singleton(Contracts\Trackers\DeviceTracker::class,    Trackers\DeviceTracker::class);
         $this->singleton(Contracts\Trackers\GeoIpTracker::class,     Trackers\GeoIpTracker::class);
         $this->singleton(Contracts\Trackers\LanguageTracker::class,  Trackers\LanguageTracker::class);
+        $this->singleton(Contracts\Trackers\PathTracker::class,      Trackers\PathTracker::class);
         $this->singleton(Contracts\Trackers\RefererTracker::class,   Trackers\RefererTracker::class);
         $this->singleton(Contracts\Trackers\SessionTracker::class,   function ($app) {
             /** @var \Illuminate\Contracts\Foundation\Application $app */

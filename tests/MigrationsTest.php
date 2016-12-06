@@ -57,6 +57,7 @@ class MigrationsTest extends TestCase
             'domains',
             'geoip',
             'languages',
+            'paths',
             'referers',
             'referer_search_terms',
             'sessions',

@@ -24,6 +24,15 @@ interface TrackingManager
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Track the path.
+     *
+     * @param  string  $path
+     *
+     * @return int
+     */
+    public function trackPath($path);
+
+    /**
      * Track the user.
      *
      * @return int|null

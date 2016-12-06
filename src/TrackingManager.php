@@ -26,6 +26,9 @@ class TrackingManager implements TrackingManagerContract
     /** @var Contracts\Trackers\LanguageTracker */
     private $languageTracker;
 
+    /** @var Contracts\Trackers\PathTracker */
+    private $pathTracker;
+
     /** @var Contracts\Trackers\RefererTracker */
     private $refererTracker;
 
@@ -49,6 +52,7 @@ class TrackingManager implements TrackingManagerContract
      * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\DeviceTracker     $deviceTracker
      * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\GeoIpTracker      $geoIpTracker
      * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\LanguageTracker   $languageTracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\PathTracker       $pathTracker
      * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\RefererTracker    $refererTracker
      * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker    $sessionTracker
      * @param  \Arcanedev\LaravelTracker\Contracts\Trackers\UserAgentTracker  $userAgentTracker
@@ -59,6 +63,7 @@ class TrackingManager implements TrackingManagerContract
         Contracts\Trackers\DeviceTracker $deviceTracker,
         Contracts\Trackers\GeoIpTracker $geoIpTracker,
         Contracts\Trackers\LanguageTracker $languageTracker,
+        Contracts\Trackers\PathTracker $pathTracker,
         Contracts\Trackers\RefererTracker $refererTracker,
         Contracts\Trackers\SessionTracker $sessionTracker,
         Contracts\Trackers\UserAgentTracker $userAgentTracker,
@@ -68,6 +73,7 @@ class TrackingManager implements TrackingManagerContract
         $this->deviceTracker    = $deviceTracker;
         $this->geoIpTracker     = $geoIpTracker;
         $this->languageTracker  = $languageTracker;
+        $this->pathTracker      = $pathTracker;
         $this->refererTracker   = $refererTracker;
         $this->sessionTracker   = $sessionTracker;
         $this->userAgentTracker = $userAgentTracker;
@@ -92,6 +98,18 @@ class TrackingManager implements TrackingManagerContract
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Track the path.
+     *
+     * @param  string  $path
+     *
+     * @return int
+     */
+    public function trackPath($path)
+    {
+        return $this->pathTracker->track($path);
+    }
+
     /**
      * Track the user.
      *

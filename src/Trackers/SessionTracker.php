@@ -250,32 +250,12 @@ class SessionTracker implements SessionTrackerContract
             $this->setSessionId($id);
         }
         else {
-            $session = $this->firstOrCreate(Arr::only($this->sessionInfo, ['uuid']), $this->sessionInfo);
+            $session = Session::firstOrCreate(Arr::only($this->sessionInfo, ['uuid']), $this->sessionInfo);
             $this->setSessionId($session->id);
             $this->storeSession();
         }
 
         return $known;
-    }
-
-    protected function firstOrCreate(array $attributes, array $values = [])
-    {
-        if (version_compare(app()->version(), '5.2.0', '>='))
-            return Session::firstOrCreate($attributes, $values);
-
-        $instance = new Session;
-
-        foreach ($attributes as $key => $value) {
-            $instance = $instance->where($key, $value);
-        }
-
-        if ( ! is_null($first = $instance->first()))
-            return $first;
-
-        $instance = new Session($attributes + $values);
-        $instance->save();
-
-        return $instance;
     }
 
     /**

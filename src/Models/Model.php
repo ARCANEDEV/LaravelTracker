@@ -43,4 +43,48 @@ abstract class Model extends BaseModel
     {
         return config("laravel-tracker.$key", $default);
     }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Laravel 5.2 & 5.1 Support
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Handle dynamic method calls into the model.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * 
+     * @return mixed
+     */
+    public function __call($method, $parameters)
+    {
+        if (version_compare(app()->version(), '5.3.0', '<') && in_array($method, ['firstOrCreate']))
+            return call_user_func_array([$this, 'custom'.ucfirst($method)], $parameters);
+
+        return parent::__call($method, $parameters);
+    }
+
+    /**
+     * Get the first record matching the attributes or create it.
+     *
+     * @param  array  $attributes
+     * @param  array  $values
+     *
+     * @return self
+     */
+    public function customFirstOrCreate(array $attributes, array $values = [])
+    {
+        $instance = $this->newInstance();
+
+        foreach ($attributes as $key => $value) {
+            $instance = $instance->where($key, $value);
+        }
+
+        if ( ! is_null($first = $instance->first())) return $first;
+
+        $instance = $this->newInstance($attributes + $values);
+        $instance->save();
+
+        return $instance;
+    }
 }

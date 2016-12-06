@@ -26,6 +26,7 @@ return [
         'cookie'              => \Arcanedev\LaravelTracker\Models\Cookie::class,
         'device'              => \Arcanedev\LaravelTracker\Models\Device::class,
         'domain'              => \Arcanedev\LaravelTracker\Models\Domain::class,
+        'error'               => \Arcanedev\LaravelTracker\Models\Error::class,
         'geoip'               => \Arcanedev\LaravelTracker\Models\GeoIp::class,
         'language'            => \Arcanedev\LaravelTracker\Models\Language::class,
         'query'               => \Arcanedev\LaravelTracker\Models\Query::class,
@@ -33,6 +34,7 @@ return [
         'referer'             => \Arcanedev\LaravelTracker\Models\Referer::class,
         'referer-search-term' => \Arcanedev\LaravelTracker\Models\RefererSearchTerm::class,
         'session'             => \Arcanedev\LaravelTracker\Models\Session::class,
+        'session-activity'    => \Arcanedev\LaravelTracker\Models\SessionActivity::class,
         'user'                => \Illuminate\Foundation\Auth\User::class,
     ],
 

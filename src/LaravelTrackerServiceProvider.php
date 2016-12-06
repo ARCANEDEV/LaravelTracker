@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker;
 
 use Arcanedev\Support\PackageServiceProvider;
+use Arcanedev\LaravelTracker\Contracts\Trackers as TrackerContracts;
 
 /**
  * Class     LaravelTrackerServiceProvider
@@ -139,19 +140,9 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      */
     private function registerTrackers()
     {
-        $this->singleton(Contracts\Trackers\CookieTracker::class,    Trackers\CookieTracker::class);
-        $this->singleton(Contracts\Trackers\DeviceTracker::class,    Trackers\DeviceTracker::class);
-        $this->singleton(Contracts\Trackers\GeoIpTracker::class,     Trackers\GeoIpTracker::class);
-        $this->singleton(Contracts\Trackers\LanguageTracker::class,  Trackers\LanguageTracker::class);
-        $this->singleton(Contracts\Trackers\PathTracker::class,      Trackers\PathTracker::class);
-        $this->singleton(Contracts\Trackers\QueryTracker::class,     Trackers\QueryTracker::class);
-        $this->singleton(Contracts\Trackers\RefererTracker::class,   Trackers\RefererTracker::class);
-        $this->singleton(Contracts\Trackers\SessionTracker::class,   function ($app) {
-            /** @var \Illuminate\Contracts\Foundation\Application $app */
-            return new Trackers\SessionTracker($app['session.store']);
-        });
-        $this->singleton(Contracts\Trackers\UserAgentTracker::class, Trackers\UserAgentTracker::class);
-        $this->singleton(Contracts\Trackers\UserTracker::class,      Trackers\UserTracker::class);
+        foreach ($this->getTrackers() as $abstract => $concrete) {
+            $this->singleton($abstract, $concrete);
+        }
 
         // Register the trackers manager
         $this->singleton(Contracts\TrackingManager::class, TrackingManager::class);
@@ -164,5 +155,30 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     {
         $this->singleton('arcanedev.tracker', Tracker::class);
         $this->bind(Contracts\Tracker::class, Tracker::class);
+    }
+
+    /**
+     * Get the trackers.
+     *
+     * @return array
+     */
+    private function getTrackers()
+    {
+        return [
+            TrackerContracts\CookieTracker::class          => Trackers\CookieTracker::class,
+            TrackerContracts\DeviceTracker::class          => Trackers\DeviceTracker::class,
+            TrackerContracts\GeoIpTracker::class           => Trackers\GeoIpTracker::class,
+            TrackerContracts\LanguageTracker::class        => Trackers\LanguageTracker::class,
+            TrackerContracts\PathTracker::class            => Trackers\PathTracker::class,
+            TrackerContracts\QueryTracker::class           => Trackers\QueryTracker::class,
+            TrackerContracts\RefererTracker::class         => Trackers\RefererTracker::class,
+            TrackerContracts\SessionTracker::class         => function ($app) {
+                /** @var \Illuminate\Contracts\Foundation\Application $app */
+                return new Trackers\SessionTracker($app['session.store']);
+            },
+            TrackerContracts\SessionActivityTracker::class => Trackers\SessionActivityTracker::class,
+            TrackerContracts\UserAgentTracker::class       => Trackers\UserAgentTracker::class,
+            TrackerContracts\UserTracker::class            => Trackers\UserTracker::class,
+        ];
     }
 }

@@ -107,6 +107,15 @@ interface TrackingManager
     public function trackSession(array $data);
 
     /**
+     * Track the session activity.
+     *
+     * @param  array  $data
+     *
+     * @return int
+     */
+    public function trackActivity(array $data);
+
+    /**
      * Check the session data.
      *
      * @param  array  $data

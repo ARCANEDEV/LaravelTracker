@@ -133,7 +133,9 @@ class Tracker implements TrackerContract
         if ($this->isEnabled()) {
             $this->setRequest($request);
 
-            $activity = $this->getSessionActivityData();
+            $id = $this->trackingManager->trackActivity(
+                $activity = $this->getSessionActivityData()
+            );
         }
     }
 

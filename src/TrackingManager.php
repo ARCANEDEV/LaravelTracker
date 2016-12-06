@@ -43,7 +43,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getCookieTracker()
     {
-        return $this->app->make(Contracts\Trackers\CookieTracker::class);
+        return $this->getTracker(Contracts\Trackers\CookieTracker::class);
     }
 
     /**
@@ -53,7 +53,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getDeviceTracker()
     {
-        return $this->app->make(Contracts\Trackers\DeviceTracker::class);
+        return $this->getTracker(Contracts\Trackers\DeviceTracker::class);
     }
 
     /**
@@ -63,7 +63,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getGeoIpTracker()
     {
-        return $this->app->make(Contracts\Trackers\GeoIpTracker::class);
+        return $this->getTracker(Contracts\Trackers\GeoIpTracker::class);
     }
 
     /**
@@ -73,7 +73,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getLanguageTracker()
     {
-        return $this->app->make(Contracts\Trackers\LanguageTracker::class);
+        return $this->getTracker(Contracts\Trackers\LanguageTracker::class);
     }
 
     /**
@@ -83,7 +83,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getPathTracker()
     {
-        return $this->app->make(Contracts\Trackers\PathTracker::class);
+        return $this->getTracker(Contracts\Trackers\PathTracker::class);
     }
 
     /**
@@ -93,7 +93,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getQueryTracker()
     {
-        return $this->app->make(Contracts\Trackers\QueryTracker::class);
+        return $this->getTracker(Contracts\Trackers\QueryTracker::class);
     }
 
     /**
@@ -103,7 +103,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getRefererTracker()
     {
-        return $this->app->make(Contracts\Trackers\RefererTracker::class);
+        return $this->getTracker(Contracts\Trackers\RefererTracker::class);
     }
 
     /**
@@ -113,7 +113,17 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getSessionTracker()
     {
-        return $this->app->make(Contracts\Trackers\SessionTracker::class);
+        return $this->getTracker(Contracts\Trackers\SessionTracker::class);
+    }
+
+    /**
+     * Get the session activity tracker.
+     *
+     * @return \Arcanedev\LaravelTracker\Contracts\Trackers\SessionActivityTracker
+     */
+    private function getSessionActivityTracker()
+    {
+        return $this->getTracker(Contracts\Trackers\SessionActivityTracker::class);
     }
 
     /**
@@ -123,7 +133,7 @@ class TrackingManager implements TrackingManagerContract
      */
     public function getUserAgentTracker()
     {
-        return $this->app->make(Contracts\Trackers\UserAgentTracker::class);
+        return $this->getTracker(Contracts\Trackers\UserAgentTracker::class);
     }
 
     /**
@@ -133,7 +143,19 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getUserTracker()
     {
-        return $this->app->make(Contracts\Trackers\UserTracker::class);
+        return $this->getTracker(Contracts\Trackers\UserTracker::class);
+    }
+
+    /**
+     * Get the tracker instance.
+     *
+     * @param  string  $abstract
+     *
+     * @return mixed
+     */
+    private function getTracker($abstract)
+    {
+        return $this->app->make($abstract);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -251,6 +273,18 @@ class TrackingManager implements TrackingManagerContract
     public function trackSession(array $data)
     {
         return $this->getSessionTracker()->track($data);
+    }
+
+    /**
+     * Track the session activity.
+     *
+     * @param  array  $data
+     *
+     * @return int
+     */
+    public function trackActivity(array $data)
+    {
+        return $this->getSessionActivityTracker()->track($data);
     }
 
     /**

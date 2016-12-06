@@ -65,6 +65,7 @@ class MigrationsTest extends TestCase
             'referers',
             'referer_search_terms',
             'sessions',
+            'session_activities',
         ]);
 
         return $tables + [

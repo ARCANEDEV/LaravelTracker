@@ -227,9 +227,18 @@ class Tracker implements TrackerContract
         ], $this->sessionData);
     }
 
+    /**
+     * Track the path.
+     *
+     * @return int|null
+     */
     private function getPathId()
     {
-        return 0;
+        return $this->trackIfEnabled('paths', function () {
+            return $this->trackingManager->trackPath(
+                $this->request->path()
+            );
+        });
     }
 
     private function getQueryId()
@@ -244,9 +253,9 @@ class Tracker implements TrackerContract
      */
     private function getUserId()
     {
-        return $this->getConfig('tracking.users', false)
-            ? $this->trackingManager->trackUser()
-            : null;
+        return $this->trackIfEnabled('users', function () {
+            return $this->trackingManager->trackUser();
+        });
     }
 
     /**
@@ -256,9 +265,9 @@ class Tracker implements TrackerContract
      */
     private function getDeviceId()
     {
-        return $this->getConfig('tracking.devices', false)
-            ? $this->trackingManager->trackDevice()
-            : null;
+        return $this->trackIfEnabled('devices', function () {
+            return $this->trackingManager->trackDevice();
+        });
     }
 
     /**
@@ -268,9 +277,11 @@ class Tracker implements TrackerContract
      */
     private function getGeoIpId()
     {
-        return $this->getConfig('tracking.geoip', false)
-            ? $this->trackingManager->trackGeoIp($this->request->getClientIp())
-            : null;
+        return $this->trackIfEnabled('geoip', function () {
+            return $this->trackingManager->trackGeoIp(
+                $this->request->getClientIp()
+            );
+        });
     }
 
     /**
@@ -280,9 +291,9 @@ class Tracker implements TrackerContract
      */
     private function getAgentId()
     {
-        return $this->getConfig('tracking.user-agents', false)
-            ? $this->trackingManager->trackUserAgent()
-            : null;
+        return $this->trackIfEnabled('user-agents', function () {
+            return $this->trackingManager->trackUserAgent();
+        });
     }
 
     /**
@@ -292,9 +303,12 @@ class Tracker implements TrackerContract
      */
     private function getRefererId()
     {
-        return $this->getConfig('tracking.referers', false)
-            ? $this->trackingManager->trackReferer($this->request->headers->get('referer'), $this->request->url())
-            : null;
+        return $this->trackIfEnabled('referers', function () {
+            return $this->trackingManager->trackReferer(
+                $this->request->headers->get('referer'),
+                $this->request->url()
+            );
+        });
     }
 
     /**
@@ -304,9 +318,11 @@ class Tracker implements TrackerContract
      */
     private function getCookieId()
     {
-        return $this->getConfig('tracking.cookies', false)
-            ? $this->trackingManager->trackCookie($this->request->cookie($this->getConfig('cookie.name')))
-            : null;
+        return $this->trackIfEnabled('cookies', function () {
+            return $this->trackingManager->trackCookie(
+                $this->request->cookie($this->getConfig('cookie.name'))
+            );
+        });
     }
 
     /**
@@ -316,9 +332,9 @@ class Tracker implements TrackerContract
      */
     private function getLanguageId()
     {
-        return $this->getConfig('tracking.languages', false)
-            ? $this->trackingManager->trackLanguage()
-            : null;
+        return $this->trackIfEnabled('languages', function () {
+            return $this->trackingManager->trackLanguage();
+        });
     }
 
     /**
@@ -332,5 +348,19 @@ class Tracker implements TrackerContract
         $crawler = $this->app[CrawlerDetector::class];
 
         return $crawler->isRobot();
+    }
+
+    /**
+     * Track the trackable if enabled.
+     *
+     * @param  string      $key
+     * @param  \Closure    $callback
+     * @param  mixed|null  $default
+     *
+     * @return mixed
+     */
+    private function trackIfEnabled($key, \Closure $callback, $default = null)
+    {
+        return $this->getConfig("tracking.$key", false) ? $callback() : $default;
     }
 }

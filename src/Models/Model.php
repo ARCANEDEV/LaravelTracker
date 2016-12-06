@@ -53,7 +53,7 @@ abstract class Model extends BaseModel
      *
      * @param  string  $method
      * @param  array   $parameters
-     * 
+     *
      * @return mixed
      */
     public function __call($method, $parameters)

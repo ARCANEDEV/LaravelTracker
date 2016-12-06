@@ -145,6 +145,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         $this->singleton(Contracts\Trackers\LanguageTracker::class,  Trackers\LanguageTracker::class);
         $this->singleton(Contracts\Trackers\RefererTracker::class,   Trackers\RefererTracker::class);
         $this->singleton(Contracts\Trackers\SessionTracker::class,   function ($app) {
+            /** @var \Illuminate\Contracts\Foundation\Application $app */
             return new Trackers\SessionTracker($app['session.store']);
         });
         $this->singleton(Contracts\Trackers\UserAgentTracker::class, Trackers\UserAgentTracker::class);

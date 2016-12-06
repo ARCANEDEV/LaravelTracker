@@ -141,11 +141,18 @@ class SessionTracker implements SessionTrackerContract
         return $data;
     }
 
+    /**
+     * Get the session data.
+     *
+     * @param  string|null  $column
+     *
+     * @return mixed
+     */
     private function getSessionData($column = null)
     {
         $data = $this->session->get($this->getSessionKey());
 
-        return $column ? Arr::get($data, $column, null) : $data;
+        return is_null($column) ? Arr::get($data, $column, null) : $data;
     }
 
     /**
@@ -170,6 +177,13 @@ class SessionTracker implements SessionTrackerContract
         return $model;
     }
 
+    /**
+     * Regenerate system session.
+     *
+     * @param  array|null  $data
+     *
+     * @return array
+     */
     private function regenerateSystemSession($data = null)
     {
         $data = $data ?: $this->getSessionData();
@@ -206,9 +220,9 @@ class SessionTracker implements SessionTrackerContract
     /**
      * Put the session data.
      *
-     * @param  mixed  $data
+     * @param  array  $data
      */
-    private function putSessionData($data)
+    private function putSessionData(array $data)
     {
         $this->session->put([
             $this->getSessionKey() => $data
@@ -302,13 +316,12 @@ class SessionTracker implements SessionTrackerContract
      *
      * @param  array  $sessionInfo
      */
-    private function generateSession($sessionInfo)
+    private function generateSession(array $sessionInfo)
     {
         $this->sessionInfo = $sessionInfo;
 
-        if ( ! $this->checkSessionDataIsReliable()) {
+        if ( ! $this->checkSessionDataIsReliable())
             $this->regenerateSystemSession();
-        }
 
         $this->checkSessionUuid();
     }

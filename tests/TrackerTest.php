@@ -85,6 +85,7 @@ class TrackerTest extends TestCase
     /** @test */
     public function it_can_track()
     {
+        // Without an authenticated user
         $this->call('GET', '/');
 
         // TODO: Complete the implementation

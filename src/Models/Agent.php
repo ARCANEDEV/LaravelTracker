@@ -13,7 +13,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Agent extends Model
+class Agent extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

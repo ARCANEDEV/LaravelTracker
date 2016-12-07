@@ -11,7 +11,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Cookie extends Model
+class Cookie extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

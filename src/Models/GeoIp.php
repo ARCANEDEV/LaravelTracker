@@ -22,7 +22,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class GeoIp extends Model
+class GeoIp extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

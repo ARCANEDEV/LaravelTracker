@@ -11,7 +11,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Path extends Model
+class Path extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

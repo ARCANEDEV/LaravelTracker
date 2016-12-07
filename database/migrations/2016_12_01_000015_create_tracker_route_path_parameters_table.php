@@ -4,11 +4,11 @@ use Arcanedev\LaravelTracker\Bases\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
 /**
- * Class     CreateTrackerSessionActivitiesTable
+ * Class     CreateTrackerRoutePathParametersTable
  *
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class CreateTrackerSessionActivitiesTable extends Migration
+class CreateTrackerRoutePathParametersTable extends Migration
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -19,7 +19,7 @@ class CreateTrackerSessionActivitiesTable extends Migration
      *
      * @var string
      */
-    protected $table = 'session_activities';
+    protected $table = 'route_path_parameters';
 
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
@@ -32,17 +32,9 @@ class CreateTrackerSessionActivitiesTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('session_id', false, true)->index();
-            $table->bigInteger('path_id', false, true)->nullable()->index();
-            $table->bigInteger('query_id', false, true)->nullable()->index();
-            $table->bigInteger('referrer_id', false, true)->nullable()->index();
-            $table->bigInteger('route_path_id', false, true)->nullable()->index();
-            $table->bigInteger('error_id', false, true)->nullable()->index();
-            $table->string('method', 10)->index();
-            $table->boolean('is_ajax')->default(false);
-            $table->boolean('is_secure')->default(false);
-            $table->boolean('is_json')->default(false);
-            $table->boolean('wants_json')->default(false);
+            $table->bigInteger('route_path_id', false, true)->index();
+            $table->string('parameter')->index();
+            $table->string('value')->index();
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();
         });

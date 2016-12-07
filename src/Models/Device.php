@@ -15,7 +15,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Device extends Model
+class Device extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

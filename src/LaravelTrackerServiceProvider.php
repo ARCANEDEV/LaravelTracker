@@ -48,6 +48,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         $this->registerConfig();
 
         $this->app->register(Providers\PackagesServiceProvider::class);
+        $this->app->register(Providers\EventServiceProvider::class);
 
         if ($this->app->runningInConsole())
             $this->app->register(Providers\CommandServiceProvider::class);
@@ -153,8 +154,8 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      */
     private function registerMainTracker()
     {
-        $this->singleton('arcanedev.tracker', Tracker::class);
-        $this->bind(Contracts\Tracker::class, Tracker::class);
+        $this->singleton(Contracts\Tracker::class, Tracker::class);
+        $this->bind('arcanedev.tracker', Contracts\Tracker::class);
     }
 
     /**
@@ -172,6 +173,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             TrackerContracts\PathTracker::class            => Trackers\PathTracker::class,
             TrackerContracts\QueryTracker::class           => Trackers\QueryTracker::class,
             TrackerContracts\RefererTracker::class         => Trackers\RefererTracker::class,
+            TrackerContracts\RouteTracker::class           => Trackers\RouteTracker::class,
             TrackerContracts\SessionTracker::class         => function ($app) {
                 /** @var \Illuminate\Contracts\Foundation\Application $app */
                 return new Trackers\SessionTracker($app['session.store']);

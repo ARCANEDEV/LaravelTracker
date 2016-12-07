@@ -13,6 +13,13 @@ interface TrackingManager
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Get the route tracker.
+     *
+     * @return \Arcanedev\LaravelTracker\Contracts\Trackers\RouteTracker
+     */
+    public function getRouteTracker();
+
+    /**
      * Get the user agent tracker.
      *
      * @return \Arcanedev\LaravelTracker\Contracts\Trackers\UserAgentTracker
@@ -118,10 +125,10 @@ interface TrackingManager
     /**
      * Check the session data.
      *
-     * @param  array  $data
      * @param  array  $currentData
+     * @param  array  $newData
      *
      * @return array
      */
-    public function checkSessionData(array $data, array $currentData);
+    public function checkSessionData(array $currentData, array $newData);
 }

@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Contracts;
 
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 /**
  * Interface  Tracker
@@ -11,11 +12,6 @@ use Illuminate\Http\Request;
 interface Tracker
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
-     | ------------------------------------------------------------------------------------------------
-     */
-
-    /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
@@ -25,6 +21,14 @@ interface Tracker
      * @param  \Illuminate\Http\Request  $request
      */
     public function track(Request $request);
+
+    /**
+     * Track the matched route.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Http\Request   $request
+     */
+    public function trackMatchedRoute(Route $route, Request $request);
 
     /**
      * Enable the tracker.

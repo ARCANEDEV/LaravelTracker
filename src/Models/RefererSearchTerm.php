@@ -6,7 +6,7 @@
  * @package  Arcanesoft\Tracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RefererSearchTerm extends Model
+class RefererSearchTerm extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

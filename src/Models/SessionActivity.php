@@ -27,7 +27,7 @@
  * @property  \Arcanedev\LaravelTracker\Models\Referer  referer
  * @property  \Arcanedev\LaravelTracker\Models\Error    error
  */
-class SessionActivity extends Model
+class SessionActivity extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

@@ -1,18 +1,18 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 /**
- * Class     Language
+ * Class     Route
  *
- * @package  Arcanedev\LaravelTracker\Models
+ * @package  Arcanesoft\Tracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  int             id
- * @property  string          preference
- * @property  string          language_range
+ * @property  string          name
+ * @property  string          action
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Language extends AbstractModel
+class Route extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -23,20 +23,28 @@ class Language extends AbstractModel
      *
      * @var string
      */
-    protected $table = 'languages';
+    protected $table = 'routes';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'preference',
-        'language_range',
-    ];
+    protected $fillable = ['name', 'action'];
 
     /* ------------------------------------------------------------------------------------------------
      |  Relationships
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Paths relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function paths()
+    {
+        return $this->hasMany(
+            $this->getConfig('models.route-path', RoutePath::class)
+        );
+    }
 }

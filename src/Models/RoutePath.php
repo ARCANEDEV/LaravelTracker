@@ -1,19 +1,21 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 /**
- * Class     Domain
+ * Class     RoutePath
  *
- * @package  Arcanedev\LaravelTracker\Models
+ * @package  Arcanesoft\Tracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  int             id
- * @property  string          name
+ * @property  int             route_id
+ * @property  string          path
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  *
- * @property  \Illuminate\Database\Eloquent\Collection  referers
+ * @property  \Arcanedev\LaravelTracker\Models\Route    route
+ * @property  \Illuminate\Database\Eloquent\Collection  parameters
  */
-class Domain extends AbstractModel
+class RoutePath extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -24,14 +26,14 @@ class Domain extends AbstractModel
      *
      * @var string
      */
-    protected $table = 'domains';
+    protected $table = 'route_paths';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['route_id', 'path'];
 
     /**
      * The attributes that should be cast to native types.
@@ -39,7 +41,7 @@ class Domain extends AbstractModel
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
+        'route_id' => 'integer',
     ];
 
     /* ------------------------------------------------------------------------------------------------
@@ -47,14 +49,26 @@ class Domain extends AbstractModel
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Referer relationship.
+     * Route relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function route()
+    {
+        return $this->belongsTo(
+            $this->getConfig('models.route', Route::class)
+        );
+    }
+
+    /**
+     * Parameters relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function referers()
+    public function parameters()
     {
         return $this->hasMany(
-            $this->getConfig('models.referer', Referer::class)
+            $this->getConfig('models.route-path-parameter', RoutePathParameter::class)
         );
     }
 }

@@ -28,7 +28,7 @@
  * @property  \Arcanedev\LaravelTracker\Models\GeoIp     geo_ip
  * @property  \Arcanedev\LaravelTracker\Models\Language  language
  */
-class Session extends Model
+class Session extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

@@ -5,6 +5,7 @@ use Arcanedev\LaravelTracker\Contracts\Tracker as TrackerContract;
 use Arcanedev\LaravelTracker\Contracts\TrackingManager as TrackingManagerContract;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 /**
  * Class     Tracker
@@ -37,7 +38,7 @@ class Tracker implements TrackerContract
      *
      * @var \Arcanedev\LaravelTracker\Contracts\TrackingManager
      */
-    private $trackingManager;
+    private $manager;
 
     /**
      * @var bool
@@ -59,13 +60,13 @@ class Tracker implements TrackerContract
      * Tracker constructor.
      *
      * @param  \Illuminate\Contracts\Foundation\Application         $app
-     * @param  \Arcanedev\LaravelTracker\Contracts\TrackingManager  $trackingManager
+     * @param  \Arcanedev\LaravelTracker\Contracts\TrackingManager  $manager
      */
-    public function __construct(Application $app, TrackingManagerContract $trackingManager)
+    public function __construct(Application $app, TrackingManagerContract $manager)
     {
-        $this->app             = $app;
-        $this->trackingManager = $trackingManager;
-        $this->enabled         = $this->getConfig('enabled', $this->enabled);
+        $this->app     = $app;
+        $this->manager = $manager;
+        $this->enabled = $this->getConfig('enabled', $this->enabled);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -116,13 +117,30 @@ class Tracker implements TrackerContract
      */
     public function getUserAgentParser()
     {
-        return $this->trackingManager->getUserAgentTracker()->getUserAgentParser();
+        return $this->manager->getUserAgentTracker()->getUserAgentParser();
     }
 
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Track the matched route.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Http\Request   $request
+     */
+    public function trackMatchedRoute(Route $route, Request $request)
+    {
+        $tracker = $this->manager->getRouteTracker();
+
+        if ($tracker->isTrackable($route)) {
+            $routePathId = $tracker->track($route, $request);
+        }
+        else
+            $this->disable();
+    }
+
     /**
      * Start the tracking.
      *
@@ -133,7 +151,7 @@ class Tracker implements TrackerContract
         if ($this->isEnabled()) {
             $this->setRequest($request);
 
-            $id = $this->trackingManager->trackActivity(
+            $id = $this->manager->trackActivity(
                 $activity = $this->getSessionActivityData()
             );
         }
@@ -202,7 +220,7 @@ class Tracker implements TrackerContract
      */
     private function getSessionId()
     {
-        $this->sessionData = $this->trackingManager->checkSessionData([
+        $this->sessionData = $this->manager->checkSessionData($this->sessionData, [
             'user_id'      => $this->getUserId(),
             'device_id'    => $this->getDeviceId(),
             'client_ip'    => $this->request->getClientIp(),
@@ -212,12 +230,10 @@ class Tracker implements TrackerContract
             'cookie_id'    => $this->getCookieId(),
             'language_id'  => $this->getLanguageId(),
             'is_robot'     => $this->isRobot(),
-            // The key `user_agent` is not present in the sessions table, but it's internally used to check
-            // if the user agent changed during a session.
             'user_agent'   => $this->getUserAgentParser()->getOriginalUserAgent(),
-        ], $this->sessionData);
+        ]);
 
-        return $this->trackingManager->trackSession($this->sessionData);
+        return $this->manager->trackSession($this->sessionData);
     }
 
     /**
@@ -228,7 +244,7 @@ class Tracker implements TrackerContract
     private function getPathId()
     {
         return $this->trackIfEnabled('paths', function () {
-            return $this->trackingManager->trackPath(
+            return $this->manager->trackPath(
                 $this->request->path()
             );
         });
@@ -242,7 +258,7 @@ class Tracker implements TrackerContract
     private function getQueryId()
     {
         return $this->trackIfEnabled('path-queries', function () {
-            return $this->trackingManager->trackQuery(
+            return $this->manager->trackQuery(
                 $this->request->query()
             );
         });
@@ -256,7 +272,7 @@ class Tracker implements TrackerContract
     private function getUserId()
     {
         return $this->trackIfEnabled('users', function () {
-            return $this->trackingManager->trackUser();
+            return $this->manager->trackUser();
         });
     }
 
@@ -268,7 +284,7 @@ class Tracker implements TrackerContract
     private function getDeviceId()
     {
         return $this->trackIfEnabled('devices', function () {
-            return $this->trackingManager->trackDevice();
+            return $this->manager->trackDevice();
         });
     }
 
@@ -280,7 +296,7 @@ class Tracker implements TrackerContract
     private function getGeoIpId()
     {
         return $this->trackIfEnabled('geoip', function () {
-            return $this->trackingManager->trackGeoIp(
+            return $this->manager->trackGeoIp(
                 $this->request->getClientIp()
             );
         });
@@ -294,7 +310,7 @@ class Tracker implements TrackerContract
     private function getAgentId()
     {
         return $this->trackIfEnabled('user-agents', function () {
-            return $this->trackingManager->trackUserAgent();
+            return $this->manager->trackUserAgent();
         });
     }
 
@@ -306,7 +322,7 @@ class Tracker implements TrackerContract
     private function getRefererId()
     {
         return $this->trackIfEnabled('referers', function () {
-            return $this->trackingManager->trackReferer(
+            return $this->manager->trackReferer(
                 $this->request->headers->get('referer'),
                 $this->request->url()
             );
@@ -321,7 +337,7 @@ class Tracker implements TrackerContract
     private function getCookieId()
     {
         return $this->trackIfEnabled('cookies', function () {
-            return $this->trackingManager->trackCookie(
+            return $this->manager->trackCookie(
                 $this->request->cookie($this->getConfig('cookie.name'))
             );
         });
@@ -335,7 +351,7 @@ class Tracker implements TrackerContract
     private function getLanguageId()
     {
         return $this->trackIfEnabled('languages', function () {
-            return $this->trackingManager->trackLanguage();
+            return $this->manager->trackLanguage();
         });
     }
 

@@ -1,33 +1,35 @@
 <?php namespace Arcanedev\LaravelTracker\Contracts\Trackers;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 /**
- * Interface  SessionTracker
+ * Interface  RouteTracker
  *
  * @package   Arcanedev\LaravelTracker\Contracts\Trackers
  * @author    ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-interface SessionTracker
+interface RouteTracker
 {
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Track the session.
+     * Check if the route is trackable.
      *
-     * @param  array  $data
+     * @param  \Illuminate\Routing\Route  $route
      *
-     * @return int
+     * @return bool
      */
-    public function track(array $data);
+    public function isTrackable($route);
 
     /**
-     * Check the session data.
+     * Track the matched route.
      *
-     * @param  array  $currentData
-     * @param  array  $newData
+     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Http\Request   $request
      *
-     * @return array
+     * @return mixed
      */
-    public function checkData(array $currentData, array $newData);
+    public function track(Route $route, Request $request);
 }

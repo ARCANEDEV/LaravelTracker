@@ -1,18 +1,18 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
-use Arcanedev\Support\Bases\Model as BaseModel;
+use Arcanedev\Support\Bases\Model;
 
 /**
- * Class     Model
+ * Class     AbstractModel
  *
  * @package  Arcanedev\LaravelTracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
- * @property  int             id
+ * @property  int  id
  *
- * @method  static  Model  firstOrCreate(array $attributes, array $values = [])
+ * @method  static  \Arcanedev\LaravelTracker\Models\AbstractModel  firstOrCreate(array $attributes, array $values = [])
  */
-abstract class Model extends BaseModel
+abstract class AbstractModel extends Model
 {
     /* ------------------------------------------------------------------------------------------------
      |  Constructor

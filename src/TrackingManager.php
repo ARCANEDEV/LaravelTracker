@@ -127,6 +127,16 @@ class TrackingManager implements TrackingManagerContract
     }
 
     /**
+     * Get the route tracker.
+     *
+     * @return \Arcanedev\LaravelTracker\Contracts\Trackers\RouteTracker
+     */
+    public function getRouteTracker()
+    {
+        return $this->getTracker(Contracts\Trackers\RouteTracker::class);
+    }
+
+    /**
      * Get the user agent tracker.
      *
      * @return \Arcanedev\LaravelTracker\Contracts\Trackers\UserAgentTracker
@@ -144,18 +154,6 @@ class TrackingManager implements TrackingManagerContract
     private function getUserTracker()
     {
         return $this->getTracker(Contracts\Trackers\UserTracker::class);
-    }
-
-    /**
-     * Get the tracker instance.
-     *
-     * @param  string  $abstract
-     *
-     * @return mixed
-     */
-    private function getTracker($abstract)
-    {
-        return $this->app->make($abstract);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -290,13 +288,29 @@ class TrackingManager implements TrackingManagerContract
     /**
      * Check the session data.
      *
-     * @param  array  $data
      * @param  array  $currentData
+     * @param  array  $newData
      *
      * @return array
      */
-    public function checkSessionData(array $data, array $currentData)
+    public function checkSessionData(array $currentData, array $newData)
     {
-        return $this->getSessionTracker()->checkData($data, $currentData);
+        return $this->getSessionTracker()->checkData($currentData, $newData);
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the tracker instance.
+     *
+     * @param  string  $abstract
+     *
+     * @return mixed
+     */
+    private function getTracker($abstract)
+    {
+        return $this->app->make($abstract);
     }
 }

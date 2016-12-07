@@ -18,7 +18,7 @@
  *
  * @property  \Arcanedev\LaravelTracker\Models\Domain  domain
  */
-class Referer extends Model
+class Referer extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

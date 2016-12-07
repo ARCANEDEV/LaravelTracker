@@ -1,18 +1,19 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 /**
- * Class     Language
+ * Class     RoutePathParameter
  *
- * @package  Arcanedev\LaravelTracker\Models
+ * @package  Arcanesoft\Tracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  int             id
- * @property  string          preference
- * @property  string          language_range
+ * @property  int             route_path_id
+ * @property  string          parameter
+ * @property  string          value
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Language extends AbstractModel
+class RoutePathParameter extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -23,20 +24,21 @@ class Language extends AbstractModel
      *
      * @var string
      */
-    protected $table = 'languages';
+    protected $table = 'route_path_parameters';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'preference',
-        'language_range',
-    ];
+    protected $fillable = ['route_path_id', 'parameter', 'value'];
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Relationships
-     | ------------------------------------------------------------------------------------------------
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
      */
+    protected $casts = [
+        'route_path_id' => 'integer',
+    ];
 }

@@ -12,7 +12,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Query extends Model
+class Query extends AbstractModel
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

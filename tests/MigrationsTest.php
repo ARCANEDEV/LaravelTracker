@@ -63,6 +63,9 @@ class MigrationsTest extends TestCase
             'queries',
             'referers',
             'referer_search_terms',
+            'routes',
+            'route_paths',
+            'route_path_parameters',
             'sessions',
             'session_activities',
         ]);

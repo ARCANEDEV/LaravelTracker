@@ -108,14 +108,14 @@ class SessionTracker implements SessionTrackerContract
     /**
      * Check the session data.
      *
-     * @param  array  $newData
      * @param  array  $currentData
+     * @param  array  $newData
      *
      * @return array
      */
-    public function checkData(array $newData, array $currentData)
+    public function checkData(array $currentData, array $newData)
     {
-        return ($newData && $currentData && $newData !== $currentData)
+        return ($currentData && $newData && $currentData !== $newData)
             ? $this->updateData($newData)
             : $newData;
     }

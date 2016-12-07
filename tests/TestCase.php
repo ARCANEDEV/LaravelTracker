@@ -89,6 +89,10 @@ abstract class TestCase extends BaseTestCase
             'users'        => true,
             'user-agents'  => true,
         ]);
+
+        $config->set('laravel-tracker.routes.ignore.names', [
+            'admin::*',
+        ]);
     }
 
     /**
@@ -105,9 +109,19 @@ abstract class TestCase extends BaseTestCase
             : ['middleware' => 'tracked'];
 
         $router->group($attributes, function () use ($router) {
-            $router->get('/', function () {
-                return 'Tracked route';
-            });
+            $router->get('/', [
+                'as' => 'home',
+                function () {
+                    return 'Tracked home route';
+                }
+            ]);
+
+            $router->get('admin', [
+                'as' => 'admin::home',
+                function () {
+                    return 'Tracked admin route';
+                }
+            ]);
         });
     }
 
@@ -159,5 +173,19 @@ abstract class TestCase extends BaseTestCase
         $this->artisan('vendor:publish', [
             '--tag' => ['migrations'],
         ]);
+    }
+
+    /**
+     * Make a route.
+     *
+     * @param  array|string    $methods
+     * @param  string          $uri
+     * @param  \Closure|array  $action
+     *
+     * @return \Illuminate\Routing\Route
+     */
+    protected function makeRoute($methods, $uri, $action)
+    {
+        return new \Illuminate\Routing\Route($methods, $uri, $action);
     }
 }

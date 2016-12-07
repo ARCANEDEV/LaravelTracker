@@ -133,10 +133,8 @@ class SessionTracker implements SessionTrackerContract
      */
     private function updateData(array $data)
     {
-        /**  @var \Arcanedev\LaravelTracker\Models\Session $session  */
-        $session = $this->checkIfUserChanged($data, Session::find($this->getSessionData('id')));
-
-        $session->update(Arr::except($data, ['id', 'uuid']));
+        $this->checkIfUserChanged($data)
+             ->update(Arr::except($data, ['id', 'uuid']));
 
         return $data;
     }
@@ -158,13 +156,17 @@ class SessionTracker implements SessionTrackerContract
     /**
      * Check if user changed.
      *
-     * @param  array                                     $data
-     * @param  \Arcanedev\LaravelTracker\Models\Session  $model
+     * @param  array  $data
      *
-     * @return \Arcanedev\LaravelTracker\Models\Session  Session
+     * @return \Arcanedev\LaravelTracker\Models\Session
      */
-    private function checkIfUserChanged(array $data, $model)
+    private function checkIfUserChanged(array $data)
     {
+        $model = Session::find($this->getSessionData('id'));
+
+        if (is_null($model) && ! $this->sessionIsKnown())
+            return $this->createSessionForGuest($data);
+
         if (
             ! is_null($model->user_id) &&
             ! is_null($data['user_id']) &&
@@ -175,6 +177,25 @@ class SessionTracker implements SessionTrackerContract
         }
 
         return $model;
+    }
+
+    /**
+     * Create session for guest.
+     *
+     * @param  array  $data
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Session
+     */
+    private function createSessionForGuest(array $data)
+    {
+        $this->generateSession($data);
+
+        $session = Session::create($this->sessionInfo);
+
+        $this->putSessionData($data);
+        $this->setSessionId($session->id);
+
+        return $session;
     }
 
     /**
@@ -245,9 +266,7 @@ class SessionTracker implements SessionTrackerContract
      */
     private function getSystemSessionId()
     {
-        $sessionData = $this->getSessionData();
-
-        return isset($sessionData['uuid']) ? $sessionData['uuid'] : (string) UUID::uuid4();
+        return Arr::get($this->getSessionData(), 'uuid', (string) Uuid::uuid4());
     }
 
     /**
@@ -266,7 +285,7 @@ class SessionTracker implements SessionTrackerContract
         else {
             $session = Session::firstOrCreate(Arr::only($this->sessionInfo, ['uuid']), $this->sessionInfo);
             $this->setSessionId($session->id);
-            $this->storeSession();
+            $this->putSessionData($this->sessionInfo);
         }
 
         return $known;
@@ -282,7 +301,7 @@ class SessionTracker implements SessionTrackerContract
         if ( ! $this->session->has($this->getSessionKey()))
             return false;
 
-        if ( ! $this->getSessionData('uuid') == $this->getSystemSessionId())
+        if ($this->getSessionData('uuid') != $this->getSystemSessionId())
             return false;
 
         if ( ! $this->findByUuid($this->getSessionData('uuid')))
@@ -301,14 +320,6 @@ class SessionTracker implements SessionTrackerContract
     private function findByUuid($uuid)
     {
         return Session::where('uuid', $uuid)->first();
-    }
-
-    /**
-     * Store the session information.
-     */
-    private function storeSession()
-    {
-        $this->putSessionData($this->sessionInfo);
     }
 
     /**
@@ -368,6 +379,7 @@ class SessionTracker implements SessionTrackerContract
             }
         }
 
-        if ( ! $completed) $this->storeSession();
+        if ( ! $completed)
+            $this->putSessionData($this->sessionInfo);
     }
 }

@@ -20,7 +20,10 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \Illuminate\Routing\Events\RouteMatched::class => [
+        'router.matched' => [
+            \Arcanedev\LaravelTracker\EventListeners\TrackMatchedRoute::class
+        ],
+        'Illuminate\Routing\Events\RouteMatched' => [
             \Arcanedev\LaravelTracker\EventListeners\TrackMatchedRoute::class
         ],
     ];

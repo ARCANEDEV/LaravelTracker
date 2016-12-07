@@ -36,11 +36,11 @@ class CreateTrackerSessionsTable extends Migration
             $table->bigInteger('user_id', false, true)->nullable()->index();
             $table->bigInteger('device_id', false, true)->nullable()->index();
             $table->bigInteger('agent_id', false, true)->nullable()->index();
-            $table->string('client_ip')->index();
+            $table->bigInteger('geoip_id', false, true)->nullable()->index();
             $table->bigInteger('referer_id', false, true)->nullable()->index();
             $table->bigInteger('cookie_id', false, true)->nullable()->index();
-            $table->bigInteger('geoip_id', false, true)->nullable()->index();
             $table->bigInteger('language_id', false, true)->nullable()->index();
+            $table->string('client_ip')->index();
             $table->boolean('is_robot')->default(false);
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();

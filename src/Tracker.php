@@ -50,7 +50,37 @@ class Tracker implements TrackerContract
      *
      * @var array
      */
-    protected $sessionData = [];
+    protected $sessionData = [
+        'user_id'     => null,
+        'device_id'   => null,
+        'agent_id'    => null,
+        'geoip_id'    => null,
+        'referrer_id' => null,
+        'cookie_id'   => null,
+        'language_id' => null,
+        'client_ip'   => '',
+        'is_robot'    => false,
+        'user_agent'  => '',
+    ];
+
+    /**
+     * The current session activity data.
+     *
+     * @var array
+     */
+    protected $sessionActivityData = [
+        'session_id'    => null,
+        'path_id'       => null,
+        'query_id'      => null,
+        'referrer_id'   => null,
+        'route_path_id' => null,
+        'error_id'      => null,
+        'method'        => '',
+        'is_ajax'       => false,
+        'is_secure'     => false,
+        'is_json'       => false,
+        'wants_json'    => false,
+    ];
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -105,6 +135,14 @@ class Tracker implements TrackerContract
      */
     private function setRequest(Request $request)
     {
+        $this->mergeSessionActivityData([
+            'method'      => $request->method(),
+            'is_ajax'     => $request->ajax(),
+            'is_secure'   => $request->isSecure(),
+            'is_json'     => $request->isJson(),
+            'wants_json'  => $request->wantsJson(),
+        ]);
+
         $this->request = $request;
 
         return $this;
@@ -118,6 +156,34 @@ class Tracker implements TrackerContract
     public function getUserAgentParser()
     {
         return $this->manager->getUserAgentTracker()->getUserAgentParser();
+    }
+
+    /**
+     * Merge session data.
+     *
+     * @param  array  $data
+     *
+     * @return self
+     */
+    private function mergeSessionData(array $data)
+    {
+        $this->sessionData = array_merge($this->sessionData, $data);
+
+        return $this;
+    }
+
+    /**
+     * Merge session activity data.
+     *
+     * @param  array  $data
+     *
+     * @return self
+     */
+    private function mergeSessionActivityData(array $data)
+    {
+        $this->sessionActivityData = array_merge($this->sessionActivityData, $data);
+
+        return $this;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -135,7 +201,9 @@ class Tracker implements TrackerContract
         $tracker = $this->manager->getRouteTracker();
 
         if ($tracker->isTrackable($route)) {
-            $routePathId = $tracker->track($route, $request);
+            $this->mergeSessionActivityData([
+                'route_path_id' => $tracker->track($route, $request),
+            ]);
         }
         else
             $this->disable();
@@ -151,9 +219,14 @@ class Tracker implements TrackerContract
         if ($this->isEnabled()) {
             $this->setRequest($request);
 
-            $id = $this->manager->trackActivity(
-                $activity = $this->getSessionActivityData()
-            );
+            $this->mergeSessionActivityData([
+                'session_id'  => $this->getSessionId(),
+                'path_id'     => $this->getPathId(),
+                'query_id'    => $this->getQueryId(),
+                'referrer_id' => $this->getRefererId(),
+            ]);
+
+            $id = $this->manager->trackActivity($this->sessionActivityData);
         }
     }
 
@@ -162,8 +235,7 @@ class Tracker implements TrackerContract
      */
     public function enable()
     {
-        if ( ! $this->isEnabled())
-            $this->enabled = true;
+        if ( ! $this->isEnabled()) $this->enabled = true;
     }
 
     /**
@@ -171,8 +243,7 @@ class Tracker implements TrackerContract
      */
     public function disable()
     {
-        if ($this->isEnabled())
-            $this->enabled = false;
+        if ($this->isEnabled()) $this->enabled = false;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -194,33 +265,13 @@ class Tracker implements TrackerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Get the session log data.
-     *
-     * @return array
-     */
-    protected function getSessionActivityData()
-    {
-        return [
-            'session_id'  => $this->getSessionId(),
-            'method'      => $this->request->method(),
-            'path_id'     => $this->getPathId(),
-            'query_id'    => $this->getQueryId(),
-            'referrer_id' => $this->getRefererId(),
-            'is_ajax'     => $this->request->ajax(),
-            'is_secure'   => $this->request->isSecure(),
-            'is_json'     => $this->request->isJson(),
-            'wants_json'  => $this->request->wantsJson(),
-        ];
-    }
-
-    /**
      * Get the stored session id.
      *
      * @return int
      */
     private function getSessionId()
     {
-        $this->sessionData = $this->manager->checkSessionData($this->sessionData, [
+        $sessionData = $this->manager->checkSessionData($this->sessionData, [
             'user_id'      => $this->getUserId(),
             'device_id'    => $this->getDeviceId(),
             'client_ip'    => $this->request->getClientIp(),
@@ -232,6 +283,8 @@ class Tracker implements TrackerContract
             'is_robot'     => $this->isRobot(),
             'user_agent'   => $this->getUserAgentParser()->getOriginalUserAgent(),
         ]);
+
+        $this->mergeSessionData($sessionData);
 
         return $this->manager->trackSession($this->sessionData);
     }

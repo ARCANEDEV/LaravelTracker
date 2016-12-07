@@ -1,8 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Providers;
 
-use Event;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Routing\Events\RouteMatched;
+use Arcanedev\Support\Providers\EventServiceProvider as ServiceProvider;
 
 /**
  * Class     EventServiceProvider
@@ -32,7 +30,7 @@ class EventServiceProvider extends ServiceProvider
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Register any events for your application.
+     * Register the application's event listeners.
      */
     public function boot()
     {

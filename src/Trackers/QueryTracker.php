@@ -2,7 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\QueryTracker as QueryTrackerContract;
 use Arcanedev\LaravelTracker\Models\Query;
-use Arcanedev\LaravelTracker\Models\QueryArgument;
+use Illuminate\Support\Arr;
 
 /**
  * Class     QueryTracker
@@ -27,14 +27,12 @@ class QueryTracker implements QueryTrackerContract
     {
         if (count($queries) == 0) return null;
 
-        /** @var \Arcanedev\LaravelTracker\Models\Query $query */
-        $query = Query::firstOrCreate([
-            'query' => $this->prepareArguments($queries)
-        ]);
+        $data = [
+            'query'     => $this->prepareQuery($queries),
+            'arguments' => $this->prepareArguments($queries),
+        ];
 
-        $this->saveArguments($query, $queries);
-
-        return $query->id;
+        return Query::firstOrCreate(Arr::only($data, ['query']), $data)->id;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -42,38 +40,34 @@ class QueryTracker implements QueryTrackerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Set the query arguments.
-     *
-     * @param  \Arcanedev\LaravelTracker\Models\Query  $query
-     * @param  array                                   $queries
-     *
-     * @return array
-     */
-    private function saveArguments($query, array $queries)
-    {
-        $arguments = [];
-
-        foreach ($queries as $argument => $value) {
-            $arguments[] = new QueryArgument([
-                'argument' => $argument,
-                'value'    => $this->prepareArguments($value),
-            ]);
-        }
-
-        return $query->arguments()->saveMany($arguments);
-    }
-
-    /**
-     * Prepare the query arguments.
+     * Prepare the query.
      *
      * @param  array|string  $queries
      *
      * @return string
      */
-    private function prepareArguments($queries)
+    public function prepareQuery($queries)
     {
         return is_array($queries)
             ? str_replace(['%5B', '%5D'], ['[', ']'], http_build_query($queries, null, '|'))
             : $queries;
+    }
+
+    /**
+     * Prepare the arguments.
+     *
+     * @param  array  $queries
+     *
+     * @return array
+     */
+    public function prepareArguments(array $queries)
+    {
+        $arguments = [];
+
+        foreach ($queries as $key => $value) {
+            $arguments[$key] = $this->prepareQuery($value);
+        }
+
+        return $arguments;
     }
 }

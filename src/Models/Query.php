@@ -8,6 +8,7 @@
  *
  * @property  int             id
  * @property  string          query
+ * @property  array           arguments
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
@@ -29,21 +30,20 @@ class Query extends Model
      *
      * @var array
      */
-    protected $fillable = ['query'];
+    protected $fillable = ['query', 'arguments'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'id'        => 'int',
+        'arguments' => 'array',
+    ];
 
     /* ------------------------------------------------------------------------------------------------
      |  Relationships
      | ------------------------------------------------------------------------------------------------
      */
-    /**
-     * The arguments relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function arguments()
-    {
-        return $this->hasMany(
-            $this->getConfig('models.query-argument', QueryArgument::class)
-        );
-    }
 }

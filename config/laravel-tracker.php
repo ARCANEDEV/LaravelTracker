@@ -30,7 +30,6 @@ return [
         'geoip'               => \Arcanedev\LaravelTracker\Models\GeoIp::class,
         'language'            => \Arcanedev\LaravelTracker\Models\Language::class,
         'query'               => \Arcanedev\LaravelTracker\Models\Query::class,
-        'query-argument'      => \Arcanedev\LaravelTracker\Models\QueryArgument::class,
         'referer'             => \Arcanedev\LaravelTracker\Models\Referer::class,
         'referer-search-term' => \Arcanedev\LaravelTracker\Models\RefererSearchTerm::class,
         'session'             => \Arcanedev\LaravelTracker\Models\Session::class,

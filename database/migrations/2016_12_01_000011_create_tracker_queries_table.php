@@ -33,6 +33,7 @@ class CreateTrackerQueriesTable extends Migration
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('query')->index();
+            $table->string('arguments');
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();
         });

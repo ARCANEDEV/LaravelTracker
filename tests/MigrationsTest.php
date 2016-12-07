@@ -61,7 +61,6 @@ class MigrationsTest extends TestCase
             'languages',
             'paths',
             'queries',
-            'query_arguments',
             'referers',
             'referer_search_terms',
             'sessions',

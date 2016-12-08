@@ -31,6 +31,15 @@ interface TrackingManager
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Track the exception error.
+     *
+     * @param  \Exception  $exception
+     *
+     * @return int
+     */
+    public function trackException(\Exception $exception);
+
+    /**
      * Track the path.
      *
      * @param  string  $path

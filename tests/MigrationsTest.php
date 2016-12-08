@@ -56,6 +56,7 @@ class MigrationsTest extends TestCase
             'agents',
             'cookies',
             'devices',
+            'errors',
             'domains',
             'geoip',
             'languages',

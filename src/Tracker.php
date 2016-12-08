@@ -191,6 +191,27 @@ class Tracker implements TrackerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Start the tracking.
+     *
+     * @param  \Illuminate\Http\Request $request
+     */
+    public function track(Request $request)
+    {
+        if ($this->isEnabled()) {
+            $this->setRequest($request);
+
+            $this->mergeSessionActivityData([
+                'session_id'  => $this->getSessionId(),
+                'path_id'     => $this->getPathId(),
+                'query_id'    => $this->getQueryId(),
+                'referrer_id' => $this->getRefererId(),
+            ]);
+
+            $id = $this->manager->trackActivity($this->sessionActivityData);
+        }
+    }
+
+    /**
      * Track the matched route.
      *
      * @param  \Illuminate\Routing\Route  $route
@@ -210,24 +231,17 @@ class Tracker implements TrackerContract
     }
 
     /**
-     * Start the tracking.
+     * Track the exception.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Exception  $exception
      */
-    public function track(Request $request)
+    public function trackException(\Exception $exception)
     {
-        if ($this->isEnabled()) {
-            $this->setRequest($request);
+        $id = $this->trackIfEnabled('errors', function () use ($exception) {
+            $this->manager->trackException($exception);
+        });
 
-            $this->mergeSessionActivityData([
-                'session_id'  => $this->getSessionId(),
-                'path_id'     => $this->getPathId(),
-                'query_id'    => $this->getQueryId(),
-                'referrer_id' => $this->getRefererId(),
-            ]);
-
-            $id = $this->manager->trackActivity($this->sessionActivityData);
-        }
+        $this->mergeSessionActivityData(['error_id' => $id]);
     }
 
     /**
@@ -432,6 +446,8 @@ class Tracker implements TrackerContract
      */
     private function trackIfEnabled($key, \Closure $callback, $default = null)
     {
-        return $this->getConfig("tracking.$key", false) ? $callback() : $default;
+        return $this->isEnabled()
+            ? ($this->getConfig("tracking.$key", false) ? $callback() : $default)
+            : $default;
     }
 }

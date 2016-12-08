@@ -81,6 +81,7 @@ abstract class TestCase extends BaseTestCase
         $config->set('laravel-tracker.tracking', [
             'cookies'      => true,
             'devices'      => true,
+            'errors'       => true,
             'geoip'        => true,
             'languages'    => true,
             'paths'        => true,

@@ -2,6 +2,7 @@
 
 use Arcanedev\Support\PackageServiceProvider;
 use Arcanedev\LaravelTracker\Contracts\Trackers as TrackerContracts;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 /**
  * Class     LaravelTrackerServiceProvider
@@ -57,6 +58,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         $this->registerParsers();
         $this->registerTrackers();
         $this->registerMainTracker();
+        $this->registerExceptionHandler();
     }
 
     /**
@@ -168,6 +170,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         return [
             TrackerContracts\CookieTracker::class          => Trackers\CookieTracker::class,
             TrackerContracts\DeviceTracker::class          => Trackers\DeviceTracker::class,
+            TrackerContracts\ErrorTracker::class           => Trackers\ErrorTracker::class,
             TrackerContracts\GeoIpTracker::class           => Trackers\GeoIpTracker::class,
             TrackerContracts\LanguageTracker::class        => Trackers\LanguageTracker::class,
             TrackerContracts\PathTracker::class            => Trackers\PathTracker::class,
@@ -179,5 +182,17 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             TrackerContracts\UserAgentTracker::class       => Trackers\UserAgentTracker::class,
             TrackerContracts\UserTracker::class            => Trackers\UserTracker::class,
         ];
+    }
+
+    /**
+     * Register the exception handler.
+     */
+    private function registerExceptionHandler()
+    {
+        $handler = $this->app[ExceptionHandlerContract::class];
+
+        $this->app->singleton(ExceptionHandlerContract::class, function ($app) use ($handler) {
+            return new Exceptions\Handler($app[Contracts\Tracker::class], $handler);
+        });
     }
 }

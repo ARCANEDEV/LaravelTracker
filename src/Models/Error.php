@@ -5,6 +5,12 @@
  *
  * @package  Arcanedev\LaravelTracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ *
+ * @property  int             id
+ * @property  string          code
+ * @property  string          message
+ * @property  \Carbon\Carbon  created_at
+ * @property  \Carbon\Carbon  updated_at
  */
 class Error extends AbstractModel
 {
@@ -24,5 +30,5 @@ class Error extends AbstractModel
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = ['code', 'message'];
 }

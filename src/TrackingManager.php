@@ -57,6 +57,16 @@ class TrackingManager implements TrackingManagerContract
     }
 
     /**
+     * Get the error tracker.
+     *
+     * @return \Arcanedev\LaravelTracker\Contracts\Trackers\ErrorTracker
+     */
+    private function getErrorTracker()
+    {
+        return $this->getTracker(Contracts\Trackers\ErrorTracker::class);
+    }
+
+    /**
      * Get the geoip tracker.
      *
      * @return \Arcanedev\LaravelTracker\Contracts\Trackers\GeoIpTracker
@@ -160,6 +170,18 @@ class TrackingManager implements TrackingManagerContract
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Track the exception error.
+     *
+     * @param  \Exception  $exception
+     *
+     * @return int
+     */
+    public function trackException(\Exception $exception)
+    {
+        return $this->getErrorTracker()->track($exception);
+    }
+
     /**
      * Track the path.
      *

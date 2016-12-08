@@ -31,6 +31,13 @@ interface Tracker
     public function trackMatchedRoute(Route $route, Request $request);
 
     /**
+     * Track the exception.
+     *
+     * @param  \Exception  $exception
+     */
+    public function trackException(\Exception $exception);
+
+    /**
      * Enable the tracker.
      */
     public function enable();

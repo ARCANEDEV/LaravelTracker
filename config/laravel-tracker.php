@@ -14,7 +14,7 @@ return [
     'database' => [
         'connection' => null,
 
-        'prefix'     => 'tracker_'
+        'prefix'     => 'tracker_',
     ],
 
     /* ------------------------------------------------------------------------------------------------
@@ -47,6 +47,7 @@ return [
     'tracking' => [
         'cookies'      => true,
         'devices'      => true,
+        'errors'       => true,
         'geoip'        => true,
         'languages'    => true,
         'paths'        => true,

@@ -390,9 +390,9 @@ class Tracker implements TrackerContract
     private function getCookieId()
     {
         return $this->trackIfEnabled('cookies', function () {
-            return $this->manager->trackCookie(
-                $this->request->cookie($this->getConfig('cookie.name'))
-            );
+            return ! is_null($name = $this->getConfig('cookie.name'))
+                ? $this->manager->trackCookie($this->request->cookie($name))
+                : null;
         });
     }
 

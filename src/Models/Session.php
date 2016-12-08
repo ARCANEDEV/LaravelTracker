@@ -20,7 +20,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  *
- * @property  \Illuminate\Foundation\Auth\User           user
+ * @property  \Arcanedev\LaravelTracker\Models\User      user
  * @property  \Arcanedev\LaravelTracker\Models\Device    device
  * @property  \Arcanedev\LaravelTracker\Models\Agent     agent
  * @property  \Arcanedev\LaravelTracker\Models\Referer   referer
@@ -87,7 +87,7 @@ class Session extends AbstractModel
     public function user()
     {
         return $this->belongsTo(
-            $this->getConfig('models.user', \Illuminate\Foundation\Auth\User::class)
+            $this->getConfig('models.user', User::class)
         );
     }
 

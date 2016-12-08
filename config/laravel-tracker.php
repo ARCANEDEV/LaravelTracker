@@ -37,7 +37,7 @@ return [
         'route-path-parameter' => \Arcanedev\LaravelTracker\Models\RoutePathParameter::class,
         'session'              => \Arcanedev\LaravelTracker\Models\Session::class,
         'session-activity'     => \Arcanedev\LaravelTracker\Models\SessionActivity::class,
-        'user'                 => \Illuminate\Foundation\Auth\User::class,
+        'user'                 => \Arcanedev\LaravelTracker\Models\User::class,
     ],
 
     /* ------------------------------------------------------------------------------------------------
@@ -79,7 +79,11 @@ return [
      | ------------------------------------------------------------------------------------------------
      */
     'cookie' => [
-        'name' => 'cookie_name_here'
+        /**
+         * A cookie may be created on your visitor device, so you can have
+         * information on everything made using that device on your site.
+         */
+        'name' => null
     ],
 
     /* ------------------------------------------------------------------------------------------------

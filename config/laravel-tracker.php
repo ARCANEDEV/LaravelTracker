@@ -105,7 +105,10 @@ return [
     'routes' => [
         'ignore' => [
             'names' => [
-                // route names
+                // route names like 'blog.*'
+            ],
+            'uris'  => [
+                // URIs like 'admin', 'admin/*' (both to ignore uri starting with `admin`)
             ],
         ],
 

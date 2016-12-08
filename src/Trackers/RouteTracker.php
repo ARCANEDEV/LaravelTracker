@@ -43,7 +43,8 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      */
     public function isTrackable($route)
     {
-        return ! $this->isInIgnoredRouteNames($route);
+        return ! $this->isInIgnoredRouteNames($route) &&
+               ! $this->isInIgnoredUris($route);
     }
 
     /**
@@ -90,12 +91,40 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      */
     private function isInIgnoredRouteNames($route)
     {
-        if (
-            ! is_null($name  = $route->getName()) &&
-            count($names = $this->getConfig('routes.ignore.names', [])) > 0
-        ) {
-            foreach ($names as $pattern) {
-                if (Str::is($pattern, $name)) return true;
+        return $this->checkPatterns(
+            $route->getName(),
+            $this->getConfig('routes.ignore.names', [])
+        );
+    }
+
+    /**
+     * Check if the route is ignored by a route pattern.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     *
+     * @return bool
+     */
+    private function isInIgnoredUris($route)
+    {
+        return $this->checkPatterns(
+            $route->uri(),
+            $this->getConfig('routes.ignore.uris', [])
+        );
+    }
+
+    /**
+     * Check if the value match the given patterns.
+     *
+     * @param  string|null  $value
+     * @param  array        $patterns
+     *
+     * @return bool
+     */
+    private function checkPatterns($value, array $patterns)
+    {
+        if ( ! is_null($value) && count($patterns) > 0) {
+            foreach ($patterns as $pattern) {
+                if (Str::is($pattern, $value)) return true;
             }
         }
 

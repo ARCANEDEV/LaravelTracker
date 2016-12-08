@@ -87,7 +87,7 @@ class Session extends AbstractModel
     public function user()
     {
         return $this->belongsTo(
-            $this->getConfig('models.user', User::class)
+            $this->getModelClass(self::MODEL_USER, User::class)
         );
     }
 
@@ -99,7 +99,7 @@ class Session extends AbstractModel
     public function device()
     {
         return $this->belongsTo(
-            $this->getConfig('models.device', Device::class)
+            $this->getModelClass(self::MODEL_DEVICE, Device::class)
         );
     }
 
@@ -111,7 +111,7 @@ class Session extends AbstractModel
     public function agent()
     {
         return $this->belongsTo(
-            $this->getConfig('models.agent', Agent::class)
+            $this->getModelClass(self::MODEL_AGENT, Agent::class)
         );
     }
 
@@ -123,7 +123,7 @@ class Session extends AbstractModel
     public function referer()
     {
         return $this->belongsTo(
-            $this->getConfig('models.referer', Referer::class)
+            $this->getModelClass(self::MODEL_REFERER, Referer::class)
         );
     }
 
@@ -135,7 +135,7 @@ class Session extends AbstractModel
     public function cookie()
     {
         return $this->belongsTo(
-            $this->getConfig('models.cookie', Cookie::class)
+            $this->getModelClass(self::MODEL_COOKIE, Cookie::class)
         );
     }
 
@@ -147,7 +147,7 @@ class Session extends AbstractModel
     public function geoIp()
     {
         return $this->belongsTo(
-            $this->getConfig('models.geoip', GeoIp::class), 'geoip_id'
+            $this->getModelClass(self::MODEL_GEOIP, GeoIp::class), 'geoip_id'
         );
     }
 
@@ -159,7 +159,7 @@ class Session extends AbstractModel
     public function language()
     {
         return $this->belongsTo(
-            $this->getConfig('models.language', Language::class)
+            $this->getModelClass(self::MODEL_LANGUAGE, Language::class)
         );
     }
 }

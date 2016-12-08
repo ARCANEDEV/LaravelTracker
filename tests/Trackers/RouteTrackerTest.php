@@ -68,6 +68,18 @@ class RouteTrackerTest extends TestCase
         // TODO: Add database assertions
     }
 
+    /** @test */
+    public function it_can_track_route_with_parameters()
+    {
+        $this->route('GET', 'blog::post.show', [1]);
+
+        $this->seeInDatabase('tracker_route_path_parameters', [
+            'route_path_id' => 1,
+            'parameter' => 'post',
+            'value' => '1',
+        ]);
+    }
+
     /**
      * Make contact route.
      *

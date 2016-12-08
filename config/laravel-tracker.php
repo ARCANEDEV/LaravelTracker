@@ -1,5 +1,7 @@
 <?php
 
+use Arcanedev\LaravelTracker\Models;
+
 return [
     /* ------------------------------------------------------------------------------------------------
      |  Enabled
@@ -22,22 +24,23 @@ return [
      | ------------------------------------------------------------------------------------------------
      */
     'models' => [
-        'agent'                => \Arcanedev\LaravelTracker\Models\Agent::class,
-        'cookie'               => \Arcanedev\LaravelTracker\Models\Cookie::class,
-        'device'               => \Arcanedev\LaravelTracker\Models\Device::class,
-        'domain'               => \Arcanedev\LaravelTracker\Models\Domain::class,
-        'error'                => \Arcanedev\LaravelTracker\Models\Error::class,
-        'geoip'                => \Arcanedev\LaravelTracker\Models\GeoIp::class,
-        'language'             => \Arcanedev\LaravelTracker\Models\Language::class,
-        'query'                => \Arcanedev\LaravelTracker\Models\Query::class,
-        'referer'              => \Arcanedev\LaravelTracker\Models\Referer::class,
-        'referer-search-term'  => \Arcanedev\LaravelTracker\Models\RefererSearchTerm::class,
-        'route'                => \Arcanedev\LaravelTracker\Models\Route::class,
-        'route-path'           => \Arcanedev\LaravelTracker\Models\RoutePath::class,
-        'route-path-parameter' => \Arcanedev\LaravelTracker\Models\RoutePathParameter::class,
-        'session'              => \Arcanedev\LaravelTracker\Models\Session::class,
-        'session-activity'     => \Arcanedev\LaravelTracker\Models\SessionActivity::class,
-        'user'                 => \Arcanedev\LaravelTracker\Models\User::class,
+        Models\AbstractModel::MODEL_AGENT                => Models\Agent::class,
+        Models\AbstractModel::MODEL_COOKIE               => Models\Cookie::class,
+        Models\AbstractModel::MODEL_DEVICE               => Models\Device::class,
+        Models\AbstractModel::MODEL_DOMAIN               => Models\Domain::class,
+        Models\AbstractModel::MODEL_ERROR                => Models\Error::class,
+        Models\AbstractModel::MODEL_GEOIP                => Models\GeoIp::class,
+        Models\AbstractModel::MODEL_LANGUAGE             => Models\Language::class,
+        Models\AbstractModel::MODEL_PATH                 => Models\Path::class,
+        Models\AbstractModel::MODEL_QUERY                => Models\Query::class,
+        Models\AbstractModel::MODEL_REFERER              => Models\Referer::class,
+        Models\AbstractModel::MODEL_REFERER_SEARCH_TERM  => Models\RefererSearchTerm::class,
+        Models\AbstractModel::MODEL_ROUTE                => Models\Route::class,
+        Models\AbstractModel::MODEL_ROUTE_PATH           => Models\RoutePath::class,
+        Models\AbstractModel::MODEL_ROUTE_PATH_PARAMETER => Models\RoutePathParameter::class,
+        Models\AbstractModel::MODEL_SESSION              => Models\Session::class,
+        Models\AbstractModel::MODEL_SESSION_ACTIVITY     => Models\SessionActivity::class,
+        Models\AbstractModel::MODEL_USER                 => Models\User::class,
     ],
 
     /* ------------------------------------------------------------------------------------------------

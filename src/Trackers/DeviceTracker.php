@@ -3,7 +3,7 @@
 use Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector;
 use Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser;
 use Arcanedev\LaravelTracker\Contracts\Trackers\DeviceTracker as DeviceTrackerContract;
-use Arcanedev\LaravelTracker\Models\Device;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 
 /**
  * Class     DeviceTracker
@@ -17,6 +17,16 @@ class DeviceTracker extends AbstractTracker implements DeviceTrackerContract
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Device
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_DEVICE);
+    }
+
     /**
      * @return \Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector
      */
@@ -44,10 +54,8 @@ class DeviceTracker extends AbstractTracker implements DeviceTrackerContract
      */
     public function track()
     {
-        $data  = $this->getCurrentDeviceProperties();
-        $model = Device::firstOrCreate($data, $data);
-
-        return $model->id;
+        return $this->getModel()
+                    ->firstOrCreate($this->getCurrentDeviceProperties())->id;
     }
 
     /* ------------------------------------------------------------------------------------------------

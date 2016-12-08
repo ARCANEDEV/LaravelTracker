@@ -1,6 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\EventListeners;
 
-use Arcanedev\LaravelTracker\Contracts\Tracker;
+use Arcanedev\LaravelTracker\Contracts\TrackingManager;
 use Illuminate\Routing\Events\RouteMatched;
 use Illuminate\Routing\Route;
 
@@ -16,8 +16,8 @@ class RouteEventSubscriber
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var \Arcanedev\LaravelTracker\Contracts\Tracker */
-    private $tracker;
+    /** @var \Arcanedev\LaravelTracker\Contracts\TrackingManager */
+    private $manager;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -26,11 +26,11 @@ class RouteEventSubscriber
     /**
      * RouteEventSubscriber constructor.
      *
-     * @param  \Arcanedev\LaravelTracker\Contracts\Tracker  $tracker
+     * @param  \Arcanedev\LaravelTracker\Contracts\TrackingManager  $manager
      */
-    public function __construct(Tracker $tracker)
+    public function __construct(TrackingManager $manager)
     {
-        $this->tracker = $tracker;
+        $this->manager = $manager;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ class RouteEventSubscriber
      */
     public function handle(RouteMatched $event)
     {
-        $this->tracker->trackMatchedRoute($event->route, $event->request);
+        $this->manager->trackMatchedRoute($event->route, $event->request);
     }
 
     /**
@@ -67,6 +67,6 @@ class RouteEventSubscriber
      */
     public function handleOldEvent(Route $route)
     {
-        $this->tracker->trackMatchedRoute($route, request());
+        $this->manager->trackMatchedRoute($route, request());
     }
 }

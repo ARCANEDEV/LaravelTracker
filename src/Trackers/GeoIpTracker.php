@@ -2,7 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector;
 use Arcanedev\LaravelTracker\Contracts\Trackers\GeoIpTracker as GeoIpTrackerContract;
-use Arcanedev\LaravelTracker\Models\GeoIp;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 use Illuminate\Support\Arr;
 
 /**
@@ -14,9 +14,19 @@ use Illuminate\Support\Arr;
 class GeoIpTracker extends AbstractTracker implements GeoIpTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
+     |  Getters and Setters
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\GeoIp
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_GEOIP);
+    }
+
     /**
      * @return \Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector
      */
@@ -39,9 +49,8 @@ class GeoIpTracker extends AbstractTracker implements GeoIpTrackerContract
     public function track($ipAddress)
     {
         if ($data = $this->getGeoIpDetector()->search($ipAddress)) {
-            $model = GeoIp::firstOrCreate(Arr::only($data, ['latitude', 'longitude']), $data);
-
-            return $model->id;
+            return $this->getModel()
+                        ->firstOrCreate(Arr::only($data, ['latitude', 'longitude']), $data)->id;
         }
 
         return null;

@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\QueryTracker as QueryTrackerContract;
-use Arcanedev\LaravelTracker\Models\Query;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 use Illuminate\Support\Arr;
 
 /**
@@ -12,6 +12,20 @@ use Illuminate\Support\Arr;
  */
 class QueryTracker extends AbstractTracker implements QueryTrackerContract
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Getters and Setters
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Query
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_QUERY);
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
@@ -25,14 +39,16 @@ class QueryTracker extends AbstractTracker implements QueryTrackerContract
      */
     public function track(array $queries)
     {
-        if (count($queries) == 0) return null;
+        if (count($queries) == 0)
+            return null;
 
         $data = [
             'query'     => $this->prepareQuery($queries),
             'arguments' => $this->prepareArguments($queries),
         ];
 
-        return Query::firstOrCreate(Arr::only($data, ['query']), $data)->id;
+        return $this->getModel()
+            ->firstOrCreate(Arr::only($data, ['query']), $data)->id;
     }
 
     /* ------------------------------------------------------------------------------------------------

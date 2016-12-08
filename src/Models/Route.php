@@ -44,7 +44,7 @@ class Route extends AbstractModel
     public function paths()
     {
         return $this->hasMany(
-            $this->getConfig('models.route-path', RoutePath::class)
+            $this->getModelClass(self::MODEL_ROUTE_PATH, RoutePath::class)
         );
     }
 }

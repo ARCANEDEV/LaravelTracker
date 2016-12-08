@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker as SessionTrackerContract;
-use Arcanedev\LaravelTracker\Models\Session;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Ramsey\Uuid\Uuid;
@@ -22,9 +22,19 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
     private $sessionInfo = [];
 
     /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
+     |  Getters and Setters
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Session
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_SESSION);
+    }
+
     /**
      * Get the session key.
      *
@@ -144,7 +154,7 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      */
     private function checkIfUserChanged(array $data)
     {
-        $model = Session::find($this->getSessionData('id'));
+        $model = $this->getModel()->find($this->getSessionData('id'));
 
         if (is_null($model) && ! $this->sessionIsKnown())
             return $this->createSessionForGuest($data);
@@ -172,7 +182,8 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
     {
         $this->generateSession($data);
 
-        $session = Session::create($this->sessionInfo);
+        $session = $this->getModel()->fill($this->sessionInfo);
+        $session->save();
 
         $this->putSessionData($data);
         $this->setSessionId($session->id);
@@ -256,16 +267,17 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      */
     private function createSessionIfIsUnknown()
     {
+        $model = $this->getModel();
         /** @var \Arcanedev\LaravelTracker\Models\Session $session */
         if ($known = $this->sessionIsKnown()) {
-            $session = Session::find($id = $this->getSessionData('id'));
+            $session = $model->find($id = $this->getSessionData('id'));
             $session->updated_at = Carbon::now();
             $session->save();
 
             $this->setSessionId($id);
         }
         else {
-            $session = Session::firstOrCreate(Arr::only($this->sessionInfo, ['uuid']), $this->sessionInfo);
+            $session = $model->firstOrCreate(Arr::only($this->sessionInfo, ['uuid']), $this->sessionInfo);
             $this->setSessionId($session->id);
             $this->putSessionData($this->sessionInfo);
         }
@@ -301,7 +313,7 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      */
     private function findByUuid($uuid)
     {
-        return Session::where('uuid', $uuid)->first();
+        return $this->getModel()->where('uuid', $uuid)->first();
     }
 
     /**
@@ -352,7 +364,7 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
             if ($sessionData[$key] !== $value) {
                 /** @var \Arcanedev\LaravelTracker\Models\Session $model */
                 if ( ! isset($model))
-                    $model = Session::find($this->getSessionId());
+                    $model = $this->getModel()->find($this->getSessionId());
 
                 $model->setAttribute($key, $value);
                 $model->save();

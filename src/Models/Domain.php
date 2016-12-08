@@ -54,7 +54,7 @@ class Domain extends AbstractModel
     public function referers()
     {
         return $this->hasMany(
-            $this->getConfig('models.referer', Referer::class)
+            $this->getModelClass(self::MODEL_REFERER, Referer::class)
         );
     }
 }

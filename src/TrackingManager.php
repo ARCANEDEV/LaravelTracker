@@ -2,6 +2,8 @@
 
 use Arcanedev\LaravelTracker\Contracts\TrackingManager as TrackingManagerContract;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Http\Request;
+use Illuminate\Routing\Route;
 
 /**
  * Class     TrackingManager
@@ -15,8 +17,63 @@ class TrackingManager implements TrackingManagerContract
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var \Illuminate\Contracts\Foundation\Application  */
+    /**
+     * The application instance.
+     *
+     * @var  \Illuminate\Contracts\Foundation\Application
+     */
     private $app;
+
+    /**
+     * The request instance.
+     *
+     * @var \Illuminate\Http\Request
+     */
+    private $request;
+
+    /**
+     * Tracking enabled status.
+     *
+     * @var  bool
+     */
+    protected $enabled = false;
+
+    /**
+     * The current session data.
+     *
+     * @var array
+     */
+    protected $sessionData = [
+        'user_id'     => null,
+        'device_id'   => null,
+        'agent_id'    => null,
+        'geoip_id'    => null,
+        'referrer_id' => null,
+        'cookie_id'   => null,
+        'language_id' => null,
+        'client_ip'   => '',
+        'is_robot'    => false,
+        'user_agent'  => '',
+    ];
+
+    /**
+     * The current session activity data.
+     *
+     * @var array
+     */
+    protected $sessionActivityData = [
+        'session_id'    => null,
+        'path_id'       => null,
+        'query_id'      => null,
+        'referrer_id'   => null,
+        'route_path_id' => null,
+        'error_id'      => null,
+        'method'        => '',
+        'is_ajax'       => false,
+        'is_secure'     => false,
+        'is_json'       => false,
+        'wants_json'    => false,
+    ];
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -29,7 +86,8 @@ class TrackingManager implements TrackingManagerContract
      */
     public function __construct(Application $app)
     {
-        $this->app = $app;
+        $this->app     = $app;
+        $this->enabled = $this->getConfig('enabled', $this->enabled);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -37,13 +95,86 @@ class TrackingManager implements TrackingManagerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Get the config repository.
+     *
+     * @return \Illuminate\Contracts\Config\Repository
+     */
+    private function config()
+    {
+        return $this->app['config'];
+    }
+
+    /**
+     * Get the tracker config.
+     *
+     * @param  string      $key
+     * @param  mixed|null  $default
+     *
+     * @return mixed
+     */
+    private function getConfig($key, $default = null)
+    {
+        return $this->config()->get("laravel-tracker.$key", $default);
+    }
+
+    /**
+     * Set the request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return self
+     */
+    private function setRequest(Request $request)
+    {
+        $this->mergeSessionActivityData([
+            'method'      => $request->method(),
+            'is_ajax'     => $request->ajax(),
+            'is_secure'   => $request->isSecure(),
+            'is_json'     => $request->isJson(),
+            'wants_json'  => $request->wantsJson(),
+        ]);
+
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
+     * Merge session data.
+     *
+     * @param  array  $data
+     *
+     * @return self
+     */
+    private function mergeSessionData(array $data)
+    {
+        $this->sessionData = array_merge($this->sessionData, $data);
+
+        return $this;
+    }
+
+    /**
+     * Merge session activity data.
+     *
+     * @param  array  $data
+     *
+     * @return self
+     */
+    private function mergeSessionActivityData(array $data)
+    {
+        $this->sessionActivityData = array_merge($this->sessionActivityData, $data);
+
+        return $this;
+    }
+
+    /**
      * Get the cookie tracker.
      *
      * @return \Arcanedev\LaravelTracker\Contracts\Trackers\CookieTracker
      */
     private function getCookieTracker()
     {
-        return $this->getTracker(Contracts\Trackers\CookieTracker::class);
+        return $this->make(Contracts\Trackers\CookieTracker::class);
     }
 
     /**
@@ -53,7 +184,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getDeviceTracker()
     {
-        return $this->getTracker(Contracts\Trackers\DeviceTracker::class);
+        return $this->make(Contracts\Trackers\DeviceTracker::class);
     }
 
     /**
@@ -63,7 +194,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getErrorTracker()
     {
-        return $this->getTracker(Contracts\Trackers\ErrorTracker::class);
+        return $this->make(Contracts\Trackers\ErrorTracker::class);
     }
 
     /**
@@ -73,7 +204,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getGeoIpTracker()
     {
-        return $this->getTracker(Contracts\Trackers\GeoIpTracker::class);
+        return $this->make(Contracts\Trackers\GeoIpTracker::class);
     }
 
     /**
@@ -83,7 +214,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getLanguageTracker()
     {
-        return $this->getTracker(Contracts\Trackers\LanguageTracker::class);
+        return $this->make(Contracts\Trackers\LanguageTracker::class);
     }
 
     /**
@@ -93,7 +224,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getPathTracker()
     {
-        return $this->getTracker(Contracts\Trackers\PathTracker::class);
+        return $this->make(Contracts\Trackers\PathTracker::class);
     }
 
     /**
@@ -103,7 +234,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getQueryTracker()
     {
-        return $this->getTracker(Contracts\Trackers\QueryTracker::class);
+        return $this->make(Contracts\Trackers\QueryTracker::class);
     }
 
     /**
@@ -113,7 +244,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getRefererTracker()
     {
-        return $this->getTracker(Contracts\Trackers\RefererTracker::class);
+        return $this->make(Contracts\Trackers\RefererTracker::class);
     }
 
     /**
@@ -123,7 +254,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getSessionTracker()
     {
-        return $this->getTracker(Contracts\Trackers\SessionTracker::class);
+        return $this->make(Contracts\Trackers\SessionTracker::class);
     }
 
     /**
@@ -133,7 +264,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getSessionActivityTracker()
     {
-        return $this->getTracker(Contracts\Trackers\SessionActivityTracker::class);
+        return $this->make(Contracts\Trackers\SessionActivityTracker::class);
     }
 
     /**
@@ -141,9 +272,9 @@ class TrackingManager implements TrackingManagerContract
      *
      * @return \Arcanedev\LaravelTracker\Contracts\Trackers\RouteTracker
      */
-    public function getRouteTracker()
+    private function getRouteTracker()
     {
-        return $this->getTracker(Contracts\Trackers\RouteTracker::class);
+        return $this->make(Contracts\Trackers\RouteTracker::class);
     }
 
     /**
@@ -151,9 +282,9 @@ class TrackingManager implements TrackingManagerContract
      *
      * @return \Arcanedev\LaravelTracker\Contracts\Trackers\UserAgentTracker
      */
-    public function getUserAgentTracker()
+    private function getUserAgentTracker()
     {
-        return $this->getTracker(Contracts\Trackers\UserAgentTracker::class);
+        return $this->make(Contracts\Trackers\UserAgentTracker::class);
     }
 
     /**
@@ -163,7 +294,7 @@ class TrackingManager implements TrackingManagerContract
      */
     private function getUserTracker()
     {
-        return $this->getTracker(Contracts\Trackers\UserTracker::class);
+        return $this->make(Contracts\Trackers\UserTracker::class);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -171,153 +302,103 @@ class TrackingManager implements TrackingManagerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Track the exception error.
+     * Start the tracking.
+     *
+     * @param  \Illuminate\Http\Request $request
+     */
+    public function track(Request $request)
+    {
+        if ($this->isEnabled()) {
+            $this->setRequest($request);
+
+            $this->mergeSessionActivityData([
+                'session_id'  => $this->getSessionId(),
+                'path_id'     => $this->getPathId(),
+                'query_id'    => $this->getQueryId(),
+                'referrer_id' => $this->getRefererId(),
+            ]);
+
+            $id = $this->getSessionActivityTracker()->track($this->sessionActivityData);
+        }
+    }
+
+    /**
+     * Track the matched route.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Http\Request   $request
+     */
+    public function trackMatchedRoute(Route $route, Request $request)
+    {
+        $tracker = $this->getRouteTracker();
+
+        if ($tracker->isTrackable($route)) {
+            $this->mergeSessionActivityData([
+                'route_path_id' => $tracker->track($route, $request),
+            ]);
+        }
+        else
+            $this->disable();
+    }
+
+    /**
+     * Track the exception.
      *
      * @param  \Exception  $exception
-     *
-     * @return int
      */
     public function trackException(\Exception $exception)
     {
-        return $this->getErrorTracker()->track($exception);
+        $id = $this->trackIfEnabled('errors', function () use ($exception) {
+            $this->getErrorTracker()->track($exception);
+        });
+
+        $this->mergeSessionActivityData(['error_id' => $id]);
     }
 
     /**
-     * Track the path.
-     *
-     * @param  string  $path
-     *
-     * @return int
+     * Enable the tracking.
      */
-    public function trackPath($path)
+    public function enable()
     {
-        return $this->getPathTracker()->track($path);
+        if ( ! $this->isEnabled()) $this->enabled = true;
     }
 
     /**
-     * Track the query.
-     *
-     * @param  array  $queries
-     *
-     * @return int|null
+     * Disable the tracking.
      */
-    public function trackQuery(array $queries)
+    public function disable()
     {
-        return $this->getQueryTracker()->track($queries);
+        if ($this->isEnabled()) $this->enabled = false;
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Check Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Check if the tracker is enabled.
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return $this->enabled;
     }
 
     /**
-     * Track the user.
+     * Track the trackable if enabled.
      *
-     * @return int|null
+     * @param  string      $key
+     * @param  \Closure    $callback
+     * @param  mixed|null  $default
+     *
+     * @return mixed
      */
-    public function trackUser()
+    private function trackIfEnabled($key, \Closure $callback, $default = null)
     {
-        return $this->getUserTracker()->track();
-    }
-
-    /**
-     * Track the device.
-     *
-     * @return int
-     */
-    public function trackDevice()
-    {
-        return $this->getDeviceTracker()->track();
-    }
-
-    /**
-     * Track the ip address.
-     *
-     * @param  string  $ipAddress
-     *
-     * @return int|null
-     */
-    public function trackGeoIp($ipAddress)
-    {
-        return $this->getGeoIpTracker()->track($ipAddress);
-    }
-
-    /**
-     * Track the user agent.
-     *
-     * @return int
-     */
-    public function trackUserAgent()
-    {
-        return $this->getUserAgentTracker()->track();
-    }
-
-    /**
-     * Track the referer.
-     *
-     * @param  string  $refererUrl
-     * @param  string  $pageUrl
-     *
-     * @return int|null
-     */
-    public function trackReferer($refererUrl, $pageUrl)
-    {
-        return $this->getRefererTracker()->track($refererUrl, $pageUrl);
-    }
-
-    /**
-     * Track the cookie.
-     *
-     * @param  mixed  $cookie
-     *
-     * @return int|null
-     */
-    public function trackCookie($cookie)
-    {
-        return $this->getCookieTracker()->track($cookie);
-    }
-
-    /**
-     * Track the language.
-     *
-     * @return int
-     */
-    public function trackLanguage()
-    {
-        return $this->getLanguageTracker()->track();
-    }
-
-    /**
-     * Track the session.
-     *
-     * @param  array  $data
-     *
-     * @return int
-     */
-    public function trackSession(array $data)
-    {
-        return $this->getSessionTracker()->track($data);
-    }
-
-    /**
-     * Track the session activity.
-     *
-     * @param  array  $data
-     *
-     * @return int
-     */
-    public function trackActivity(array $data)
-    {
-        return $this->getSessionActivityTracker()->track($data);
-    }
-
-    /**
-     * Check the session data.
-     *
-     * @param  array  $currentData
-     * @param  array  $newData
-     *
-     * @return array
-     */
-    public function checkSessionData(array $currentData, array $newData)
-    {
-        return $this->getSessionTracker()->checkData($currentData, $newData);
+        return $this->isEnabled()
+            ? ($this->getConfig("tracking.$key", false) ? $callback() : $default)
+            : $default;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -325,13 +406,171 @@ class TrackingManager implements TrackingManagerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Get the stored session id.
+     *
+     * @return int
+     */
+    private function getSessionId()
+    {
+        $tracker     = $this->getSessionTracker();
+        $sessionData = $tracker->checkData($this->sessionData, [
+            'user_id'     => $this->getUserId(),
+            'device_id'   => $this->getDeviceId(),
+            'client_ip'   => $this->request->getClientIp(),
+            'geoip_id'    => $this->getGeoIpId(),
+            'agent_id'    => $this->getAgentId(),
+            'referrer_id' => $this->getRefererId(),
+            'cookie_id'   => $this->getCookieId(),
+            'language_id' => $this->getLanguageId(),
+            'is_robot'    => $this->isRobot(),
+            'user_agent'  => $this->getUserAgentTracker()->getUserAgentParser()->getOriginalUserAgent(),
+        ]);
+
+        $this->mergeSessionData($sessionData);
+
+        return $tracker->track($this->sessionData);
+    }
+
+    /**
+     * Track the path.
+     *
+     * @return int|null
+     */
+    private function getPathId()
+    {
+        return $this->trackIfEnabled('paths', function () {
+            return $this->getPathTracker()->track(
+                $this->request->path()
+            );
+        });
+    }
+
+    /**
+     * Track the query.
+     *
+     * @return int|null
+     */
+    private function getQueryId()
+    {
+        return $this->trackIfEnabled('path-queries', function () {
+            return $this->getQueryTracker()->track(
+                $this->request->query()
+            );
+        });
+    }
+
+    /**
+     * Get the user id.
+     *
+     * @return int|null
+     */
+    private function getUserId()
+    {
+        return $this->trackIfEnabled('users', function () {
+            return $this->getUserTracker()->track();
+        });
+    }
+
+    /**
+     * Get the tracked device id.
+     *
+     * @return int|null
+     */
+    private function getDeviceId()
+    {
+        return $this->trackIfEnabled('devices', function () {
+            return $this->getDeviceTracker()->track();
+        });
+    }
+
+    /**
+     * Get the tracked ip address ip.
+     *
+     * @return int|null
+     */
+    private function getGeoIpId()
+    {
+        return $this->trackIfEnabled('geoip', function () {
+            return $this->getGeoIpTracker()->track(
+                $this->request->getClientIp()
+            );
+        });
+    }
+
+    /**
+     * Get the tracked user agent id.
+     *
+     * @return int|null
+     */
+    private function getAgentId()
+    {
+        return $this->trackIfEnabled('user-agents', function () {
+            return $this->getUserAgentTracker()->track();
+        });
+    }
+
+    /**
+     * Get the tracked referer id.
+     *
+     * @return int|null
+     */
+    private function getRefererId()
+    {
+        return $this->trackIfEnabled('referers', function () {
+            return $this->getRefererTracker()->track(
+                $this->request->headers->get('referer'),
+                $this->request->url()
+            );
+        });
+    }
+
+    /**
+     * Get the tracked cookie id.
+     *
+     * @return int|null
+     */
+    private function getCookieId()
+    {
+        return $this->trackIfEnabled('cookies', function () {
+            return ! is_null($name = $this->getConfig('cookie.name'))
+                ? $this->getCookieTracker()->track($this->request->cookie($name))
+                : null;
+        });
+    }
+
+    /**
+     * Get the tracked language id.
+     *
+     * @return int|null
+     */
+    private function getLanguageId()
+    {
+        return $this->trackIfEnabled('languages', function () {
+            return $this->getLanguageTracker()->track();
+        });
+    }
+
+    /**
+     * Check if the visitor is a robot.
+     *
+     * @return bool
+     */
+    protected function isRobot()
+    {
+        /** @var  \Arcanedev\LaravelTracker\Contracts\Detectors\CrawlerDetector  $crawler */
+        $crawler = $this->make(\Arcanedev\LaravelTracker\Contracts\Detectors\CrawlerDetector::class);
+
+        return $crawler->isRobot();
+    }
+
+    /**
      * Get the tracker instance.
      *
      * @param  string  $abstract
      *
      * @return mixed
      */
-    private function getTracker($abstract)
+    private function make($abstract)
     {
         return $this->app->make($abstract);
     }

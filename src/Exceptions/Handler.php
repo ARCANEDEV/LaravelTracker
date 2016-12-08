@@ -1,6 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Exceptions;
 
-use Arcanedev\LaravelTracker\Contracts\Tracker;
+use Arcanedev\LaravelTracker\Contracts\TrackingManager;
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
@@ -16,8 +16,8 @@ class Handler implements ExceptionHandlerContract
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var  \Arcanedev\LaravelTracker\Contracts\Tracker */
-    private $tracker;
+    /** @var  \Arcanedev\LaravelTracker\Contracts\TrackingManager */
+    private $manager;
 
     /** @var  \Illuminate\Contracts\Debug\ExceptionHandler */
     private $illuminateHandler;
@@ -33,12 +33,12 @@ class Handler implements ExceptionHandlerContract
     /**
      * Handler constructor.
      *
-     * @param  \Arcanedev\LaravelTracker\Contracts\Tracker   $tracker
-     * @param  \Illuminate\Contracts\Debug\ExceptionHandler  $illuminateHandler
+     * @param  \Arcanedev\LaravelTracker\Contracts\TrackingManager   $manager
+     * @param  \Illuminate\Contracts\Debug\ExceptionHandler          $illuminateHandler
      */
-    public function __construct(Tracker $tracker, ExceptionHandlerContract $illuminateHandler)
+    public function __construct(TrackingManager $manager, ExceptionHandlerContract $illuminateHandler)
     {
-        $this->tracker                  = $tracker;
+        $this->manager                  = $manager;
         $this->illuminateHandler        = $illuminateHandler;
         $this->originalExceptionHandler = set_exception_handler([$this, 'trackException']);
         $this->originalErrorHandler     = set_error_handler([$this, 'handleError']);
@@ -56,7 +56,7 @@ class Handler implements ExceptionHandlerContract
     public function report(Exception $e)
     {
         try {
-            $this->tracker->trackException($e);
+            $this->manager->trackException($e);
         }
         catch (Exception $exception) {
             // ignore
@@ -99,7 +99,7 @@ class Handler implements ExceptionHandlerContract
     public function trackException(Exception $exception)
     {
         try {
-            $this->tracker->trackException($exception);
+            $this->manager->trackException($exception);
         }
         catch (Exception $e) {
             // Ignore Tracker exceptions
@@ -123,7 +123,7 @@ class Handler implements ExceptionHandlerContract
     public function handleError($err_severity, $err_msg, $err_file, $err_line, array $err_context)
     {
         try {
-            $this->tracker->trackException(
+            $this->manager->trackException(
                 ExceptionFactory::make($err_severity, $err_msg)
             );
         }

@@ -3,6 +3,7 @@
 use Arcanedev\Support\PackageServiceProvider;
 use Arcanedev\LaravelTracker\Contracts\Trackers as TrackerContracts;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Illuminate\Contracts\Foundation\Application as AppContract;
 
 /**
  * Class     LaravelTrackerServiceProvider
@@ -94,7 +95,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      */
     private function registerDetectors()
     {
-        $this->singleton(Contracts\Detectors\CrawlerDetector::class, function ($app) {
+        $this->singleton(Contracts\Detectors\CrawlerDetector::class, function (AppContract $app) {
             /** @var \Illuminate\Http\Request $request */
             $request = $app['request'];
             $crawler = new \Jaybizzle\CrawlerDetect\CrawlerDetect(
@@ -105,7 +106,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             return new Detectors\CrawlerDetector($crawler);
         });
 
-        $this->singleton(Contracts\Detectors\DeviceDetector::class, function ($app) {
+        $this->singleton(Contracts\Detectors\DeviceDetector::class, function (AppContract $app) {
             return new Detectors\DeviceDetector($app['agent']);
         });
 
@@ -114,7 +115,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             Detectors\GeoIpDetector::class
         );
 
-        $this->singleton(Contracts\Detectors\LanguageDetector::class, function ($app) {
+        $this->singleton(Contracts\Detectors\LanguageDetector::class, function (AppContract $app) {
             return new Detectors\LanguageDetector($app['agent']);
         });
     }
@@ -130,7 +131,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             );
         });
 
-        $this->singleton(Contracts\Parsers\UserAgentParser::class, function ($app) {
+        $this->singleton(Contracts\Parsers\UserAgentParser::class, function (AppContract $app) {
             return new Parsers\UserAgentParser(
                 \UAParser\Parser::create(),
                 $app->make('path.base')
@@ -192,7 +193,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         $handler = $this->app[ExceptionHandlerContract::class];
 
         $this->app->singleton(ExceptionHandlerContract::class, function ($app) use ($handler) {
-            return new Exceptions\Handler($app[Contracts\Tracker::class], $handler);
+            return new Exceptions\Handler($app[Contracts\TrackingManager::class], $handler);
         });
     }
 }

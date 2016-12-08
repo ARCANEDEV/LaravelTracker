@@ -1,6 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Middleware;
 
-use Arcanedev\LaravelTracker\Contracts\Tracker as TrackerContract;
+use Arcanedev\LaravelTracker\Contracts\TrackingManager as TrackingManagerContract;
 use Closure;
 
 /**
@@ -18,9 +18,9 @@ class Tracking
     /**
      * The tracker instance.
      *
-     * @var  \Arcanedev\LaravelTracker\Contracts\Tracker
+     * @var  \Arcanedev\LaravelTracker\Contracts\TrackingManager
      */
-    protected $tracker;
+    protected $manager;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
@@ -29,9 +29,9 @@ class Tracking
     /**
      * Tracking constructor.
      */
-    public function __construct(TrackerContract $tracker)
+    public function __construct(TrackingManagerContract $manager)
     {
-        $this->tracker = $tracker;
+        $this->manager = $manager;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -48,7 +48,7 @@ class Tracking
      */
     public function handle($request, Closure $next)
     {
-        $this->tracker->track($request);
+        $this->manager->track($request);
 
         return $next($request);
     }

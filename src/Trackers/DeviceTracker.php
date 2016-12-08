@@ -11,32 +11,26 @@ use Arcanedev\LaravelTracker\Models\Device;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class DeviceTracker implements DeviceTrackerContract
+class DeviceTracker extends AbstractTracker implements DeviceTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Properties
-     | ------------------------------------------------------------------------------------------------
-     */
-    /** @var \Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector */
-    private $deviceDetector;
-
-    /** @var \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser */
-    private $userAgentParser;
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Constructor
+     |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * DeviceTracker constructor.
-     *
-     * @param  \Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector  $deviceDetector
-     * @param  \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser   $userAgentParser
+     * @return \Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector
      */
-    public function __construct(DeviceDetector $deviceDetector, UserAgentParser $userAgentParser)
+    private function getDeviceDetector()
     {
-        $this->deviceDetector  = $deviceDetector;
-        $this->userAgentParser = $userAgentParser;
+        return $this->make(DeviceDetector::class);
+    }
+
+    /**
+     * @return \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser
+     */
+    private function getUserAgentParser()
+    {
+        return $this->make(UserAgentParser::class);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -67,9 +61,11 @@ class DeviceTracker implements DeviceTrackerContract
      */
     private function getCurrentDeviceProperties()
     {
-        if ($properties = $this->deviceDetector->detect()) {
-            $properties['platform']         = $this->userAgentParser->getOperatingSystemFamily();
-            $properties['platform_version'] = $this->userAgentParser->getOperatingSystemVersion();
+        if ($properties = $this->getDeviceDetector()->detect()) {
+            $parser = $this->getUserAgentParser();
+
+            $properties['platform']         = $parser->getOperatingSystemFamily();
+            $properties['platform_version'] = $parser->getOperatingSystemVersion();
         }
 
         return $properties;

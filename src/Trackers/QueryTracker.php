@@ -10,7 +10,7 @@ use Illuminate\Support\Arr;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class QueryTracker implements QueryTrackerContract
+class QueryTracker extends AbstractTracker implements QueryTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions

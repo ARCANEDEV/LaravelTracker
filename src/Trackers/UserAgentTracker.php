@@ -10,29 +10,8 @@ use Arcanedev\LaravelTracker\Models\Agent;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UserAgentTracker implements UserAgentTrackerContract
+class UserAgentTracker extends AbstractTracker implements UserAgentTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Properties
-     | ------------------------------------------------------------------------------------------------
-     */
-    /** @var \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser */
-    protected $userAgentParser;
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Constructor
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * UserAgentTracker constructor.
-     *
-     * @param  \Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser  $userAgentParser
-     */
-    public function __construct(UserAgentParser $userAgentParser)
-    {
-        $this->userAgentParser = $userAgentParser;
-    }
-
     /* ------------------------------------------------------------------------------------------------
      |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
@@ -44,7 +23,7 @@ class UserAgentTracker implements UserAgentTrackerContract
      */
     public function getUserAgentParser()
     {
-        return $this->userAgentParser;
+        return $this->make(UserAgentParser::class);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -72,10 +51,12 @@ class UserAgentTracker implements UserAgentTrackerContract
      */
     private function prepareData()
     {
+        $parser = $this->getUserAgentParser();
+
         return [
-            'name'            => $this->userAgentParser->getOriginalUserAgent() ?: 'Other',
-            'browser'         => $this->userAgentParser->getBrowser(),
-            'browser_version' => $this->userAgentParser->getUserAgentVersion(),
+            'name'            => $parser->getOriginalUserAgent() ?: 'Other',
+            'browser'         => $parser->getBrowser(),
+            'browser_version' => $parser->getUserAgentVersion(),
         ];
     }
 }

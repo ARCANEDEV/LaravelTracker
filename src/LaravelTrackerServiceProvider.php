@@ -174,10 +174,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             TrackerContracts\QueryTracker::class           => Trackers\QueryTracker::class,
             TrackerContracts\RefererTracker::class         => Trackers\RefererTracker::class,
             TrackerContracts\RouteTracker::class           => Trackers\RouteTracker::class,
-            TrackerContracts\SessionTracker::class         => function ($app) {
-                /** @var \Illuminate\Contracts\Foundation\Application $app */
-                return new Trackers\SessionTracker($app['session.store']);
-            },
+            TrackerContracts\SessionTracker::class         => Trackers\SessionTracker::class,
             TrackerContracts\SessionActivityTracker::class => Trackers\SessionActivityTracker::class,
             TrackerContracts\UserAgentTracker::class       => Trackers\UserAgentTracker::class,
             TrackerContracts\UserTracker::class            => Trackers\UserTracker::class,

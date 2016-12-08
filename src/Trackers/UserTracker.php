@@ -9,15 +9,12 @@ use Illuminate\Contracts\Foundation\Application;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class UserTracker implements UserTrackerContract
+class UserTracker extends AbstractTracker implements UserTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var \Illuminate\Contracts\Foundation\Application */
-    private $app;
-
     /** @var array */
     private $auths = [];
 
@@ -32,7 +29,7 @@ class UserTracker implements UserTrackerContract
      */
     public function __construct(Application $app)
     {
-        $this->app = $app;
+        parent::__construct($app);
 
         $this->instantiateAuthentication();
     }
@@ -43,35 +40,8 @@ class UserTracker implements UserTrackerContract
     private function instantiateAuthentication()
     {
         foreach ((array) $this->getConfig('auth.bindings', []) as $binding) {
-            $this->auths[] = $this->app->make($binding);
+            $this->auths[] = $this->make($binding);
         }
-    }
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * Get the config instance.
-     *
-     * @return \Illuminate\Contracts\Config\Repository
-     */
-    private function config()
-    {
-        return $this->app['config'];
-    }
-
-    /**
-     * Get the tracker config.
-     *
-     * @param  string      $key
-     * @param  mixed|null  $default
-     *
-     * @return mixed
-     */
-    private function getConfig($key, $default = null)
-    {
-        return $this->config()->get("laravel-tracker.$key", $default);
     }
 
     /* ------------------------------------------------------------------------------------------------

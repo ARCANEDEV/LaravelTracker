@@ -13,27 +13,18 @@ use Illuminate\Support\Arr;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RefererTracker implements RefererTrackerContract
+class RefererTracker extends AbstractTracker implements RefererTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Properties
-     | ------------------------------------------------------------------------------------------------
-     */
-    /** @var \Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser */
-    private $refererParser;
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Constructor
+     |  Getters & Setters
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * RefererTracker constructor.
-     *
-     * @param  \Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser  $refererParser
+     * @return \Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser
      */
-    public function __construct(RefererParser $refererParser)
+    private function getRefererParser()
     {
-        $this->refererParser = $refererParser;
+        return $this->make(RefererParser::class);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -50,7 +41,7 @@ class RefererTracker implements RefererTrackerContract
      */
     public function track($refererUrl, $pageUrl)
     {
-        $firstParsed = $this->refererParser->parseUrl($refererUrl);
+        $firstParsed = $this->getRefererParser()->parseUrl($refererUrl);
 
         if ($firstParsed) {
             $domainId   = $this->trackDomain($firstParsed['domain']);
@@ -63,7 +54,7 @@ class RefererTracker implements RefererTrackerContract
                 'search_terms_hash' => null,
             ];
 
-            $secondParsed = $this->refererParser->parse($firstParsed['url'], $pageUrl);
+            $secondParsed = $this->getRefererParser()->parse($firstParsed['url'], $pageUrl);
 
             if ($secondParsed->isKnown()) {
                 $attributes['medium']            = $secondParsed->getMedium();

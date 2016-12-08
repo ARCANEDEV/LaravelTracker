@@ -13,7 +13,7 @@ use Arcanedev\LaravelTracker\Models;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RouteTracker implements RouteTrackerContract
+class RouteTracker extends AbstractTracker implements RouteTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
@@ -82,7 +82,7 @@ class RouteTracker implements RouteTrackerContract
     {
         if (
             ! is_null($name  = $route->getName()) &&
-            count($names = config('laravel-tracker.routes.ignore.names', [])) > 0
+            count($names = $this->getConfig('routes.ignore.names', [])) > 0
         ) {
             foreach ($names as $pattern) {
                 if (Str::is($pattern, $name)) return true;
@@ -165,7 +165,7 @@ class RouteTracker implements RouteTrackerContract
     private function checkIfValueIsEloquentModel($value)
     {
         if ($value instanceof \Illuminate\Database\Eloquent\Model) {
-            foreach (config('laravel-tracker.routes.model-columns', ['id']) as $column) {
+            foreach ($this->getConfig('routes.model-columns', ['id']) as $column) {
                 if (
                     array_key_exists($column, $attributes = $value->getAttributes()) &&
                     ! is_null($attributes[$column])

@@ -9,7 +9,7 @@ use Arcanedev\LaravelTracker\Models\Path;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class PathTracker implements PathTrackerContract
+class PathTracker extends AbstractTracker implements PathTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions

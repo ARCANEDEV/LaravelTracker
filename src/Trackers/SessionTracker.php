@@ -3,7 +3,6 @@
 use Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker as SessionTrackerContract;
 use Arcanedev\LaravelTracker\Models\Session;
 use Carbon\Carbon;
-use Illuminate\Session\Store as SessionStore;
 use Illuminate\Support\Arr;
 use Ramsey\Uuid\Uuid;
 
@@ -13,31 +12,14 @@ use Ramsey\Uuid\Uuid;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class SessionTracker implements SessionTrackerContract
+class SessionTracker extends AbstractTracker implements SessionTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var \Illuminate\Session\Store */
-    private $session;
-
     /** @var array */
     private $sessionInfo = [];
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Constructor
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * SessionTracker constructor.
-     *
-     * @param  \Illuminate\Session\Store  $session
-     */
-    public function __construct(SessionStore $session)
-    {
-        $this->session = $session;
-    }
 
     /* ------------------------------------------------------------------------------------------------
      |  Getters & Setters
@@ -50,7 +32,7 @@ class SessionTracker implements SessionTrackerContract
      */
     private function getSessionKey()
     {
-        return config('laravel-tracker.session.name', 'session_name_here');
+        return $this->getConfig('session.name', 'tracker_session');
     }
 
     /**
@@ -148,7 +130,7 @@ class SessionTracker implements SessionTrackerContract
      */
     private function getSessionData($column = null)
     {
-        $data = $this->session->get($this->getSessionKey());
+        $data = $this->session()->get($this->getSessionKey());
 
         return is_null($column) ? $data : Arr::get($data, $column, null);
     }
@@ -245,7 +227,7 @@ class SessionTracker implements SessionTrackerContract
      */
     private function putSessionData(array $data)
     {
-        $this->session->put([
+        $this->session()->put([
             $this->getSessionKey() => $data
         ]);
     }
@@ -298,7 +280,7 @@ class SessionTracker implements SessionTrackerContract
      */
     private function sessionIsKnown()
     {
-        if ( ! $this->session->has($this->getSessionKey()))
+        if ( ! $this->session()->has($this->getSessionKey()))
             return false;
 
         if ($this->getSessionData('uuid') != $this->getSystemSessionId())

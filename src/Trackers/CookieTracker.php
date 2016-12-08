@@ -2,7 +2,6 @@
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\CookieTracker as CookieTrackerContract;
 use Arcanedev\LaravelTracker\Models\Cookie;
-use Illuminate\Contracts\Cookie\QueueingFactory as CookieJar;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -11,25 +10,8 @@ use Ramsey\Uuid\Uuid;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class CookieTracker implements CookieTrackerContract
+class CookieTracker extends AbstractTracker implements CookieTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Properties
-     | ------------------------------------------------------------------------------------------------
-     */
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Constructor
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * CookieTracker constructor.
-     */
-    public function __construct()
-    {
-        //
-    }
-
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
@@ -44,11 +26,25 @@ class CookieTracker implements CookieTrackerContract
     public function track($cookie)
     {
         if ( ! $cookie) {
-            $cookie = (string) Uuid::uuid4();
-
-            app(CookieJar::class)->queue(config('laravel-tracker.cookie.name'), $cookie, 0);
+            $this->cookie()->queue(
+                $this->cookie()->make($this->getConfig('cookie.name'), $cookie = (string) Uuid::uuid4())
+            );
         }
 
         return Cookie::firstOrCreate(['uuid' => $cookie])->id;
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the cookie instance.
+     *
+     * @return \Illuminate\Cookie\CookieJar
+     */
+    private function cookie()
+    {
+        return $this->make(\Illuminate\Contracts\Cookie\QueueingFactory::class);
     }
 }

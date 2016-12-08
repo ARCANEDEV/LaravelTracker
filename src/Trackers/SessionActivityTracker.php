@@ -9,7 +9,7 @@ use Arcanedev\LaravelTracker\Models\SessionActivity;
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class SessionActivityTracker implements SessionActivityTrackerContract
+class SessionActivityTracker extends AbstractTracker implements SessionActivityTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions

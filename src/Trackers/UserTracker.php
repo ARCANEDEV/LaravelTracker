@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\UserTracker as UserTrackerContract;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 use Illuminate\Contracts\Foundation\Application;
 
 /**
@@ -42,6 +43,20 @@ class UserTracker extends AbstractTracker implements UserTrackerContract
         foreach ((array) $this->getConfig('auth.bindings', []) as $binding) {
             $this->auths[] = $this->make($binding);
         }
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Getters and Setters
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\User
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_USER);
     }
 
     /* ------------------------------------------------------------------------------------------------

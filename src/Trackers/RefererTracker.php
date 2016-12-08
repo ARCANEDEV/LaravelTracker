@@ -2,9 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser;
 use Arcanedev\LaravelTracker\Contracts\Trackers\RefererTracker as RefererTrackerContract;
-use Arcanedev\LaravelTracker\Models\Domain;
-use Arcanedev\LaravelTracker\Models\Referer;
-use Arcanedev\LaravelTracker\Models\RefererSearchTerm;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 use Illuminate\Support\Arr;
 
 /**
@@ -16,9 +14,19 @@ use Illuminate\Support\Arr;
 class RefererTracker extends AbstractTracker implements RefererTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
+     |  Getters and Setters
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Referer
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_REFERER);
+    }
+
     /**
      * @return \Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser
      */
@@ -62,13 +70,13 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
                 $attributes['search_terms_hash'] = sha1($secondParsed->getSearchTerm());
             }
 
-            $referer = Referer::firstOrCreate(
+            $referer = $this->getModel()->firstOrCreate(
                 Arr::only($attributes, ['url', 'search_terms_hash']),
                 $attributes
             );
 
             if ($secondParsed->isKnown()) {
-                $this->trackRefererSearchTerms($referer->id, $secondParsed->getSearchTerm());
+                $this->trackRefererSearchTerms($referer, $secondParsed->getSearchTerm());
             }
 
             return $referer->id;
@@ -86,26 +94,28 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
      */
     private function trackDomain($name)
     {
-        $data = compact('name');
-
-        return Domain::firstOrCreate($data, $data)->id;
+        return $this->makeModel(AbstractModel::MODEL_DOMAIN)
+                    ->firstOrCreate(compact('name'))->id;
     }
 
     /**
      * Store the referer's search terms.
      *
-     * @param  int     $refererId
-     * @param  string  $searchTerms
+     * @param  \Arcanedev\LaravelTracker\Models\Referer     $referer
+     * @param  string                                       $searchTerms
      */
-    private function trackRefererSearchTerms($refererId, $searchTerms)
+    private function trackRefererSearchTerms($referer, $searchTerms)
     {
-        foreach (explode(' ', $searchTerms) as $term) {
-            $attributes = [
-                'referer_id'  => $refererId,
-                'search_term' => $term,
-            ];
+        $terms = [];
 
-            RefererSearchTerm::firstOrCreate($attributes, $attributes);
+        foreach (explode(' ', $searchTerms) as $term) {
+            $terms[] = $this->makeModel(AbstractModel::MODEL_REFERER_SEARCH_TERM)->fill([
+                'search_term' => $term,
+            ]);
         }
+
+        if (count($terms) > 0)
+            $referer->searchTerms()->saveMany($terms);
+
     }
 }

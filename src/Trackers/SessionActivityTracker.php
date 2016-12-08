@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\SessionActivityTracker as SessionActivityTrackerContract;
-use Arcanedev\LaravelTracker\Models\SessionActivity;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 
 /**
  * Class     SessionActivityTracker
@@ -11,6 +11,20 @@ use Arcanedev\LaravelTracker\Models\SessionActivity;
  */
 class SessionActivityTracker extends AbstractTracker implements SessionActivityTrackerContract
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Getters and Setters
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\SessionActivity
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_SESSION_ACTIVITY);
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
@@ -24,6 +38,9 @@ class SessionActivityTracker extends AbstractTracker implements SessionActivityT
      */
     public function track(array $data)
     {
-        return SessionActivity::create($data)->id;
+        $model = $this->getModel()->fill($data);
+        $model->save();
+
+        return $model->id;
     }
 }

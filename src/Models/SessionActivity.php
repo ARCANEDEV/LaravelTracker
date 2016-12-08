@@ -90,7 +90,7 @@ class SessionActivity extends AbstractModel
     public function session()
     {
         return $this->belongsTo(
-            $this->getConfig('models.session', Session::class)
+            $this->getModelClass(self::MODEL_SESSION, Session::class)
         );
     }
 
@@ -102,7 +102,7 @@ class SessionActivity extends AbstractModel
     public function path()
     {
         return $this->belongsTo(
-            $this->getConfig('models.path', Path::class)
+            $this->getModelClass(self::MODEL_PATH, Path::class)
         );
     }
 
@@ -114,7 +114,7 @@ class SessionActivity extends AbstractModel
     public function queryRel()
     {
         return $this->belongsTo(
-            $this->getConfig('models.query', Query::class)
+            $this->getModelClass(self::MODEL_QUERY, Query::class)
         );
     }
 
@@ -126,7 +126,7 @@ class SessionActivity extends AbstractModel
     public function referrer()
     {
         return $this->belongsTo(
-            $this->getConfig('models.referrer', Referer::class)
+            $this->getModelClass(self::MODEL_REFERER, Referer::class)
         );
     }
 
@@ -138,7 +138,7 @@ class SessionActivity extends AbstractModel
     public function error()
     {
         return $this->belongsTo(
-            $this->getConfig('models.error', Error::class)
+            $this->getModelClass(self::MODEL_ERROR, Error::class)
         );
     }
 }

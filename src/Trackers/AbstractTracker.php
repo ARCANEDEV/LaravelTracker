@@ -67,6 +67,20 @@ abstract class AbstractTracker
     }
 
     /**
+     * Make the model.
+     *
+     * @param  string  $name
+     *
+     * @return mixed
+     */
+    protected function makeModel($name)
+    {
+        return $this->make(
+            $this->getConfig("models.$name")
+        );
+    }
+
+    /**
      * Make/Get the instance from the app.
      *
      * @param  string  $abstract

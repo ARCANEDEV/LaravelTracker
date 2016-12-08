@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\ErrorTracker as ErrorTrackerContract;
-use Arcanedev\LaravelTracker\Models\Error;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 use Exception;
 
 /**
@@ -12,6 +12,20 @@ use Exception;
  */
 class ErrorTracker extends AbstractTracker implements ErrorTrackerContract
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Getters and Setters
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Error
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_ERROR);
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
@@ -25,12 +39,11 @@ class ErrorTracker extends AbstractTracker implements ErrorTrackerContract
      */
     public function track(Exception $exception)
     {
-        $data = [
-            'code'    => $this->getCode($exception),
-            'message' => $exception->getMessage(),
-        ];
-
-        return Error::firstOrCreate($data)->id;
+        return $this->getModel()
+                    ->firstOrCreate([
+                        'code'    => $this->getCode($exception),
+                        'message' => $exception->getMessage(),
+                    ])->id;
     }
 
     /* ------------------------------------------------------------------------------------------------

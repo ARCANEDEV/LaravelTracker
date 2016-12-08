@@ -56,7 +56,7 @@ class RoutePath extends AbstractModel
     public function route()
     {
         return $this->belongsTo(
-            $this->getConfig('models.route', Route::class)
+            $this->getModelClass(self::MODEL_ROUTE, Route::class)
         );
     }
 
@@ -68,7 +68,7 @@ class RoutePath extends AbstractModel
     public function parameters()
     {
         return $this->hasMany(
-            $this->getConfig('models.route-path-parameter', RoutePathParameter::class)
+            $this->getModelClass(self::MODEL_ROUTE_PATH_PARAMETER, RoutePathParameter::class)
         );
     }
 }

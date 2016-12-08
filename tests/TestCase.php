@@ -117,6 +117,13 @@ abstract class TestCase extends BaseTestCase
                 }
             ]);
 
+            $router->get('blog/posts/{post}', [
+                'as' => 'blog::post.show',
+                function ($post) {
+                    return $post;
+                }
+            ]);
+
             $router->get('admin', [
                 'as' => 'admin::home',
                 function () {

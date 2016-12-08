@@ -2,7 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser;
 use Arcanedev\LaravelTracker\Contracts\Trackers\UserAgentTracker as UserAgentTrackerContract;
-use Arcanedev\LaravelTracker\Models\Agent;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 
 /**
  * Class     UserAgentTracker
@@ -13,9 +13,19 @@ use Arcanedev\LaravelTracker\Models\Agent;
 class UserAgentTracker extends AbstractTracker implements UserAgentTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
+     |  Getters and Setters
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Agent
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_AGENT);
+    }
+
     /**
      * Get the user agent parser.
      *
@@ -37,7 +47,8 @@ class UserAgentTracker extends AbstractTracker implements UserAgentTrackerContra
      */
     public function track()
     {
-        return Agent::firstOrCreate($data = $this->prepareData(), $data)->id;
+        return $this->getModel()
+                    ->firstOrCreate($data = $this->prepareData())->id;
     }
 
     /* ------------------------------------------------------------------------------------------------

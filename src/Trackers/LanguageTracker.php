@@ -2,7 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\LanguageDetector;
 use Arcanedev\LaravelTracker\Contracts\Trackers\LanguageTracker as LanguageTrackerContract;
-use Arcanedev\LaravelTracker\Models\Language;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 
 /**
  * Class     LanguageTracker
@@ -13,9 +13,19 @@ use Arcanedev\LaravelTracker\Models\Language;
 class LanguageTracker extends AbstractTracker implements LanguageTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
+     |  Getters and Setters
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Language
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_LANGUAGE);
+    }
+
     /**
      * @return \Arcanedev\LaravelTracker\Contracts\Detectors\LanguageDetector
      */
@@ -35,8 +45,9 @@ class LanguageTracker extends AbstractTracker implements LanguageTrackerContract
      */
     public function track()
     {
-        $languages = $this->getLanguageDetector()->detect();
-
-        return Language::firstOrCreate($languages)->id;
+        return $this->getModel()
+            ->firstOrCreate(
+                $this->getLanguageDetector()->detect()
+            )->id;
     }
 }

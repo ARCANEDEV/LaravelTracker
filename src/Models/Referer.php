@@ -16,7 +16,8 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  *
- * @property  \Arcanedev\LaravelTracker\Models\Domain  domain
+ * @property  \Arcanedev\LaravelTracker\Models\Domain   domain
+ * @property  \Illuminate\Database\Eloquent\Collection  search_terms
  */
 class Referer extends AbstractModel
 {
@@ -67,7 +68,19 @@ class Referer extends AbstractModel
     public function domain()
     {
         return $this->belongsTo(
-            $this->getConfig('models.domain', Domain::class)
+            $this->getModelClass(self::MODEL_DOMAIN, Domain::class)
+        );
+    }
+
+    /**
+     * Search terms relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function searchTerms()
+    {
+        return $this->hasMany(
+            $this->getModelClass(self::MODEL_REFERER_SEARCH_TERM, RefererSearchTerm::class)
         );
     }
 }

@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\CookieTracker as CookieTrackerContract;
-use Arcanedev\LaravelTracker\Models\Cookie;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -12,6 +12,20 @@ use Ramsey\Uuid\Uuid;
  */
 class CookieTracker extends AbstractTracker implements CookieTrackerContract
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Getters and Setters
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Cookie
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_COOKIE);
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
@@ -31,7 +45,8 @@ class CookieTracker extends AbstractTracker implements CookieTrackerContract
             );
         }
 
-        return Cookie::firstOrCreate(['uuid' => $cookie])->id;
+        return $this->getModel()
+                    ->firstOrCreate(['uuid' => $cookie])->id;
     }
 
     /* ------------------------------------------------------------------------------------------------

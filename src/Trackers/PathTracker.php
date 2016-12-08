@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\PathTracker as PathTrackerContract;
-use Arcanedev\LaravelTracker\Models\Path;
+use Arcanedev\LaravelTracker\Models\AbstractModel;
 
 /**
  * Class     PathTracker
@@ -11,6 +11,20 @@ use Arcanedev\LaravelTracker\Models\Path;
  */
 class PathTracker extends AbstractTracker implements PathTrackerContract
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Getters and Setters
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the model.
+     *
+     * @return \Arcanedev\LaravelTracker\Models\Path
+     */
+    protected function getModel()
+    {
+        return $this->makeModel(AbstractModel::MODEL_PATH);
+    }
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
@@ -24,6 +38,7 @@ class PathTracker extends AbstractTracker implements PathTrackerContract
      */
     public function track($path)
     {
-        return Path::firstOrCreate(compact('path'))->id;
+        return $this->getModel()
+                    ->firstOrCreate(compact('path'))->id;
     }
 }

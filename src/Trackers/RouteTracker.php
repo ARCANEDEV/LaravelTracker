@@ -3,9 +3,9 @@
 use Arcanedev\LaravelTracker\Contracts\Trackers\RouteTracker as RouteTrackerContract;
 use Arcanedev\LaravelTracker\Models;
 use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 
 /**
@@ -92,8 +92,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
     private function isInIgnoredRouteNames($route)
     {
         return $this->checkPatterns(
-            $route->getName(),
-            $this->getConfig('routes.ignore.names', [])
+            $route->getName(), $this->getConfig('routes.ignore.names', [])
         );
     }
 
@@ -107,8 +106,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
     private function isInIgnoredUris($route)
     {
         return $this->checkPatterns(
-            $route->uri(),
-            $this->getConfig('routes.ignore.uris', [])
+            $route->uri(), $this->getConfig('routes.ignore.uris', [])
         );
     }
 
@@ -138,13 +136,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      */
     private function getRouteName(Route $route)
     {
-        if ($name = $route->getName())
-            return $name;
-
-        if ($name = Arr::get($route->getAction(), 'as'))
-            return $name;
-
-        return $route->getUri();
+        return is_null($name = $route->getName()) ? $route->getUri() : $name;
     }
 
     /**
@@ -180,16 +172,15 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
     {
         $parameters = [];
 
-        if (count($params = $route->parameters()) > 0) {
-            foreach ($params as $parameter => $value) {
-                $parameters[] = $this->makeModel(AbstractModel::MODEL_ROUTE_PATH_PARAMETER)->fill([
-                    'parameter' => $parameter,
-                    'value'     => $this->checkIfValueIsEloquentModel($value),
-                ]);
-            }
-
-            $routePath->parameters()->saveMany($parameters);
+        foreach ($route->parameters() as $parameter => $value) {
+            $parameters[] = $this->makeModel(AbstractModel::MODEL_ROUTE_PATH_PARAMETER)->fill([
+                'parameter' => $parameter,
+                'value'     => $this->checkIfValueIsEloquentModel($value),
+            ]);
         }
+
+        if (count($parameters) > 0)
+            $routePath->parameters()->saveMany($parameters);
     }
 
     /**
@@ -201,7 +192,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      */
     private function checkIfValueIsEloquentModel($value)
     {
-        if ($value instanceof \Illuminate\Database\Eloquent\Model) {
+        if ($value instanceof EloquentModel) {
             foreach ($this->getConfig('routes.model-columns', ['id']) as $column) {
                 if (
                     array_key_exists($column, $attributes = $value->getAttributes()) &&

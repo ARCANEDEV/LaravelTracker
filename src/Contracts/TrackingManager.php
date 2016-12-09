@@ -20,7 +20,7 @@ interface TrackingManager
      *
      * @param  \Illuminate\Http\Request $request
      */
-    public function track(Request $request);
+    public function trackRequest(Request $request);
 
     /**
      * Track the matched route.

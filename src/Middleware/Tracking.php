@@ -48,7 +48,7 @@ class Tracking
      */
     public function handle($request, Closure $next)
     {
-        $this->manager->track($request);
+        $this->manager->trackRequest($request);
 
         return $next($request);
     }

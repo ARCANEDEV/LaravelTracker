@@ -306,7 +306,7 @@ class TrackingManager implements TrackingManagerContract
      *
      * @param  \Illuminate\Http\Request $request
      */
-    public function track(Request $request)
+    public function trackRequest(Request $request)
     {
         if ($this->isEnabled()) {
             $this->setRequest($request);

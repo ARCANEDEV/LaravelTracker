@@ -330,6 +330,8 @@ class TrackingManager implements TrackingManagerContract
      */
     public function trackMatchedRoute(Route $route, Request $request)
     {
+        if ( ! $this->isEnabled()) return;
+
         $tracker = $this->getRouteTracker();
 
         if ($tracker->isTrackable($route)) {

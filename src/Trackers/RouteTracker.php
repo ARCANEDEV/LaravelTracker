@@ -122,10 +122,8 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      */
     private function checkPatterns($value, array $patterns)
     {
-        if ( ! is_null($value) && count($patterns) > 0) {
-            foreach ($patterns as $pattern) {
-                if (Str::is($pattern, $value)) return true;
-            }
+        foreach ($patterns as $pattern) {
+            if (Str::is($pattern, $value)) return true;
         }
 
         return false;

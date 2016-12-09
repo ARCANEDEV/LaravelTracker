@@ -41,6 +41,15 @@ class Device extends AbstractModel
         'is_mobile',
     ];
 
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'is_mobile' => 'boolean',
+    ];
+
     /* ------------------------------------------------------------------------------------------------
      |  Relationships
      | ------------------------------------------------------------------------------------------------

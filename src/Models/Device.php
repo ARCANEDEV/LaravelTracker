@@ -47,6 +47,7 @@ class Device extends AbstractModel
      * @var array
      */
     protected $casts = [
+        'id'        => 'integer',
         'is_mobile' => 'boolean',
     ];
 

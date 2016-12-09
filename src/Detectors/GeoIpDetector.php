@@ -1,8 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Detectors;
 
+use Arcanedev\GeoIP\Contracts\GeoIP;
 use Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector as GeoIpDetectorContract;
-use GeoIp2\Database\Reader as GeoIpReader;
-use GeoIp2\Exception\AddressNotFoundException;
 
 /**
  * Class     GeoIpDetector
@@ -16,15 +15,18 @@ class GeoIpDetector implements GeoIpDetectorContract
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    private $reader;
+    /**
+     * @var \Arcanedev\GeoIP\Contracts\GeoIP
+     */
+    private $geoip;
 
     /* ------------------------------------------------------------------------------------------------
      |  Constructor
      | ------------------------------------------------------------------------------------------------
      */
-    public function __construct()
+    public function __construct(GeoIP $geoip)
     {
-        $this->reader = new GeoIpReader($this->getGeoliteFileName());
+        $this->geoip = $geoip;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -41,11 +43,11 @@ class GeoIpDetector implements GeoIpDetectorContract
     public function search($ipAddress)
     {
         try {
-            if ($cityModel = $this->reader->city($ipAddress)) {
-                return $this->renderData($cityModel);
+            if ($location = $this->geoip->location($ipAddress)) {
+                return $this->renderData($location);
             }
         }
-        catch (AddressNotFoundException $e) {
+        catch (\Exception $e) {
             // do nothing
         }
 
@@ -59,35 +61,24 @@ class GeoIpDetector implements GeoIpDetectorContract
     /**
      * Render the data.
      *
-     * @param  \GeoIp2\Model\City  $cityModel
+     * @param  \Arcanedev\GeoIP\Location  $location
      *
      * @return array
      */
-    private function renderData($cityModel)
+    private function renderData($location)
     {
         return [
-            'latitude'       => $cityModel->location->latitude,
-            'longitude'      => $cityModel->location->longitude,
-            'country_code'   => $cityModel->country->isoCode,
-            'country_code3'  => null,
-            'country_name'   => $cityModel->country->name,
-            'region'         => $cityModel->continent->code,
-            'city'           => $cityModel->city->name,
-            'postal_code'    => $cityModel->postal->code,
-            'area_code'      => null,
-            'dma_code'       => null,
-            'metro_code'     => $cityModel->location->metroCode,
-            'continent_code' => $cityModel->continent->code,
+            'iso_code'    => $location->iso_code,
+            'country'     => $location->country,
+            'city'        => $location->city,
+            'state'       => $location->state,
+            'state_code'  => $location->state_code,
+            'postal_code' => $location->postal_code,
+            'latitude'    => $location->latitude,
+            'longitude'   => $location->longitude,
+            'timezone'    => $location->timezone,
+            'continent'   => $location->continent,
+            'currency'    => $location->currency,
         ];
-    }
-
-    /**
-     * Get the GeoLiteFileName.
-     *
-     * @return string
-     */
-    private function getGeoliteFileName()
-    {
-        return __DIR__ . '/../../data/GeoLite2-City.mmdb';
     }
 }

@@ -2,8 +2,15 @@
 
 use Arcanedev\LaravelTracker\Exceptions\ExceptionFactory;
 use Arcanedev\LaravelTracker\Exceptions\Errors;
+use Arcanedev\LaravelTracker\Tests\TestCase;
 
-class ExceptionFactoryTest extends \PHPUnit_Framework_TestCase
+/**
+ * Class     ExceptionFactoryTest
+ *
+ * @package  Arcanedev\LaravelTracker\Tests\Exceptions
+ * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
+ */
+class ExceptionFactoryTest extends TestCase
 {
     /* ------------------------------------------------------------------------------------------------
      |  Test Functions
@@ -12,7 +19,36 @@ class ExceptionFactoryTest extends \PHPUnit_Framework_TestCase
     /** @test */
     public function it_can_make()
     {
-        $exceptions = [
+        $exceptions = $this->getSupportedErrors();
+
+        foreach ($exceptions as $code => $class) {
+            $exception = ExceptionFactory::make($code, 'This is a message');
+
+            $this->assertInstanceOf($class, $exception);
+        }
+    }
+
+    /** @test */
+    public function it_can_make_default_if_not_supported()
+    {
+        $this->assertInstanceOf(
+            Errors\Error::class,
+            ExceptionFactory::make(600, 'Kabooom!!')
+        );
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Other Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Get the supported error exceptions.
+     *
+     * @return array
+     */
+    private function getSupportedErrors()
+    {
+        return [
             E_ERROR             => Errors\Error::class,
             E_WARNING           => Errors\Warning::class,
             E_PARSE             => Errors\Parse::class,
@@ -29,20 +65,5 @@ class ExceptionFactoryTest extends \PHPUnit_Framework_TestCase
             E_DEPRECATED        => Errors\Deprecated::class,
             E_USER_DEPRECATED   => Errors\UserDeprecated::class,
         ];
-
-        foreach ($exceptions as $code => $class) {
-            $exception = ExceptionFactory::make($code, 'This is a message');
-
-            $this->assertInstanceOf($class, $exception);
-        }
-    }
-
-    /** @test */
-    public function it_can_make_default_if_not_supported()
-    {
-        $this->assertInstanceOf(
-            Errors\Error::class,
-            ExceptionFactory::make(600, 'Kabooom!!')
-        );
     }
 }

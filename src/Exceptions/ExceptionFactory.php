@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Exceptions;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class     ExceptionFactory
  *
@@ -8,6 +10,33 @@
  */
 class ExceptionFactory
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Properties
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Supported exceptions.
+     *
+     * @var array
+     */
+    protected static $supported = [
+        E_ERROR             => Errors\Error::class,
+        E_WARNING           => Errors\Warning::class,
+        E_PARSE             => Errors\Parse::class,
+        E_NOTICE            => Errors\Notice::class,
+        E_CORE_ERROR        => Errors\CoreError::class,
+        E_CORE_WARNING      => Errors\CoreWarning::class,
+        E_COMPILE_ERROR     => Errors\CompileError::class,
+        E_COMPILE_WARNING   => Errors\CompileWarning::class,
+        E_USER_ERROR        => Errors\UserError::class,
+        E_USER_WARNING      => Errors\UserWarning::class,
+        E_USER_NOTICE       => Errors\UserNotice::class,
+        E_STRICT            => Errors\Strict::class,
+        E_RECOVERABLE_ERROR => Errors\RecoverableError::class,
+        E_DEPRECATED        => Errors\Deprecated::class,
+        E_USER_DEPRECATED   => Errors\UserDeprecated::class,
+    ];
+
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
@@ -22,24 +51,8 @@ class ExceptionFactory
      */
     public static function make($errorCode, $errorMessage)
     {
-        switch ($errorCode) {
-            case E_ERROR:             return new Errors\Error($errorMessage, $errorCode);
-            case E_WARNING:           return new Errors\Warning($errorMessage, $errorCode);
-            case E_PARSE:             return new Errors\Parse($errorMessage, $errorCode);
-            case E_NOTICE:            return new Errors\Notice($errorMessage, $errorCode);
-            case E_CORE_ERROR:        return new Errors\CoreError($errorMessage, $errorCode);
-            case E_CORE_WARNING:      return new Errors\CoreWarning($errorMessage, $errorCode);
-            case E_COMPILE_ERROR:     return new Errors\CompileError($errorMessage, $errorCode);
-            case E_COMPILE_WARNING:   return new Errors\CompileWarning($errorMessage, $errorCode);
-            case E_USER_ERROR:        return new Errors\UserError($errorMessage, $errorCode);
-            case E_USER_WARNING:      return new Errors\UserWarning($errorMessage, $errorCode);
-            case E_USER_NOTICE:       return new Errors\UserNotice($errorMessage, $errorCode);
-            case E_STRICT:            return new Errors\Strict($errorMessage, $errorCode);
-            case E_RECOVERABLE_ERROR: return new Errors\RecoverableError($errorMessage, $errorCode);
-            case E_DEPRECATED:        return new Errors\Deprecated($errorMessage, $errorCode);
-            case E_USER_DEPRECATED:   return new Errors\UserDeprecated($errorMessage, $errorCode);
-        }
+        $exception = Arr::get(self::$supported, $errorCode, Errors\Error::class);
 
-        return new Errors\Error($errorMessage, $errorCode);
+        return new $exception($errorMessage, $errorCode);
     }
 }

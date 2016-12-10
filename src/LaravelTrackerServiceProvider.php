@@ -146,7 +146,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         }
 
         // Register the trackers manager
-        $this->singleton(Contracts\TrackingManager::class, TrackingManager::class);
+        $this->bind(Contracts\TrackingManager::class, TrackingManager::class);
     }
 
     /**

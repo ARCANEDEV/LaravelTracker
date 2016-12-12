@@ -23,7 +23,6 @@ class GeoIpTrackerTest extends TestCase
     {
         parent::setUp();
 
-        $this->artisan('geoip:update');
         $this->tracker = $this->app->make(\Arcanedev\LaravelTracker\Contracts\Trackers\GeoIpTracker::class);
     }
 

@@ -110,10 +110,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
             return new Detectors\DeviceDetector($app['agent']);
         });
 
-        $this->singleton(
-            Contracts\Detectors\GeoIpDetector::class,
-            Detectors\GeoIpDetector::class
-        );
+        $this->singleton(Contracts\Detectors\GeoIpDetector::class, Detectors\GeoIpDetector::class);
 
         $this->singleton(Contracts\Detectors\LanguageDetector::class, function (AppContract $app) {
             return new Detectors\LanguageDetector($app['agent']);
@@ -149,7 +146,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         }
 
         // Register the trackers manager
-        $this->singleton(Contracts\TrackingManager::class, TrackingManager::class);
+        $this->bind(Contracts\TrackingManager::class, TrackingManager::class);
     }
 
     /**

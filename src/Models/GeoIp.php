@@ -7,18 +7,17 @@
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  int             id
+ * @property  string          iso_code
+ * @property  string          country
+ * @property  string          city
+ * @property  string          state
+ * @property  string          state_code
+ * @property  string          postal_code
  * @property  float           latitude
  * @property  float           longitude
- * @property  string          country_code
- * @property  string          country_code3
- * @property  string          country_name
- * @property  string          region
- * @property  string          city
- * @property  string          postal_code
- * @property  int             area_code
- * @property  float           dma_code
- * @property  float           metro_code
- * @property  string          continent_code
+ * @property  string          timezone
+ * @property  string          continent
+ * @property  string          currency
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
@@ -41,18 +40,17 @@ class GeoIp extends AbstractModel
      * @var array
      */
     protected $fillable = [
+        'iso_code',
+        'country',
+        'city',
+        'state',
+        'state_code',
+        'postal_code',
         'latitude',
         'longitude',
-        'country_code',
-        'country_code3',
-        'country_name',
-        'region',
-        'city',
-        'postal_code',
-        'area_code',
-        'dma_code',
-        'metro_code',
-        'continent_code',
+        'timezone',
+        'continent',
+        'currency',
     ];
 
     /**

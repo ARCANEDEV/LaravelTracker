@@ -23,6 +23,7 @@ class GeoIpTrackerTest extends TestCase
     {
         parent::setUp();
 
+        $this->artisan('geoip:update');
         $this->tracker = $this->app->make(\Arcanedev\LaravelTracker\Contracts\Trackers\GeoIpTracker::class);
     }
 
@@ -58,15 +59,17 @@ class GeoIpTrackerTest extends TestCase
         $this->assertSame(1, $this->tracker->track($ip));
 
         $this->seeInDatabase('tracker_geoip', [
-            'id'             => 1,
-            'latitude'       => 44.9759,
-            'longitude'      => -93.2166,
-            'country_code'   => 'US',
-            'country_name'   => 'United States',
-            'region'         => 'NA',
-            'city'           => 'Minneapolis',
-            'postal_code'    => '55414',
-            'continent_code' => 'NA',
+            'iso_code'    => 'US',
+            'country'     => 'United States',
+            'city'        => 'Minneapolis',
+            'state'       => 'Minnesota',
+            'state_code'  => 'MN',
+            'postal_code' => '55414',
+            'latitude'    => 44.9759,
+            'longitude'   => -93.2166,
+            'timezone'    => 'America/Chicago',
+            'continent'   => 'NA',
+            'currency'    => 'USD',
         ]);
     }
 }

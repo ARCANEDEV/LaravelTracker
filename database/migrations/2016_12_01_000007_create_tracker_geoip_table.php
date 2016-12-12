@@ -32,18 +32,17 @@ class CreateTrackerGeoipTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('iso_code', 3)->nullable()->index();
+            $table->string('country')->nullable()->index();
+            $table->string('city', 50)->nullable()->index();
+            $table->string('state', 100)->nullable()->index();
+            $table->string('state_code', 2)->nullable();
+            $table->string('postal_code', 20)->nullable();
             $table->double('latitude')->nullable()->index();
             $table->double('longitude')->nullable()->index();
-            $table->string('country_code', 2)->nullable()->index();
-            $table->string('country_code3', 3)->nullable()->index();
-            $table->string('country_name')->nullable()->index();
-            $table->string('region', 2)->nullable();
-            $table->string('city', 50)->nullable()->index();
-            $table->string('postal_code', 20)->nullable();
-            $table->bigInteger('area_code')->nullable();
-            $table->double('dma_code')->nullable();
-            $table->double('metro_code')->nullable();
-            $table->string('continent_code', 2)->nullable();
+            $table->string('timezone', 20)->nullable();
+            $table->string('continent', 2)->nullable();
+            $table->string('currency', 3)->nullable();
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();
         });

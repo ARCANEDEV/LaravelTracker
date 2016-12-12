@@ -102,13 +102,23 @@ class Tracker implements TrackerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
+     * Get the application instance.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application
+     */
+    protected function app()
+    {
+        return $this->app;
+    }
+
+    /**
      * Get the config repository.
      *
      * @return \Illuminate\Contracts\Config\Repository
      */
     private function config()
     {
-        return $this->app['config'];
+        return $this->make('config');
     }
 
     /**

@@ -11,17 +11,6 @@ use Arcanedev\LaravelTracker\Contracts;
 trait TrackersMaker
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Properties
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * The application container.
-     *
-     * @var \Illuminate\Contracts\Foundation\Application
-     */
-    protected $app;
-
-    /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
@@ -164,6 +153,13 @@ trait TrackersMaker
      */
     private function make($abstract)
     {
-        return $this->app->make($abstract);
+        return $this->app()->make($abstract);
     }
+
+    /**
+     * Get the application instance.
+     *
+     * @return \Illuminate\Contracts\Foundation\Application
+     */
+    abstract protected function app();
 }

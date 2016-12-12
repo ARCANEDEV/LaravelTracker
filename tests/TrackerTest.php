@@ -24,7 +24,8 @@ class TrackerTest extends TestCase
         parent::setUp();
         $this->migrate();
 
-        $this->tracker = $this->app->make('arcanedev.tracker');
+        $this->tracker = $this->app->make(\Arcanedev\LaravelTracker\Contracts\Tracker::class);
+        $this->tracker->enable();
     }
 
     public function tearDown()

@@ -125,8 +125,7 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      */
     private function updateData(array $data)
     {
-        $this->checkIfUserChanged($data)
-             ->update(Arr::except($data, ['id', 'uuid']));
+        $this->checkIfUserChanged($data);
 
         return $data;
     }
@@ -149,26 +148,21 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      * Check if user changed.
      *
      * @param  array  $data
-     *
-     * @return \Arcanedev\LaravelTracker\Models\Session
      */
     private function checkIfUserChanged(array $data)
     {
         $model = $this->getModel()->find($this->getSessionData('id'));
 
-        if (is_null($model) && ! $this->sessionIsKnown())
-            return $this->createSessionForGuest($data);
-
         if (
+            ! is_null($model) &&
             ! is_null($model->user_id) &&
             ! is_null($data['user_id']) &&
             $data['user_id'] !== $model->user_id
         ) {
             $newSession = $this->regenerateSystemSession($data);
             $model      = $this->findByUuid($newSession['uuid']);
+            $model->update(Arr::except($data, ['id', 'uuid']));
         }
-
-        return $model;
     }
 
     /**

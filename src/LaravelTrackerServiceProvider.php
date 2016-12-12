@@ -144,9 +144,6 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         foreach ($this->getTrackers() as $abstract => $concrete) {
             $this->singleton($abstract, $concrete);
         }
-
-        // Register the trackers manager
-        $this->bind(Contracts\TrackingManager::class, TrackingManager::class);
     }
 
     /**
@@ -155,7 +152,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     private function registerMainTracker()
     {
         $this->singleton(Contracts\Tracker::class, Tracker::class);
-        $this->bind('arcanedev.tracker', Contracts\Tracker::class);
+        $this->singleton('arcanedev.tracker', Contracts\Tracker::class);
     }
 
     /**
@@ -190,7 +187,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         $handler = $this->app[ExceptionHandlerContract::class];
 
         $this->app->singleton(ExceptionHandlerContract::class, function ($app) use ($handler) {
-            return new Exceptions\Handler($app[Contracts\TrackingManager::class], $handler);
+            return new Exceptions\Handler($app[Contracts\Tracker::class], $handler);
         });
     }
 }

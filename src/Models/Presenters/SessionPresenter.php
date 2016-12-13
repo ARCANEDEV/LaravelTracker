@@ -8,7 +8,7 @@
  *
  * @property  string  location_name
  *
- * @property  \Arcanedev\LaravelTracker\Models\GeoIp  geo_ip
+ * @property  \Arcanedev\LaravelTracker\Models\GeoIp  geoip
  */
 trait SessionPresenter
 {
@@ -23,8 +23,6 @@ trait SessionPresenter
      */
     public function getLocationNameAttribute()
     {
-        return is_null($this->geo_ip)
-            ? 'undefined'
-            : $this->geo_ip->country_name . ' ' . $this->geo_ip->city;
+        return $this->hasGeoip() ? $this->geoip->country.' '.$this->geoip->city : 'undefined';
     }
 }

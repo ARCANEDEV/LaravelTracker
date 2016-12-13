@@ -25,7 +25,7 @@
  * @property  \Arcanedev\LaravelTracker\Models\Agent     agent
  * @property  \Arcanedev\LaravelTracker\Models\Referer   referer
  * @property  \Arcanedev\LaravelTracker\Models\Cookie    cookie
- * @property  \Arcanedev\LaravelTracker\Models\GeoIp     geo_ip
+ * @property  \Arcanedev\LaravelTracker\Models\GeoIp     geoip
  * @property  \Arcanedev\LaravelTracker\Models\Language  language
  */
 class Session extends AbstractModel
@@ -150,7 +150,7 @@ class Session extends AbstractModel
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function geoIp()
+    public function geoip()
     {
         return $this->belongsTo(
             $this->getModelClass(self::MODEL_GEOIP, GeoIp::class), 'geoip_id'
@@ -167,5 +167,41 @@ class Session extends AbstractModel
         return $this->belongsTo(
             $this->getModelClass(self::MODEL_LANGUAGE, Language::class)
         );
+    }
+
+    /**
+     * Session activities relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function activities()
+    {
+        return $this->hasMany(
+            $this->getModelClass(self::MODEL_SESSION_ACTIVITY, SessionActivity::class)
+        );
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Check Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Check if the user exists.
+     *
+     * @return bool
+     */
+    public function hasUser()
+    {
+        return ! is_null($this->user);
+    }
+
+    /**
+     * Check if the geoip exists.
+     *
+     * @return bool
+     */
+    public function hasGeoip()
+    {
+        return ! is_null($this->geoip);
     }
 }

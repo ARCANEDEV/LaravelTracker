@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Detectors;
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector as DeviceDetectorContract;
+use Arcanedev\LaravelTracker\Models\Device;
 
 /**
  * Class     DeviceDetector
@@ -45,7 +46,6 @@ class DeviceDetector implements DeviceDetectorContract
         return [
             'kind'      => $this->getDeviceKind(),
             'model'     => $this->agent->device() ?: '',
-            'is_mobile' => $this->agent->isMobile(),
         ];
     }
 
@@ -56,11 +56,11 @@ class DeviceDetector implements DeviceDetectorContract
      */
     public function getDeviceKind()
     {
-        if ($this->isTablet())   return 'Tablet';
-        if ($this->isPhone())    return 'Phone';
-        if ($this->isComputer()) return 'Computer';
+        if ($this->isTablet())   return Device::KIND_TABLET;
+        if ($this->isPhone())    return Device::KIND_PHONE;
+        if ($this->isComputer()) return Device::KIND_COMPUTER;
 
-        return 'unavailable';
+        return Device::KIND_UNAVAILABLE;
     }
 
     /**

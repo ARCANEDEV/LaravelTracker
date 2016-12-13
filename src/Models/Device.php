@@ -11,12 +11,20 @@
  * @property  string          model
  * @property  string          platform
  * @property  string          platform_version
- * @property  bool            is_mobile
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
 class Device extends AbstractModel
 {
+    /* ------------------------------------------------------------------------------------------------
+     |  Constants
+     | ------------------------------------------------------------------------------------------------
+     */
+    const KIND_COMPUTER    = 'computer';
+    const KIND_PHONE       = 'phone';
+    const KIND_TABLET      = 'tablet';
+    const KIND_UNAVAILABLE = 'unavailable';
+
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
@@ -38,7 +46,6 @@ class Device extends AbstractModel
         'model',
         'platform',
         'platform_version',
-        'is_mobile',
     ];
 
     /**
@@ -47,12 +54,45 @@ class Device extends AbstractModel
      * @var array
      */
     protected $casts = [
-        'id'        => 'integer',
-        'is_mobile' => 'boolean',
+        'id' => 'integer',
     ];
 
     /* ------------------------------------------------------------------------------------------------
      |  Relationships
      | ------------------------------------------------------------------------------------------------
      */
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Check Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Is this a computer?
+     *
+     * @return bool
+     */
+    public function isComputer()
+    {
+        return $this->kind == static::KIND_COMPUTER;
+    }
+
+    /**
+     * Is this a phone?
+     *
+     * @return bool
+     */
+    public function isPhone()
+    {
+        return $this->kind == static::KIND_PHONE;
+    }
+
+    /**
+     * Is this a tablet?
+     *
+     * @return bool
+     */
+    public function isTablet()
+    {
+        return $this->kind == static::KIND_TABLET;
+    }
 }

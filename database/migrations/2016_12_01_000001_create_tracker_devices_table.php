@@ -36,7 +36,6 @@ class CreateTrackerDevicesTable extends Migration
             $table->string('model', 64)->index();
             $table->string('platform', 64)->index();
             $table->string('platform_version', 16)->index();
-            $table->boolean('is_mobile')->default(false);
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();
 

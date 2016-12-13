@@ -1,6 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Exceptions;
 
-use Arcanedev\LaravelTracker\Contracts\TrackingManager;
+use Arcanedev\LaravelTracker\Contracts\Tracker;
 use Exception;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
@@ -16,7 +16,7 @@ class Handler implements ExceptionHandlerContract
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var  \Arcanedev\LaravelTracker\Contracts\TrackingManager */
+    /** @var  \Arcanedev\LaravelTracker\Contracts\Tracker */
     private $manager;
 
     /** @var  \Illuminate\Contracts\Debug\ExceptionHandler */
@@ -33,12 +33,12 @@ class Handler implements ExceptionHandlerContract
     /**
      * Handler constructor.
      *
-     * @param  \Arcanedev\LaravelTracker\Contracts\TrackingManager   $manager
-     * @param  \Illuminate\Contracts\Debug\ExceptionHandler          $illuminateHandler
+     * @param  \Arcanedev\LaravelTracker\Contracts\Tracker   $tracker
+     * @param  \Illuminate\Contracts\Debug\ExceptionHandler  $illuminateHandler
      */
-    public function __construct(TrackingManager $manager, ExceptionHandlerContract $illuminateHandler)
+    public function __construct(Tracker $tracker, ExceptionHandlerContract $illuminateHandler)
     {
-        $this->manager                  = $manager;
+        $this->manager                  = $tracker;
         $this->illuminateHandler        = $illuminateHandler;
         $this->originalExceptionHandler = set_exception_handler([$this, 'trackException']);
         $this->originalErrorHandler     = set_error_handler([$this, 'handleError']);

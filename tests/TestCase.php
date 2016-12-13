@@ -14,6 +14,13 @@ abstract class TestCase extends BaseTestCase
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->app->make(\Arcanedev\LaravelTracker\Contracts\Tracker::class)->enable();
+    }
+
     /**
      * Get package providers.
      *
@@ -76,7 +83,6 @@ abstract class TestCase extends BaseTestCase
      */
     private function settingConfigs($config)
     {
-        $config->set('laravel-tracker.enabled', true);
         $config->set('laravel-tracker.database.connection', 'testing');
         $config->set('laravel-tracker.tracking', [
             'cookies'      => true,

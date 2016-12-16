@@ -2,7 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\RouteTracker as RouteTrackerContract;
 use Arcanedev\LaravelTracker\Models;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
@@ -27,7 +27,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_ROUTE);
+        return $this->makeModel(BindingManager::MODEL_ROUTE);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
     private function trackRoutePath(Route $route, Request $request, $routeId)
     {
         /** @var  \Arcanedev\LaravelTracker\Models\RoutePath  $model */
-        $model = $this->makeModel(AbstractModel::MODEL_ROUTE_PATH)->firstOrCreate([
+        $model = $this->makeModel(BindingManager::MODEL_ROUTE_PATH)->firstOrCreate([
             'route_id' => $routeId,
             'path'     => $request->path(),
         ]);
@@ -173,7 +173,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
         $parameters = [];
 
         foreach ($route->parameters() as $parameter => $value) {
-            $parameters[] = $this->makeModel(AbstractModel::MODEL_ROUTE_PATH_PARAMETER)->fill([
+            $parameters[] = $this->makeModel(BindingManager::MODEL_ROUTE_PATH_PARAMETER)->fill([
                 'parameter' => $parameter,
                 'value'     => $this->checkIfValueIsEloquentModel($value),
             ]);

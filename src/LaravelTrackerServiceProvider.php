@@ -48,7 +48,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     public function register()
     {
         $this->registerConfig();
-        $this->bindModels();
+        $this->registerModelsBindings();
 
         $this->app->register(Providers\PackagesServiceProvider::class);
         $this->app->register(Providers\EventServiceProvider::class);
@@ -94,9 +94,9 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     /**
      * Binding the models with the contracts.
      */
-    private function bindModels()
+    private function registerModelsBindings()
     {
-        foreach ($this->getModelsBindings() as $key => $contract) {
+        foreach (Support\BindingManager::getModelsBindings() as $key => $contract) {
             $this->bind($contract, $this->config()->get("laravel-tracker.models.$key"));
         }
     }
@@ -152,7 +152,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      */
     private function registerTrackers()
     {
-        foreach ($this->getTrackersBindings() as $abstract => $concrete) {
+        foreach (Support\BindingManager::getTrackersBindings() as $abstract => $concrete) {
             $this->singleton($abstract, $concrete);
         }
     }
@@ -176,57 +176,5 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         $this->app->singleton(ExceptionHandlerContract::class, function ($app) use ($handler) {
             return new Exceptions\Handler($app[Contracts\Tracker::class], $handler);
         });
-    }
-
-    /**
-     * Get the models bindings.
-     *
-     * @return array
-     */
-    private function getModelsBindings()
-    {
-        return [
-            Models\AbstractModel::MODEL_AGENT                => Contracts\Models\Agent::class,
-            Models\AbstractModel::MODEL_COOKIE               => Contracts\Models\Cookie::class,
-            Models\AbstractModel::MODEL_DEVICE               => Contracts\Models\Device::class,
-            Models\AbstractModel::MODEL_DOMAIN               => Contracts\Models\Domain::class,
-            Models\AbstractModel::MODEL_ERROR                => Contracts\Models\Error::class,
-            Models\AbstractModel::MODEL_GEOIP                => Contracts\Models\GeoIp::class,
-            Models\AbstractModel::MODEL_LANGUAGE             => Contracts\Models\Language::class,
-            Models\AbstractModel::MODEL_PATH                 => Contracts\Models\Path::class,
-            Models\AbstractModel::MODEL_QUERY                => Contracts\Models\Query::class,
-            Models\AbstractModel::MODEL_REFERER              => Contracts\Models\Referer::class,
-            Models\AbstractModel::MODEL_REFERER_SEARCH_TERM  => Contracts\Models\RefererSearchTerm::class,
-            Models\AbstractModel::MODEL_ROUTE                => Contracts\Models\Route::class,
-            Models\AbstractModel::MODEL_ROUTE_PATH           => Contracts\Models\RoutePath::class,
-            Models\AbstractModel::MODEL_ROUTE_PATH_PARAMETER => Contracts\Models\RoutePathParameter::class,
-            Models\AbstractModel::MODEL_SESSION              => Contracts\Models\Session::class,
-            Models\AbstractModel::MODEL_SESSION_ACTIVITY     => Contracts\Models\SessionActivity::class,
-            Models\AbstractModel::MODEL_USER                 => Contracts\Models\User::class,
-        ];
-    }
-
-    /**
-     * Get the trackers bindings.
-     *
-     * @return array
-     */
-    private function getTrackersBindings()
-    {
-        return [
-            TrackerContracts\CookieTracker::class          => Trackers\CookieTracker::class,
-            TrackerContracts\DeviceTracker::class          => Trackers\DeviceTracker::class,
-            TrackerContracts\ErrorTracker::class           => Trackers\ErrorTracker::class,
-            TrackerContracts\GeoIpTracker::class           => Trackers\GeoIpTracker::class,
-            TrackerContracts\LanguageTracker::class        => Trackers\LanguageTracker::class,
-            TrackerContracts\PathTracker::class            => Trackers\PathTracker::class,
-            TrackerContracts\QueryTracker::class           => Trackers\QueryTracker::class,
-            TrackerContracts\RefererTracker::class         => Trackers\RefererTracker::class,
-            TrackerContracts\RouteTracker::class           => Trackers\RouteTracker::class,
-            TrackerContracts\SessionTracker::class         => Trackers\SessionTracker::class,
-            TrackerContracts\SessionActivityTracker::class => Trackers\SessionActivityTracker::class,
-            TrackerContracts\UserAgentTracker::class       => Trackers\UserAgentTracker::class,
-            TrackerContracts\UserTracker::class            => Trackers\UserTracker::class,
-        ];
     }
 }

@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\ErrorTracker as ErrorTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 use Exception;
 
 /**
@@ -23,7 +23,7 @@ class ErrorTracker extends AbstractTracker implements ErrorTrackerContract
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_ERROR);
+        return $this->makeModel(BindingManager::MODEL_ERROR);
     }
 
     /* ------------------------------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\PathTracker as PathTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
  * Class     PathTracker
@@ -22,7 +22,7 @@ class PathTracker extends AbstractTracker implements PathTrackerContract
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_PATH);
+        return $this->makeModel(BindingManager::MODEL_PATH);
     }
 
     /* ------------------------------------------------------------------------------------------------

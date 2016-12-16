@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\QueryTracker as QueryTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 use Illuminate\Support\Arr;
 
 /**
@@ -23,7 +23,7 @@ class QueryTracker extends AbstractTracker implements QueryTrackerContract
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_QUERY);
+        return $this->makeModel(BindingManager::MODEL_QUERY);
     }
 
     /* ------------------------------------------------------------------------------------------------

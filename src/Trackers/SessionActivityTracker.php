@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\SessionActivityTracker as SessionActivityTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
  * Class     SessionActivityTracker
@@ -22,7 +22,7 @@ class SessionActivityTracker extends AbstractTracker implements SessionActivityT
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_SESSION_ACTIVITY);
+        return $this->makeModel(BindingManager::MODEL_SESSION_ACTIVITY);
     }
 
     /* ------------------------------------------------------------------------------------------------

@@ -2,7 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector;
 use Arcanedev\LaravelTracker\Contracts\Trackers\GeoIpTracker as GeoIpTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 use Illuminate\Support\Arr;
 
 /**
@@ -24,7 +24,7 @@ class GeoIpTracker extends AbstractTracker implements GeoIpTrackerContract
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_GEOIP);
+        return $this->makeModel(BindingManager::MODEL_GEOIP);
     }
 
     /**

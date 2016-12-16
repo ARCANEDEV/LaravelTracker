@@ -2,7 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Parsers\UserAgentParser;
 use Arcanedev\LaravelTracker\Contracts\Trackers\UserAgentTracker as UserAgentTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
  * Class     UserAgentTracker
@@ -23,7 +23,7 @@ class UserAgentTracker extends AbstractTracker implements UserAgentTrackerContra
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_AGENT);
+        return $this->makeModel(BindingManager::MODEL_AGENT);
     }
 
     /**

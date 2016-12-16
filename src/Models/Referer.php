@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 use Arcanedev\LaravelTracker\Contracts\Models\Referer as RefererContract;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
  * Class     Referer
@@ -70,7 +71,7 @@ class Referer extends AbstractModel implements RefererContract
     public function domain()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_DOMAIN, Domain::class)
+            $this->getModelClass(BindingManager::MODEL_DOMAIN, Domain::class)
         );
     }
 
@@ -82,7 +83,7 @@ class Referer extends AbstractModel implements RefererContract
     public function searchTerms()
     {
         return $this->hasMany(
-            $this->getModelClass(self::MODEL_REFERER_SEARCH_TERM, RefererSearchTerm::class)
+            $this->getModelClass(BindingManager::MODEL_REFERER_SEARCH_TERM, RefererSearchTerm::class)
         );
     }
 }

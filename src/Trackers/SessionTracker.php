@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker as SessionTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Ramsey\Uuid\Uuid;
@@ -32,7 +32,7 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_SESSION);
+        return $this->makeModel(BindingManager::MODEL_SESSION);
     }
 
     /**
@@ -163,26 +163,6 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
             $model      = $this->findByUuid($newSession['uuid']);
             $model->update(Arr::except($data, ['id', 'uuid']));
         }
-    }
-
-    /**
-     * Create session for guest.
-     *
-     * @param  array  $data
-     *
-     * @return \Arcanedev\LaravelTracker\Models\Session
-     */
-    private function createSessionForGuest(array $data)
-    {
-        $this->generateSession($data);
-
-        $session = $this->getModel()->fill($this->sessionInfo);
-        $session->save();
-
-        $this->putSessionData($data);
-        $this->setSessionId($session->id);
-
-        return $session;
     }
 
     /**

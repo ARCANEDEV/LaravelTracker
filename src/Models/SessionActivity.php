@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 use Arcanedev\LaravelTracker\Contracts\Models\SessionActivity as SessionActivityContract;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
  * Class     SessionActivity
@@ -92,7 +93,7 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
     public function session()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_SESSION, Session::class)
+            $this->getModelClass(BindingManager::MODEL_SESSION, Session::class)
         );
     }
 
@@ -104,7 +105,7 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
     public function path()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_PATH, Path::class)
+            $this->getModelClass(BindingManager::MODEL_PATH, Path::class)
         );
     }
 
@@ -116,7 +117,7 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
     public function queryRel()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_QUERY, Query::class)
+            $this->getModelClass(BindingManager::MODEL_QUERY, Query::class)
         );
     }
 
@@ -128,7 +129,7 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
     public function referrer()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_REFERER, Referer::class)
+            $this->getModelClass(BindingManager::MODEL_REFERER, Referer::class)
         );
     }
 
@@ -140,7 +141,7 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
     public function error()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_ERROR, Error::class)
+            $this->getModelClass(BindingManager::MODEL_ERROR, Error::class)
         );
     }
 

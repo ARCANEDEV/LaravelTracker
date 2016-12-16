@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 use Arcanedev\LaravelTracker\Contracts\Models\Domain as DomainContract;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
  * Class     Domain
@@ -56,7 +57,7 @@ class Domain extends AbstractModel implements DomainContract
     public function referers()
     {
         return $this->hasMany(
-            $this->getModelClass(self::MODEL_REFERER, Referer::class)
+            $this->getModelClass(BindingManager::MODEL_REFERER, Referer::class)
         );
     }
 }

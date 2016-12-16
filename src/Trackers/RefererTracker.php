@@ -2,7 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Parsers\RefererParser;
 use Arcanedev\LaravelTracker\Contracts\Trackers\RefererTracker as RefererTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 use Illuminate\Support\Arr;
 
 /**
@@ -24,7 +24,7 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_REFERER);
+        return $this->makeModel(BindingManager::MODEL_REFERER);
     }
 
     /**
@@ -70,6 +70,7 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
                 $attributes['search_terms_hash'] = sha1($secondParsed->getSearchTerm());
             }
 
+            /** @var  \Arcanedev\LaravelTracker\Models\Referer  $referer */
             $referer = $this->getModel()->firstOrCreate(
                 Arr::only($attributes, ['url', 'search_terms_hash']),
                 $attributes
@@ -94,22 +95,22 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
      */
     private function trackDomain($name)
     {
-        return $this->makeModel(AbstractModel::MODEL_DOMAIN)
+        return $this->makeModel(BindingManager::MODEL_DOMAIN)
                     ->firstOrCreate(compact('name'))->id;
     }
 
     /**
      * Store the referer's search terms.
      *
-     * @param  \Arcanedev\LaravelTracker\Models\Referer     $referer
-     * @param  string                                       $searchTerms
+     * @param  \Arcanedev\LaravelTracker\Contracts\Models\Referer  $referer
+     * @param  string                                              $searchTerms
      */
     private function trackRefererSearchTerms($referer, $searchTerms)
     {
         $terms = [];
 
         foreach (explode(' ', $searchTerms) as $term) {
-            $terms[] = $this->makeModel(AbstractModel::MODEL_REFERER_SEARCH_TERM)->fill([
+            $terms[] = $this->makeModel(BindingManager::MODEL_REFERER_SEARCH_TERM)->fill([
                 'search_term' => $term,
             ]);
         }

@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\UserTracker as UserTrackerContract;
-use Arcanedev\LaravelTracker\Models\AbstractModel;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 use Illuminate\Contracts\Foundation\Application;
 
 /**
@@ -56,7 +56,7 @@ class UserTracker extends AbstractTracker implements UserTrackerContract
      */
     protected function getModel()
     {
-        return $this->makeModel(AbstractModel::MODEL_USER);
+        return $this->makeModel(BindingManager::MODEL_USER);
     }
 
     /* ------------------------------------------------------------------------------------------------

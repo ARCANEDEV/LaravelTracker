@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 use Arcanedev\LaravelTracker\Contracts\Models\RoutePath as RoutePathContract;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
  * Class     RoutePath
@@ -58,7 +59,7 @@ class RoutePath extends AbstractModel implements RoutePathContract
     public function route()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_ROUTE, Route::class)
+            $this->getModelClass(BindingManager::MODEL_ROUTE, Route::class)
         );
     }
 
@@ -70,7 +71,7 @@ class RoutePath extends AbstractModel implements RoutePathContract
     public function parameters()
     {
         return $this->hasMany(
-            $this->getModelClass(self::MODEL_ROUTE_PATH_PARAMETER, RoutePathParameter::class)
+            $this->getModelClass(BindingManager::MODEL_ROUTE_PATH_PARAMETER, RoutePathParameter::class)
         );
     }
 }

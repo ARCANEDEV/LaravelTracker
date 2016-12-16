@@ -15,28 +15,6 @@ use Arcanedev\Support\Bases\Model;
 abstract class AbstractModel extends Model
 {
     /* ------------------------------------------------------------------------------------------------
-     |  Constants
-     | ------------------------------------------------------------------------------------------------
-     */
-    const MODEL_AGENT                = 'agent';
-    const MODEL_COOKIE               = 'cookie';
-    const MODEL_DEVICE               = 'device';
-    const MODEL_DOMAIN               = 'domain';
-    const MODEL_ERROR                = 'error';
-    const MODEL_GEOIP                = 'geoip';
-    const MODEL_LANGUAGE             = 'language';
-    const MODEL_PATH                 = 'path';
-    const MODEL_QUERY                = 'query';
-    const MODEL_REFERER              = 'referer';
-    const MODEL_REFERER_SEARCH_TERM  = 'referer-search-term';
-    const MODEL_ROUTE                = 'route';
-    const MODEL_ROUTE_PATH           = 'route-path';
-    const MODEL_ROUTE_PATH_PARAMETER = 'route-path-parameter';
-    const MODEL_SESSION              = 'session';
-    const MODEL_SESSION_ACTIVITY     = 'session-activity';
-    const MODEL_USER                 = 'user';
-
-    /* ------------------------------------------------------------------------------------------------
      |  Constructor
      | ------------------------------------------------------------------------------------------------
      */

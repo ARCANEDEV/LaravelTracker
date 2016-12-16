@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
 use Arcanedev\LaravelTracker\Contracts\Models\Session as SessionContract;
+use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
  * Class     Session
@@ -95,7 +96,7 @@ class Session extends AbstractModel implements SessionContract
     public function user()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_USER, User::class)
+            $this->getModelClass(BindingManager::MODEL_USER, User::class)
         );
     }
 
@@ -107,7 +108,7 @@ class Session extends AbstractModel implements SessionContract
     public function device()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_DEVICE, Device::class)
+            $this->getModelClass(BindingManager::MODEL_DEVICE, Device::class)
         );
     }
 
@@ -119,7 +120,7 @@ class Session extends AbstractModel implements SessionContract
     public function agent()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_AGENT, Agent::class)
+            $this->getModelClass(BindingManager::MODEL_AGENT, Agent::class)
         );
     }
 
@@ -131,7 +132,7 @@ class Session extends AbstractModel implements SessionContract
     public function referer()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_REFERER, Referer::class)
+            $this->getModelClass(BindingManager::MODEL_REFERER, Referer::class)
         );
     }
 
@@ -143,7 +144,7 @@ class Session extends AbstractModel implements SessionContract
     public function cookie()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_COOKIE, Cookie::class)
+            $this->getModelClass(BindingManager::MODEL_COOKIE, Cookie::class)
         );
     }
 
@@ -155,7 +156,7 @@ class Session extends AbstractModel implements SessionContract
     public function geoip()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_GEOIP, GeoIp::class), 'geoip_id'
+            $this->getModelClass(BindingManager::MODEL_GEOIP, GeoIp::class), 'geoip_id'
         );
     }
 
@@ -167,7 +168,7 @@ class Session extends AbstractModel implements SessionContract
     public function language()
     {
         return $this->belongsTo(
-            $this->getModelClass(self::MODEL_LANGUAGE, Language::class)
+            $this->getModelClass(BindingManager::MODEL_LANGUAGE, Language::class)
         );
     }
 
@@ -179,7 +180,7 @@ class Session extends AbstractModel implements SessionContract
     public function activities()
     {
         return $this->hasMany(
-            $this->getModelClass(self::MODEL_SESSION_ACTIVITY, SessionActivity::class)
+            $this->getModelClass(BindingManager::MODEL_SESSION_ACTIVITY, SessionActivity::class)
         );
     }
 

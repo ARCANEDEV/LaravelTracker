@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\GeoIp as GeoIpContract;
+
 /**
  * Class     GeoIp
  *
@@ -21,7 +23,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class GeoIp extends AbstractModel
+class GeoIp extends AbstractModel implements GeoIpContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

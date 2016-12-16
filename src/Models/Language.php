@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Language as LanguageContract;
+
 /**
  * Class     Language
  *
@@ -12,7 +14,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Language extends AbstractModel
+class Language extends AbstractModel implements LanguageContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

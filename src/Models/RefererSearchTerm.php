@@ -1,12 +1,14 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\RefererSearchTerm as RefererSearchTermContract;
+
 /**
  * Class     RefererSearchTerm
  *
  * @package  Arcanesoft\Tracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class RefererSearchTerm extends AbstractModel
+class RefererSearchTerm extends AbstractModel implements RefererSearchTermContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

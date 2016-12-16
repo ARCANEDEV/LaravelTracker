@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Device as DeviceContract;
+
 /**
  * Class     Device
  *
@@ -14,17 +16,8 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Device extends AbstractModel
+class Device extends AbstractModel implements DeviceContract
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Constants
-     | ------------------------------------------------------------------------------------------------
-     */
-    const KIND_COMPUTER    = 'computer';
-    const KIND_PHONE       = 'phone';
-    const KIND_TABLET      = 'tablet';
-    const KIND_UNAVAILABLE = 'unavailable';
-
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------

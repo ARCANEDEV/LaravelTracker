@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Path as PathContract;
+
 /**
  * Class     Path
  *
@@ -11,7 +13,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Path extends AbstractModel
+class Path extends AbstractModel implements PathContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

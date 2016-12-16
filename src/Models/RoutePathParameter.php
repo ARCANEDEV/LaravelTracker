@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\RoutePathParameter as RoutePathParameterContract;
+
 /**
  * Class     RoutePathParameter
  *
@@ -13,7 +15,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class RoutePathParameter extends AbstractModel
+class RoutePathParameter extends AbstractModel implements RoutePathParameterContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

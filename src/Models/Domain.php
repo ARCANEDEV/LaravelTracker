@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Domain as DomainContract;
+
 /**
  * Class     Domain
  *
@@ -13,7 +15,7 @@
  *
  * @property  \Illuminate\Database\Eloquent\Collection  referers
  */
-class Domain extends AbstractModel
+class Domain extends AbstractModel implements DomainContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

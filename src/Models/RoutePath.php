@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\RoutePath as RoutePathContract;
+
 /**
  * Class     RoutePath
  *
@@ -15,7 +17,7 @@
  * @property  \Arcanedev\LaravelTracker\Models\Route    route
  * @property  \Illuminate\Database\Eloquent\Collection  parameters
  */
-class RoutePath extends AbstractModel
+class RoutePath extends AbstractModel implements RoutePathContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Error as ErrorContract;
+
 /**
  * Class     Error
  *
@@ -12,7 +14,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Error extends AbstractModel
+class Error extends AbstractModel implements ErrorContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

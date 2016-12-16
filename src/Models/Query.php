@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Query as QueryContract;
+
 /**
  * Class     Query
  *
@@ -12,7 +14,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Query extends AbstractModel
+class Query extends AbstractModel implements QueryContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

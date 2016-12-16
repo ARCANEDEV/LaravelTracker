@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Agent as AgentContract;
+
 /**
  * Class     Agent
  *
@@ -13,7 +15,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Agent extends AbstractModel
+class Agent extends AbstractModel implements AgentContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Cookie as CookieContract;
+
 /**
  * Class     Cookie
  *
@@ -11,7 +13,7 @@
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  */
-class Cookie extends AbstractModel
+class Cookie extends AbstractModel implements CookieContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

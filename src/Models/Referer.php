@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Referer as RefererContract;
+
 /**
  * Class     Referer
  *
@@ -19,7 +21,7 @@
  * @property  \Arcanedev\LaravelTracker\Models\Domain   domain
  * @property  \Illuminate\Database\Eloquent\Collection  search_terms
  */
-class Referer extends AbstractModel
+class Referer extends AbstractModel implements RefererContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties

@@ -1,7 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker;
 
 use Arcanedev\Support\PackageServiceProvider;
-use Arcanedev\LaravelTracker\Contracts\Trackers as TrackerContracts;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Illuminate\Contracts\Foundation\Application as AppContract;
 
@@ -48,7 +47,6 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     public function register()
     {
         $this->registerConfig();
-        $this->registerModelsBindings();
 
         $this->app->register(Providers\PackagesServiceProvider::class);
         $this->app->register(Providers\EventServiceProvider::class);
@@ -69,6 +67,8 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     public function boot()
     {
         parent::boot();
+
+        $this->registerModelsBindings();
 
         $this->publishConfig();
         $this->publishMigrations();

@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\Session as SessionContract;
+
 /**
  * Class     Session
  *
@@ -28,7 +30,7 @@
  * @property  \Arcanedev\LaravelTracker\Models\GeoIp     geoip
  * @property  \Arcanedev\LaravelTracker\Models\Language  language
  */
-class Session extends AbstractModel
+class Session extends AbstractModel implements SessionContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Traits
@@ -203,5 +205,45 @@ class Session extends AbstractModel
     public function hasGeoip()
     {
         return ! is_null($this->geoip);
+    }
+
+    /**
+     * Check if the user agent exists.
+     *
+     * @return bool
+     */
+    public function hasUserAgent()
+    {
+        return ! is_null($this->agent);
+    }
+
+    /**
+     * Check if the device exists.
+     *
+     * @return bool
+     */
+    public function hasDevice()
+    {
+        return ! is_null($this->device);
+    }
+
+    /**
+     * Check if the referer exists.
+     *
+     * @return bool
+     */
+    public function hasReferer()
+    {
+        return ! is_null($this->referer);
+    }
+
+    /**
+     * Check if the cookie exists.
+     *
+     * @return bool
+     */
+    public function hasCookie()
+    {
+        return ! is_null($this->cookie);
     }
 }

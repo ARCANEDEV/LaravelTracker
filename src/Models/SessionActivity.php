@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
+use Arcanedev\LaravelTracker\Contracts\Models\SessionActivity as SessionActivityContract;
+
 /**
  * Class     SessionActivity
  *
@@ -27,7 +29,7 @@
  * @property  \Arcanedev\LaravelTracker\Models\Referer  referer
  * @property  \Arcanedev\LaravelTracker\Models\Error    error
  */
-class SessionActivity extends AbstractModel
+class SessionActivity extends AbstractModel implements SessionActivityContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -140,5 +142,19 @@ class SessionActivity extends AbstractModel
         return $this->belongsTo(
             $this->getModelClass(self::MODEL_ERROR, Error::class)
         );
+    }
+
+    /* ------------------------------------------------------------------------------------------------
+     |  Check Functions
+     | ------------------------------------------------------------------------------------------------
+     */
+    /**
+     * Check if the referer exists.
+     *
+     * @return bool
+     */
+    public function hasReferer()
+    {
+        return ! is_null($this->referer);
     }
 }

@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Providers;
 
 use Arcanedev\LaravelTracker\Console;
-use Arcanedev\Support\ServiceProvider;
+use Arcanedev\Support\Providers\CommandServiceProvider as ServiceProvider;
 
 /**
  * Class     CommandServiceProvider
@@ -15,29 +15,12 @@ class CommandServiceProvider extends ServiceProvider
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * The commands to be registered.
+     *
+     * @var array
+     */
     protected $commands = [
         Console\PublishCommand::class,
     ];
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * Register the commands.
-     */
-    public function register()
-    {
-        $this->commands($this->commands);
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return $this->commands;
-    }
 }

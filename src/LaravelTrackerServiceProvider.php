@@ -47,12 +47,11 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     public function register()
     {
         $this->registerConfig();
-
-        $this->app->register(Providers\PackagesServiceProvider::class);
-        $this->app->register(Providers\EventServiceProvider::class);
-
-        if ($this->app->runningInConsole())
-            $this->app->register(Providers\CommandServiceProvider::class);
+        $this->registerProviders([
+            Providers\PackagesServiceProvider::class,
+            Providers\EventServiceProvider::class,
+        ]);
+        $this->registerConsoleServiceProvider(Providers\CommandServiceProvider::class);
 
         $this->registerDetectors();
         $this->registerParsers();
@@ -107,7 +106,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     private function registerDetectors()
     {
         $this->singleton(Contracts\Detectors\CrawlerDetector::class, function (AppContract $app) {
-            /** @var \Illuminate\Http\Request $request */
+            /** @var  \Illuminate\Http\Request  $request */
             $request = $app['request'];
             $crawler = new \Jaybizzle\CrawlerDetect\CrawlerDetect(
                 $request->headers->all(),
@@ -141,8 +140,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
 
         $this->singleton(Contracts\Parsers\UserAgentParser::class, function (AppContract $app) {
             return new Parsers\UserAgentParser(
-                \UAParser\Parser::create(),
-                $app->make('path.base')
+                \UAParser\Parser::create(), $app->make('path.base')
             );
         });
     }
@@ -173,7 +171,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     {
         $handler = $this->app[ExceptionHandlerContract::class];
 
-        $this->app->singleton(ExceptionHandlerContract::class, function ($app) use ($handler) {
+        $this->singleton(ExceptionHandlerContract::class, function ($app) use ($handler) {
             return new Exceptions\Handler($app[Contracts\Tracker::class], $handler);
         });
     }

@@ -19,7 +19,9 @@ class PackagesServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->register(\Arcanedev\GeoIP\GeoIPServiceProvider::class);
-        $this->app->register(\Jenssegers\Agent\AgentServiceProvider::class);
+        $this->registerProviders([
+            \Arcanedev\GeoIP\GeoIPServiceProvider::class,
+            \Jenssegers\Agent\AgentServiceProvider::class,
+        ]);
     }
 }

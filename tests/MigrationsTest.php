@@ -67,8 +67,8 @@ class MigrationsTest extends TestCase
             'routes',
             'route_paths',
             'route_path_parameters',
-            'sessions',
-            'session_activities',
+            'visitors',
+            'visitor_activities',
         ]);
 
         return $tables + [

@@ -1,10 +1,10 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
-use Arcanedev\LaravelTracker\Contracts\Models\Session as SessionContract;
+use Arcanedev\LaravelTracker\Contracts\Models\Visitor as SessionContract;
 use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
- * Class     Session
+ * Class     Visitor
  *
  * @package  Arcanedev\LaravelTracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
@@ -31,13 +31,13 @@ use Arcanedev\LaravelTracker\Support\BindingManager;
  * @property  \Arcanedev\LaravelTracker\Models\GeoIp     geoip
  * @property  \Arcanedev\LaravelTracker\Models\Language  language
  */
-class Session extends AbstractModel implements SessionContract
+class Visitor extends AbstractModel implements SessionContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Traits
      | ------------------------------------------------------------------------------------------------
      */
-    use Presenters\SessionPresenter;
+    use Presenters\VisitorPresenter;
 
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -48,7 +48,7 @@ class Session extends AbstractModel implements SessionContract
      *
      * @var string
      */
-    protected $table = 'sessions';
+    protected $table = 'visitors';
 
     /**
      * The attributes that are mass assignable.
@@ -173,14 +173,14 @@ class Session extends AbstractModel implements SessionContract
     }
 
     /**
-     * Session activities relationship.
+     * Visitor activities relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function activities()
     {
         return $this->hasMany(
-            $this->getModelClass(BindingManager::MODEL_SESSION_ACTIVITY, SessionActivity::class)
+            $this->getModelClass(BindingManager::MODEL_VISITOR_ACTIVITY, VisitorActivity::class)
         );
     }
 

@@ -1,25 +1,25 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
-use Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker as SessionTrackerContract;
+use Arcanedev\LaravelTracker\Contracts\Trackers\VisitorTracker as VisitorTrackerContract;
 use Arcanedev\LaravelTracker\Support\BindingManager;
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Ramsey\Uuid\Uuid;
 
 /**
- * Class     SessionTracker
+ * Class     VisitorTracker
  *
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class SessionTracker extends AbstractTracker implements SessionTrackerContract
+class VisitorTracker extends AbstractTracker implements VisitorTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var array */
-    private $sessionInfo = [];
+    /** @var  array */
+    private $visitorInfo = [];
 
     /* ------------------------------------------------------------------------------------------------
      |  Getters and Setters
@@ -28,11 +28,11 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
     /**
      * Get the model.
      *
-     * @return \Arcanedev\LaravelTracker\Models\Session
+     * @return \Arcanedev\LaravelTracker\Models\Visitor
      */
     protected function getModel()
     {
-        return $this->makeModel(BindingManager::MODEL_SESSION);
+        return $this->makeModel(BindingManager::MODEL_VISITOR);
     }
 
     /**
@@ -46,37 +46,37 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
     }
 
     /**
-     * Set the session data.
+     * Set the visitor data.
      *
      * @param  array  $data
      */
-    private function setSessionData(array $data)
+    private function setVisitorData(array $data)
     {
-        $this->generateSession($data);
+        $this->generateVisitor($data);
 
-        if ($this->createSessionIfIsUnknown()) {
-            $this->ensureSessionDataIsComplete();
+        if ($this->createVisitorIfIsUnknown()) {
+            $this->ensureVisitorDataIsComplete();
         }
     }
 
     /**
-     * Get the session id.
+     * Get the visitor id.
      *
      * @return int
      */
-    private function getSessionId()
+    private function getVisitorId()
     {
-        return $this->sessionInfo['id'];
+        return $this->visitorInfo['id'];
     }
 
     /**
-     * Set the session id.
+     * Set the visitor id.
      *
      * @param  mixed  $id
      */
-    private function setSessionId($id)
+    private function setVisitorId($id)
     {
-        $this->sessionInfo['id'] = $id;
+        $this->visitorInfo['id'] = $id;
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Track the session.
+     * Track the visitor.
      *
      * @param  array  $data
      *
@@ -92,13 +92,13 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      */
     public function track(array $data)
     {
-        $this->setSessionData($data);
+        $this->setVisitorData($data);
 
-        return $this->getSessionId();
+        return $this->getVisitorId();
     }
 
     /**
-     * Check the session data.
+     * Check the visitor data.
      *
      * @param  array  $currentData
      * @param  array  $newData
@@ -117,7 +117,7 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Update the session data.
+     * Update the visitor data.
      *
      * @param  array  $data
      *
@@ -131,13 +131,13 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
     }
 
     /**
-     * Get the session data.
+     * Get the visitor data.
      *
      * @param  string|null  $column
      *
      * @return mixed
      */
-    private function getSessionData($column = null)
+    private function getVisitorData($column = null)
     {
         $data = $this->session()->get($this->getSessionKey());
 
@@ -151,7 +151,7 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
      */
     private function checkIfUserChanged(array $data)
     {
-        $model = $this->getModel()->find($this->getSessionData('id'));
+        $model = $this->getModel()->find($this->getVisitorData('id'));
 
         if (
             ! is_null($model) &&
@@ -159,48 +159,48 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
             ! is_null($data['user_id']) &&
             $data['user_id'] !== $model->user_id
         ) {
-            $newSession = $this->regenerateSystemSession($data);
-            $model      = $this->findByUuid($newSession['uuid']);
+            $newVisitor = $this->regenerateSystemVisitor($data);
+            $model      = $this->findByUuid($newVisitor['uuid']);
             $model->update(Arr::except($data, ['id', 'uuid']));
         }
     }
 
     /**
-     * Regenerate system session.
+     * Regenerate visitor data for the system.
      *
      * @param  array|null  $data
      *
      * @return array
      */
-    private function regenerateSystemSession($data = null)
+    private function regenerateSystemVisitor($data = null)
     {
-        $data = $data ?: $this->getSessionData();
+        $data = $data ?: $this->getVisitorData();
 
         if ($data) {
-            $this->resetSessionUuid($data);
-            $this->createSessionIfIsUnknown();
+            $this->resetVisitorUuid($data);
+            $this->createVisitorIfIsUnknown();
         }
 
-        return $this->sessionInfo;
+        return $this->visitorInfo;
     }
 
     /**
-     * Reset the session uuid.
+     * Reset the visitor uuid.
      *
      * @param  array|null  $data
      *
      * @return array|null
      */
-    private function resetSessionUuid($data = null)
+    private function resetVisitorUuid($data = null)
     {
-        $this->sessionInfo['uuid'] = null;
+        $this->visitorInfo['uuid'] = null;
 
-        $data = $data ?: $this->sessionInfo;
+        $data = $data ?: $this->visitorInfo;
 
         unset($data['uuid']);
 
         $this->putSessionData($data);
-        $this->checkSessionUuid();
+        $this->checkVisitorUuid();
 
         return $data;
     }
@@ -218,72 +218,76 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
     }
 
     /**
-     * Check the session uuid.
+     * Check the visitor uuid.
      */
-    private function checkSessionUuid()
+    private function checkVisitorUuid()
     {
-        if ( ! isset($this->sessionInfo['uuid']) || ! $this->sessionInfo['uuid'])
-            $this->sessionInfo['uuid'] = $this->getSystemSessionId();
+        if ( ! isset($this->visitorInfo['uuid']) || ! $this->visitorInfo['uuid'])
+            $this->visitorInfo['uuid'] = $this->getVisitorIdFromSystem();
     }
 
     /**
-     * Get the system session id.
+     * Get the visitor id from the system.
      *
      * @return string
      */
-    private function getSystemSessionId()
+    private function getVisitorIdFromSystem()
     {
-        return Arr::get($this->getSessionData(), 'uuid', (string) Uuid::uuid4());
+        return Arr::get($this->getVisitorData(), 'uuid', (string) Uuid::uuid4());
     }
 
     /**
-     * @return bool
-     */
-    private function createSessionIfIsUnknown()
-    {
-        $model = $this->getModel();
-        /** @var \Arcanedev\LaravelTracker\Models\Session $session */
-        if ($known = $this->sessionIsKnown()) {
-            $session = $model->find($id = $this->getSessionData('id'));
-            $session->updated_at = Carbon::now();
-            $session->save();
-
-            $this->setSessionId($id);
-        }
-        else {
-            $session = $model->firstOrCreate(Arr::only($this->sessionInfo, ['uuid']), $this->sessionInfo);
-            $this->setSessionId($session->id);
-            $this->putSessionData($this->sessionInfo);
-        }
-
-        return $known;
-    }
-
-    /**
-     * Check if the session is known.
+     * Create a new visitor if is unknown.
      *
      * @return bool
      */
-    private function sessionIsKnown()
+    private function createVisitorIfIsUnknown()
+    {
+        $model = $this->getModel();
+
+        /** @var  \Arcanedev\LaravelTracker\Models\Visitor  $visitor */
+        if ($this->isVisitorKnown()) {
+            $visitor = $model->find($id = $this->getVisitorData('id'));
+            $visitor->updated_at = Carbon::now();
+            $visitor->save();
+
+            $this->setVisitorId($id);
+
+            return true;
+        }
+
+        $visitor = $model->firstOrCreate(Arr::only($this->visitorInfo, ['uuid']), $this->visitorInfo);
+        $this->setVisitorId($visitor->id);
+        $this->putSessionData($this->visitorInfo);
+
+        return false;
+    }
+
+    /**
+     * Check if the visitor is known.
+     *
+     * @return bool
+     */
+    private function isVisitorKnown()
     {
         if ( ! $this->session()->has($this->getSessionKey()))
             return false;
 
-        if ($this->getSessionData('uuid') != $this->getSystemSessionId())
+        if ($this->getVisitorData('uuid') != $this->getVisitorIdFromSystem())
             return false;
 
-        if ( ! $this->findByUuid($this->getSessionData('uuid')))
+        if ( ! $this->findByUuid($this->getVisitorData('uuid')))
             return false;
 
         return true;
     }
 
     /**
-     * Find a session by its uuid.
+     * Find a visitor by its uuid.
      *
      * @param  string  $uuid
      *
-     * @return \Arcanedev\LaravelTracker\Models\Session
+     * @return \Arcanedev\LaravelTracker\Models\Visitor
      */
     private function findByUuid($uuid)
     {
@@ -291,54 +295,62 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
     }
 
     /**
-     * Generate session data.
+     * Generate visitor data.
      *
-     * @param  array  $sessionInfo
+     * @param  array  $visitorInfo
      */
-    private function generateSession(array $sessionInfo)
+    private function generateVisitor(array $visitorInfo)
     {
-        $this->sessionInfo = $sessionInfo;
+        $this->visitorInfo = $visitorInfo;
 
-        if ( ! $this->checkSessionDataIsReliable())
-            $this->regenerateSystemSession();
+        if ( ! $this->checkVisitorDataIsReliable())
+            $this->regenerateSystemVisitor();
 
-        $this->checkSessionUuid();
+        $this->checkVisitorUuid();
     }
 
     /**
-     * Check if the session data is reliable.
+     * Check if the visitor data is reliable.
      *
      * @return bool
      */
-    private function checkSessionDataIsReliable()
+    private function checkVisitorDataIsReliable()
     {
-        $data = $this->getSessionData();
+        $data = $this->getVisitorData();
 
-        if (isset($data['user_id']) && ($data['user_id'] !== $this->sessionInfo['user_id']))
-            return false;
-
-        if (isset($data['client_ip']) && ($data['client_ip'] !== $this->sessionInfo['client_ip']))
-            return false;
-
-        if (isset($data['user_agent']) && ($data['user_agent'] !== $this->sessionInfo['user_agent']))
-            return false;
+        foreach (['user_id', 'client_ip', 'user_agent'] as $key) {
+            if ($this->checkDataIsUnreliable($data, $key)) return false;
+        }
 
         return true;
     }
 
     /**
-     * Ensure that the session data is complete.
+     * Check the data is unreliable.
+     *
+     * @param  array|null  $data
+     * @param  string      $key
+     *
+     * @return bool
      */
-    private function ensureSessionDataIsComplete()
+    private function checkDataIsUnreliable($data, $key)
     {
-        $sessionData = $this->getSessionData();
+        return isset($data[$key]) && ($data[$key] !== $this->visitorInfo[$key]);
+    }
+
+    /**
+     * Ensure that the visitor data is complete.
+     */
+    private function ensureVisitorDataIsComplete()
+    {
+        $visitorData = $this->getVisitorData();
         $completed   = true;
 
-        foreach ($this->sessionInfo as $key => $value) {
-            if ($sessionData[$key] !== $value) {
-                /** @var \Arcanedev\LaravelTracker\Models\Session $model */
+        foreach ($this->visitorInfo as $key => $value) {
+            if ($visitorData[$key] !== $value) {
+                /** @var  \Arcanedev\LaravelTracker\Models\Visitor  $model */
                 if ( ! isset($model))
-                    $model = $this->getModel()->find($this->getSessionId());
+                    $model = $this->getModel()->find($this->getVisitorId());
 
                 $model->setAttribute($key, $value);
                 $model->save();
@@ -348,6 +360,6 @@ class SessionTracker extends AbstractTracker implements SessionTrackerContract
         }
 
         if ( ! $completed)
-            $this->putSessionData($this->sessionInfo);
+            $this->putSessionData($this->visitorInfo);
     }
 }

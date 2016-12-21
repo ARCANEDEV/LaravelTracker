@@ -1,15 +1,15 @@
 <?php namespace Arcanedev\LaravelTracker\Trackers;
 
-use Arcanedev\LaravelTracker\Contracts\Trackers\SessionActivityTracker as SessionActivityTrackerContract;
+use Arcanedev\LaravelTracker\Contracts\Trackers\VisitorActivityTracker as VisitorActivityTrackerContract;
 use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
- * Class     SessionActivityTracker
+ * Class     VisitorActivityTracker
  *
  * @package  Arcanedev\LaravelTracker\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class SessionActivityTracker extends AbstractTracker implements SessionActivityTrackerContract
+class VisitorActivityTracker extends AbstractTracker implements VisitorActivityTrackerContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Getters and Setters
@@ -18,11 +18,11 @@ class SessionActivityTracker extends AbstractTracker implements SessionActivityT
     /**
      * Get the model.
      *
-     * @return \Arcanedev\LaravelTracker\Models\SessionActivity
+     * @return \Arcanedev\LaravelTracker\Models\VisitorActivity
      */
     protected function getModel()
     {
-        return $this->makeModel(BindingManager::MODEL_SESSION_ACTIVITY);
+        return $this->makeModel(BindingManager::MODEL_VISITOR_ACTIVITY);
     }
 
     /* ------------------------------------------------------------------------------------------------
@@ -30,7 +30,7 @@ class SessionActivityTracker extends AbstractTracker implements SessionActivityT
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Track the session activity.
+     * Track the visitor activity.
      *
      * @param  array  $data
      *

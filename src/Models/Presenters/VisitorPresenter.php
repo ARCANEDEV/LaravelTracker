@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Models\Presenters;
 
 /**
- * Class     SessionPresenter
+ * Class     VisitorPresenter
  *
  * @package  Arcanedev\LaravelTracker\Models\Presenters
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
@@ -10,7 +10,7 @@
  *
  * @property  \Arcanedev\LaravelTracker\Models\GeoIp  geoip
  */
-trait SessionPresenter
+trait VisitorPresenter
 {
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions

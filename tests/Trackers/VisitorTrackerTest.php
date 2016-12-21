@@ -1,18 +1,18 @@
 <?php namespace Arcanedev\LaravelTracker\Tests\Trackers;
 
 /**
- * Class     SessionTrackerTest
+ * Class     VisitorTrackerTest
  *
  * @package  Arcanedev\LaravelTracker\Tests\Trackers
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-class SessionTrackerTest extends TestCase
+class VisitorTrackerTest extends TestCase
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var  \Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker */
+    /** @var  \Arcanedev\LaravelTracker\Contracts\Trackers\VisitorTracker */
     private $tracker;
 
     /* ------------------------------------------------------------------------------------------------
@@ -23,7 +23,7 @@ class SessionTrackerTest extends TestCase
     {
         parent::setUp();
 
-        $this->tracker = $this->app->make(\Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker::class);
+        $this->tracker = $this->app->make(\Arcanedev\LaravelTracker\Contracts\Trackers\VisitorTracker::class);
     }
 
     public function tearDown()
@@ -41,8 +41,8 @@ class SessionTrackerTest extends TestCase
     public function it_can_be_instantiated()
     {
         $expectations = [
-            \Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker::class,
-            \Arcanedev\LaravelTracker\Trackers\SessionTracker::class,
+            \Arcanedev\LaravelTracker\Contracts\Trackers\VisitorTracker::class,
+            \Arcanedev\LaravelTracker\Trackers\VisitorTracker::class,
         ];
 
         foreach ($expectations as $expected) {
@@ -53,7 +53,7 @@ class SessionTrackerTest extends TestCase
     /** @test */
     public function it_can_track()
     {
-        $data = $this->getSessionData();
+        $data = $this->getVisitorData();
 
         $this->assertSame(1, $this->tracker->track($data));
 
@@ -65,11 +65,11 @@ class SessionTrackerTest extends TestCase
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Get the session data.
+     * Get the visitor data.
      *
      * @return array
      */
-    private function getSessionData()
+    private function getVisitorData()
     {
         return [
             'user_id'      => 1,
@@ -83,7 +83,7 @@ class SessionTrackerTest extends TestCase
             'is_robot'     => true,
 
             // The key user_agent is not present in the sessions table, but it's internally used to check
-            // if the user agent changed during a session.
+            // if the user agent changed during a visitor.
             'user_agent'   => '',
         ];
     }

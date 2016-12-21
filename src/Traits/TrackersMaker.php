@@ -95,23 +95,23 @@ trait TrackersMaker
     }
 
     /**
-     * Get the session tracker.
+     * Get the visitor tracker.
      *
-     * @return \Arcanedev\LaravelTracker\Contracts\Trackers\SessionTracker
+     * @return \Arcanedev\LaravelTracker\Contracts\Trackers\VisitorTracker
      */
-    protected function getSessionTracker()
+    protected function getVisitorTracker()
     {
-        return $this->make(Contracts\Trackers\SessionTracker::class);
+        return $this->make(Contracts\Trackers\VisitorTracker::class);
     }
 
     /**
-     * Get the session activity tracker.
+     * Get the visitor activity tracker.
      *
-     * @return \Arcanedev\LaravelTracker\Contracts\Trackers\SessionActivityTracker
+     * @return \Arcanedev\LaravelTracker\Contracts\Trackers\VisitorActivityTracker
      */
-    protected function getSessionActivityTracker()
+    protected function getVisitorActivityTracker()
     {
-        return $this->make(Contracts\Trackers\SessionActivityTracker::class);
+        return $this->make(Contracts\Trackers\VisitorActivityTracker::class);
     }
 
     /**

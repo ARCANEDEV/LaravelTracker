@@ -1,7 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Contracts\Models;
 
 /**
- * Interface  Session
+ * Interface  Visitor
  *
  * @package   Arcanedev\LaravelTracker\Contracts\Models
  * @author    ARCANEDEV <arcanedev.maroc@gmail.com>
@@ -14,7 +14,7 @@
  * @property  \Arcanedev\LaravelTracker\Models\GeoIp     geoip
  * @property  \Arcanedev\LaravelTracker\Models\Language  language
  */
-interface Session
+interface Visitor
 {
     /* ------------------------------------------------------------------------------------------------
      |  Relationships
@@ -70,7 +70,7 @@ interface Session
     public function language();
 
     /**
-     * Session activities relationship.
+     * Visitor activities relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

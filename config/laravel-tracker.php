@@ -39,9 +39,9 @@ return [
         BindingManager::MODEL_ROUTE                => Models\Route::class,
         BindingManager::MODEL_ROUTE_PATH           => Models\RoutePath::class,
         BindingManager::MODEL_ROUTE_PATH_PARAMETER => Models\RoutePathParameter::class,
-        BindingManager::MODEL_SESSION              => Models\Session::class,
-        BindingManager::MODEL_SESSION_ACTIVITY     => Models\SessionActivity::class,
         BindingManager::MODEL_USER                 => Models\User::class,
+        BindingManager::MODEL_VISITOR              => Models\Visitor::class,
+        BindingManager::MODEL_VISITOR_ACTIVITY     => Models\VisitorActivity::class,
     ],
 
     /* ------------------------------------------------------------------------------------------------

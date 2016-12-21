@@ -30,9 +30,9 @@ class BindingManager
     const MODEL_ROUTE                = 'route';
     const MODEL_ROUTE_PATH           = 'route-path';
     const MODEL_ROUTE_PATH_PARAMETER = 'route-path-parameter';
-    const MODEL_SESSION              = 'session';
-    const MODEL_SESSION_ACTIVITY     = 'session-activity';
     const MODEL_USER                 = 'user';
+    const MODEL_VISITOR              = 'visitor';
+    const MODEL_VISITOR_ACTIVITY     = 'visitor-activity';
 
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -58,9 +58,9 @@ class BindingManager
         self::MODEL_ROUTE                => ModelContracts\Route::class,
         self::MODEL_ROUTE_PATH           => ModelContracts\RoutePath::class,
         self::MODEL_ROUTE_PATH_PARAMETER => ModelContracts\RoutePathParameter::class,
-        self::MODEL_SESSION              => ModelContracts\Session::class,
-        self::MODEL_SESSION_ACTIVITY     => ModelContracts\SessionActivity::class,
         self::MODEL_USER                 => ModelContracts\User::class,
+        self::MODEL_VISITOR              => ModelContracts\Visitor::class,
+        self::MODEL_VISITOR_ACTIVITY     => ModelContracts\VisitorActivity::class,
     ];
 
     /**
@@ -78,10 +78,10 @@ class BindingManager
         TrackerContracts\QueryTracker::class           => Trackers\QueryTracker::class,
         TrackerContracts\RefererTracker::class         => Trackers\RefererTracker::class,
         TrackerContracts\RouteTracker::class           => Trackers\RouteTracker::class,
-        TrackerContracts\SessionTracker::class         => Trackers\SessionTracker::class,
-        TrackerContracts\SessionActivityTracker::class => Trackers\SessionActivityTracker::class,
         TrackerContracts\UserAgentTracker::class       => Trackers\UserAgentTracker::class,
         TrackerContracts\UserTracker::class            => Trackers\UserTracker::class,
+        TrackerContracts\VisitorTracker::class         => Trackers\VisitorTracker::class,
+        TrackerContracts\VisitorActivityTracker::class => Trackers\VisitorActivityTracker::class,
     ];
 
     /* ------------------------------------------------------------------------------------------------

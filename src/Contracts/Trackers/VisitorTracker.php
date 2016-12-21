@@ -1,19 +1,19 @@
 <?php namespace Arcanedev\LaravelTracker\Contracts\Trackers;
 
 /**
- * Interface  SessionTracker
+ * Interface  VisitorTracker
  *
  * @package   Arcanedev\LaravelTracker\Contracts\Trackers
  * @author    ARCANEDEV <arcanedev.maroc@gmail.com>
  */
-interface SessionTracker
+interface VisitorTracker
 {
     /* ------------------------------------------------------------------------------------------------
      |  Main Functions
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Track the session.
+     * Track the visitor activity.
      *
      * @param  array  $data
      *
@@ -22,7 +22,7 @@ interface SessionTracker
     public function track(array $data);
 
     /**
-     * Check the session data.
+     * Check the visitor data.
      *
      * @param  array  $currentData
      * @param  array  $newData

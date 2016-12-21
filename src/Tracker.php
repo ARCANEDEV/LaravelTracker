@@ -46,11 +46,11 @@ class Tracker implements TrackerContract
     protected $enabled = false;
 
     /**
-     * The current session data.
+     * The current visitor data.
      *
      * @var array
      */
-    protected $sessionData = [
+    protected $visitorData = [
         'user_id'     => null,
         'device_id'   => null,
         'agent_id'    => null,
@@ -64,12 +64,12 @@ class Tracker implements TrackerContract
     ];
 
     /**
-     * The current session activity data.
+     * The current visitor activity data.
      *
      * @var array
      */
-    protected $sessionActivityData = [
-        'session_id'    => null,
+    protected $visitorActivityData = [
+        'visitor_id'    => null,
         'path_id'       => null,
         'query_id'      => null,
         'referer_id'    => null,
@@ -143,7 +143,7 @@ class Tracker implements TrackerContract
      */
     private function setRequest(Request $request)
     {
-        $this->mergeSessionActivityData([
+        $this->mergeVisitorActivityData([
             'method'      => $request->method(),
             'is_ajax'     => $request->ajax(),
             'is_secure'   => $request->isSecure(),
@@ -163,21 +163,21 @@ class Tracker implements TrackerContract
     /**
      * Start the tracking.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      */
     public function trackRequest(Request $request)
     {
         if ($this->isEnabled()) {
             $this->setRequest($request);
 
-            $this->mergeSessionActivityData([
-                'session_id' => $this->getSessionId(),
+            $this->mergeVisitorActivityData([
+                'visitor_id' => $this->getVisitorId(),
                 'path_id'    => $this->getPathId(),
                 'query_id'   => $this->getQueryId(),
                 'referer_id' => $this->getRefererId(),
             ]);
 
-            $id = $this->getSessionActivityTracker()->track($this->sessionActivityData);
+            $id = $this->getVisitorActivityTracker()->track($this->visitorActivityData);
         }
     }
 
@@ -194,7 +194,7 @@ class Tracker implements TrackerContract
         $tracker = $this->getRouteTracker();
 
         if ($tracker->isTrackable($route)) {
-            $this->mergeSessionActivityData([
+            $this->mergeVisitorActivityData([
                 'route_path_id' => $tracker->track($route, $request),
             ]);
         }
@@ -213,7 +213,7 @@ class Tracker implements TrackerContract
             $this->getErrorTracker()->track($exception);
         });
 
-        $this->mergeSessionActivityData(['error_id' => $id]);
+        $this->mergeVisitorActivityData(['error_id' => $id]);
     }
 
     /**
@@ -267,42 +267,42 @@ class Tracker implements TrackerContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Merge session data.
+     * Merge visitor data.
      *
      * @param  array  $data
      *
      * @return self
      */
-    private function mergeSessionData(array $data)
+    private function mergeVisitorData(array $data)
     {
-        $this->sessionData = array_merge($this->sessionData, $data);
+        $this->visitorData = array_merge($this->visitorData, $data);
 
         return $this;
     }
 
     /**
-     * Merge session activity data.
+     * Merge visitor activity data.
      *
      * @param  array  $data
      *
      * @return self
      */
-    private function mergeSessionActivityData(array $data)
+    private function mergeVisitorActivityData(array $data)
     {
-        $this->sessionActivityData = array_merge($this->sessionActivityData, $data);
+        $this->visitorActivityData = array_merge($this->visitorActivityData, $data);
 
         return $this;
     }
 
     /**
-     * Get the stored session id.
+     * Get the stored visitor id.
      *
      * @return int
      */
-    private function getSessionId()
+    private function getVisitorId()
     {
-        $tracker     = $this->getSessionTracker();
-        $sessionData = $tracker->checkData($this->sessionData, [
+        $tracker = $this->getVisitorTracker();
+        $data    = $tracker->checkData($this->visitorData, [
             'user_id'     => $this->getUserId(),
             'device_id'   => $this->getDeviceId(),
             'client_ip'   => $this->request->getClientIp(),
@@ -315,9 +315,9 @@ class Tracker implements TrackerContract
             'user_agent'  => $this->getUserAgentTracker()->getUserAgentParser()->getOriginalUserAgent(),
         ]);
 
-        $this->mergeSessionData($sessionData);
+        $this->mergeVisitorData($data);
 
-        return $tracker->track($this->sessionData);
+        return $tracker->track($this->visitorData);
     }
 
     /**
@@ -447,7 +447,7 @@ class Tracker implements TrackerContract
     protected function isRobot()
     {
         /** @var  \Arcanedev\LaravelTracker\Contracts\Detectors\CrawlerDetector  $crawler */
-        $crawler = $this->make(\Arcanedev\LaravelTracker\Contracts\Detectors\CrawlerDetector::class);
+        $crawler = $this->make(Contracts\Detectors\CrawlerDetector::class);
 
         return $crawler->isRobot();
     }

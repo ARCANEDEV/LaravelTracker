@@ -1,16 +1,16 @@
 <?php namespace Arcanedev\LaravelTracker\Models;
 
-use Arcanedev\LaravelTracker\Contracts\Models\SessionActivity as SessionActivityContract;
+use Arcanedev\LaravelTracker\Contracts\Models\VisitorActivity as VisitorActivityContract;
 use Arcanedev\LaravelTracker\Support\BindingManager;
 
 /**
- * Class     SessionActivity
+ * Class     VisitorActivity
  *
  * @package  Arcanedev\LaravelTracker\Models
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  int             id
- * @property  int             session_id
+ * @property  int             visitor_id
  * @property  int             path_id
  * @property  int             query_id
  * @property  int             referrer_id
@@ -24,13 +24,13 @@ use Arcanedev\LaravelTracker\Support\BindingManager;
  * @property  \Carbon\Carbon  created_at
  * @property  \Carbon\Carbon  updated_at
  *
- * @property  \Arcanedev\LaravelTracker\Models\Session  session
+ * @property  \Arcanedev\LaravelTracker\Models\Visitor  visitor
  * @property  \Arcanedev\LaravelTracker\Models\Path     path
  * @property  \Arcanedev\LaravelTracker\Models\Query    queryRel
  * @property  \Arcanedev\LaravelTracker\Models\Referer  referer
  * @property  \Arcanedev\LaravelTracker\Models\Error    error
  */
-class SessionActivity extends AbstractModel implements SessionActivityContract
+class VisitorActivity extends AbstractModel implements VisitorActivityContract
 {
     /* ------------------------------------------------------------------------------------------------
      |  Properties
@@ -41,7 +41,7 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
      *
      * @var string
      */
-    protected $table = 'session_activities';
+    protected $table = 'visitor_activities';
 
     /**
      * The attributes that are mass assignable.
@@ -49,7 +49,7 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
      * @var array
      */
     protected $fillable = [
-        'session_id',
+        'visitor_id',
         'path_id',
         'query_id',
         'referrer_id',
@@ -69,7 +69,7 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
      */
     protected $casts = [
         'id'            => 'integer',
-        'session_id'    => 'integer',
+        'visitor_id'    => 'integer',
         'path_id'       => 'integer',
         'query_id'      => 'integer',
         'referrer_id'   => 'integer',
@@ -86,14 +86,14 @@ class SessionActivity extends AbstractModel implements SessionActivityContract
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Session relationship.
+     * Visitor relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function session()
+    public function visitor()
     {
         return $this->belongsTo(
-            $this->getModelClass(BindingManager::MODEL_SESSION, Session::class)
+            $this->getModelClass(BindingManager::MODEL_VISITOR, Visitor::class)
         );
     }
 

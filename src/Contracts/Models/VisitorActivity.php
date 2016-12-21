@@ -1,29 +1,29 @@
 <?php namespace Arcanedev\LaravelTracker\Contracts\Models;
 
 /**
- * Interface  SessionActivity
+ * Interface  VisitorActivity
  *
  * @package   Arcanedev\LaravelTracker\Contracts\Models
  * @author    ARCANEDEV <arcanedev.maroc@gmail.com>
  *
- * @property  \Arcanedev\LaravelTracker\Models\Session  session
+ * @property  \Arcanedev\LaravelTracker\Models\Visitor  visitor
  * @property  \Arcanedev\LaravelTracker\Models\Path     path
  * @property  \Arcanedev\LaravelTracker\Models\Query    queryRel
  * @property  \Arcanedev\LaravelTracker\Models\Referer  referer
  * @property  \Arcanedev\LaravelTracker\Models\Error    error
  */
-interface SessionActivity
+interface VisitorActivity
 {
     /* ------------------------------------------------------------------------------------------------
      |  Relationships
      | ------------------------------------------------------------------------------------------------
      */
     /**
-     * Session relationship.
+     * Visitor relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function session();
+    public function visitor();
 
     /**
      * Path relationship.

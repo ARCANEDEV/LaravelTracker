@@ -56,7 +56,6 @@ class LaravelTrackerServiceProviderTest extends TestCase
     public function it_can_provides()
     {
         $expected = [
-            'arcanedev.tracker',
             \Arcanedev\LaravelTracker\Contracts\Tracker::class,
         ];
 

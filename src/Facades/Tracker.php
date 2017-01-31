@@ -1,5 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Facades;
 
+use Arcanedev\LaravelTracker\Contracts\Tracker as TrackerContract;
 use Illuminate\Support\Facades\Facade;
 
 /**
@@ -15,5 +16,5 @@ class Tracker extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'arcanedev.tracker'; }
+    protected static function getFacadeAccessor() { return TrackerContract::class; }
 }

@@ -81,7 +81,6 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     public function provides()
     {
         return [
-            'arcanedev.tracker',
             Contracts\Tracker::class,
         ];
     }
@@ -161,7 +160,6 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
     private function registerMainTracker()
     {
         $this->singleton(Contracts\Tracker::class, Tracker::class);
-        $this->singleton('arcanedev.tracker', Contracts\Tracker::class);
     }
 
     /**

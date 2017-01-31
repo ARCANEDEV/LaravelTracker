@@ -1,6 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Tests;
 
-use Orchestra\Testbench\TestCase as BaseTestCase;
+use Orchestra\Testbench\BrowserKit\TestCase as BaseTestCase;
 
 /**
  * Class     TestCase
@@ -31,6 +31,7 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
+            \Orchestra\Database\ConsoleServiceProvider::class,
             \Arcanedev\LaravelTracker\LaravelTrackerServiceProvider::class,
         ];
     }
@@ -109,13 +110,9 @@ abstract class TestCase extends BaseTestCase
      */
     private function settingRoutes($router)
     {
-        $router->middleware('tracked', \Arcanedev\LaravelTracker\Middleware\Tracking::class);
+        $router->aliasMiddleware('tracked', \Arcanedev\LaravelTracker\Middleware\Tracking::class);
 
-        $attributes = version_compare('5.2.0', app()->version(), '<=')
-            ? ['middleware' => ['web', 'tracked']]
-            : ['middleware' => 'tracked'];
-
-        $router->group($attributes, function () use ($router) {
+        $router->group(['middleware' => ['web', 'tracked']], function () use ($router) {
             $router->get('/', [
                 'as' => 'home',
                 function () {

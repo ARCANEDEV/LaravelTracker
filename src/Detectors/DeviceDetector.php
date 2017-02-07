@@ -1,5 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Detectors;
 
+use Arcanedev\Agent\Contracts\Agent;
 use Arcanedev\LaravelTracker\Contracts\Detectors\DeviceDetector as DeviceDetectorContract;
 use Arcanedev\LaravelTracker\Models\Device;
 
@@ -15,7 +16,7 @@ class DeviceDetector implements DeviceDetectorContract
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var \Jenssegers\Agent\Agent */
+    /** @var \Arcanedev\Agent\Contracts\Agent */
     protected $agent;
 
     /* ------------------------------------------------------------------------------------------------
@@ -25,9 +26,9 @@ class DeviceDetector implements DeviceDetectorContract
     /**
      * DeviceDetector constructor.
      *
-     * @param  \Jenssegers\Agent\Agent  $agent
+     * @param  \Arcanedev\Agent\Contracts\Agent  $agent
      */
-    public function __construct($agent)
+    public function __construct(Agent $agent)
     {
         $this->agent = $agent;
     }

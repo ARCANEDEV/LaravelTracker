@@ -20,7 +20,7 @@
         "arcanedev/geo-ip":         "~2.0",
         "arcanedev/support":        "~4.0",
         "jaybizzle/crawler-detect": "~1.0",
-        "jenssegers/agent":         "~2.0",
+        "arcanedev/agent":          "~2.0",
         "ramsey/uuid":              "~3.0",
         "snowplow/referer-parser":  "~0.2",
         "ua-parser/uap-php" :       "~3.0"

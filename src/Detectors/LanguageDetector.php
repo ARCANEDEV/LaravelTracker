@@ -1,5 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Detectors;
 
+use Arcanedev\Agent\Contracts\Agent;
 use Arcanedev\LaravelTracker\Contracts\Detectors\LanguageDetector as LanguageDetectorContract;
 
 /**
@@ -14,7 +15,7 @@ class LanguageDetector implements LanguageDetectorContract
      |  Properties
      | ------------------------------------------------------------------------------------------------
      */
-    /** @var \Jenssegers\Agent\Agent */
+    /** @var \Arcanedev\Agent\Contracts\Agent */
     protected $agent;
 
     /* ------------------------------------------------------------------------------------------------
@@ -24,9 +25,9 @@ class LanguageDetector implements LanguageDetectorContract
     /**
      * LanguageDetector constructor.
      *
-     * @param  \Jenssegers\Agent\Agent  $agent
+     * @param  \Arcanedev\Agent\Contracts\Agent  $agent
      */
-    public function __construct($agent)
+    public function __construct(Agent $agent)
     {
         $this->agent = $agent;
     }

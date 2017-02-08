@@ -24,6 +24,11 @@ class GeoIpDetector implements GeoIpDetectorContract
      |  Constructor
      | ------------------------------------------------------------------------------------------------
      */
+    /**
+     * GeoIpDetector constructor.
+     *
+     * @param  \Arcanedev\GeoIP\Contracts\GeoIP  $geoip
+     */
     public function __construct(GeoIP $geoip)
     {
         $this->geoip = $geoip;

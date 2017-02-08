@@ -21,7 +21,7 @@ class PackagesServiceProvider extends ServiceProvider
     {
         $this->registerProviders([
             \Arcanedev\GeoIP\GeoIPServiceProvider::class,
-            \Jenssegers\Agent\AgentServiceProvider::class,
+            \Arcanedev\Agent\AgentServiceProvider::class,
         ]);
     }
 }

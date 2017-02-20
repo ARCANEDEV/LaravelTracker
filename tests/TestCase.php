@@ -57,6 +57,8 @@ abstract class TestCase extends BaseTestCase
      */
     protected function getEnvironmentSetUp($app)
     {
+        \Arcanedev\LaravelTracker\Tracker::$runsMigrations = false;
+
         $this->settingDatabase($app['config']);
         $this->settingConfigs($app['config']);
         $this->settingRoutes($app['router']);

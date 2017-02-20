@@ -32,7 +32,7 @@ class CreateTrackerRoutePathsTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('route_id', false, true)->index();
+            $table->unsignedBigInteger('route_id')->index();
             $table->string('path')->index();
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();

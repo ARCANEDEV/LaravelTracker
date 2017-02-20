@@ -32,7 +32,7 @@ class CreateTrackerReferersTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('domain_id', false, true)->index();
+            $table->unsignedBigInteger('domain_id')->index();
             $table->string('url')->index();
             $table->string('host');
             $table->string('medium')->nullable()->index();

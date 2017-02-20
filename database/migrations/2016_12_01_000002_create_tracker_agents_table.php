@@ -32,11 +32,13 @@ class CreateTrackerAgentsTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name')->unique();
+            $table->string('name');
             $table->string('browser')->index();
             $table->string('browser_version');
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();
+
+            $table->unique('name');
         });
     }
 }

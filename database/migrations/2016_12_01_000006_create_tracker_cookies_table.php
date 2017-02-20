@@ -32,9 +32,11 @@ class CreateTrackerCookiesTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('uuid')->unique();
+            $table->string('uuid');
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();
+
+            $table->unique('uuid');
         });
     }
 }

@@ -12,9 +12,9 @@ use Illuminate\Contracts\Foundation\Application as AppContract;
  */
 class LaravelTrackerServiceProvider extends PackageServiceProvider
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
     /**
      * Package name.
@@ -23,23 +23,9 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      */
     protected $package = 'laravel-tracker';
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Getters & Setters
-     | ------------------------------------------------------------------------------------------------
-     */
-    /**
-     * Get the base path of the package.
-     *
-     * @return string
-     */
-    public function getBasePath()
-    {
-        return dirname(__DIR__);
-    }
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
     /**
      * Register the service provider.
@@ -69,8 +55,10 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
 
         $this->registerModelsBindings();
 
+        // Publishes
         $this->publishConfig();
-        $this->publishMigrations();
+
+        Tracker::$runsMigrations ? $this->loadMigrations() : $this->publishMigrations();
     }
 
     /**
@@ -85,9 +73,9 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         ];
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
     /**
      * Binding the models with the contracts.

@@ -32,7 +32,7 @@ class CreateTrackerRefererSearchTermsTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('referer_id', false, true)->index();
+            $table->unsignedBigInteger('referer_id')->index();
             $table->string('search_term')->index();
             $table->timestamp('created_at')->index();
             $table->timestamp('updated_at')->index();

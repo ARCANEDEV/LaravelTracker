@@ -32,12 +32,12 @@ class CreateTrackerVisitorActivitiesTable extends Migration
     {
         $this->createSchema(function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('visitor_id', false, true)->index();
-            $table->bigInteger('path_id', false, true)->nullable()->index();
-            $table->bigInteger('query_id', false, true)->nullable()->index();
-            $table->bigInteger('referrer_id', false, true)->nullable()->index();
-            $table->bigInteger('route_path_id', false, true)->nullable()->index();
-            $table->bigInteger('error_id', false, true)->nullable()->index();
+            $table->unsignedBigInteger('visitor_id')->index();
+            $table->unsignedBigInteger('path_id')->nullable()->index();
+            $table->unsignedBigInteger('query_id')->nullable()->index();
+            $table->unsignedBigInteger('referrer_id')->nullable()->index();
+            $table->unsignedBigInteger('route_path_id')->nullable()->index();
+            $table->unsignedBigInteger('error_id')->nullable()->index();
             $table->string('method', 10)->index();
             $table->boolean('is_ajax')->default(false);
             $table->boolean('is_secure')->default(false);

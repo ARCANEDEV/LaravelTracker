@@ -136,7 +136,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      */
     private function getRouteName(Route $route)
     {
-        return is_null($name = $route->getName()) ? $route->getUri() : $name;
+        return is_null($name = $route->getName()) ? $route->uri() : $name;
     }
 
     /**

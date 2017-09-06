@@ -13,10 +13,11 @@ use Illuminate\Support\Arr;
  */
 class RefererTracker extends AbstractTracker implements RefererTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -35,10 +36,11 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
         return $this->make(RefererParser::class);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the referer and return the id.
      *
@@ -52,11 +54,10 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
         $firstParsed = $this->getRefererParser()->parseUrl($refererUrl);
 
         if ($firstParsed) {
-            $domainId   = $this->trackDomain($firstParsed['domain']);
             $attributes = [
                 'url'               => $firstParsed['url'],
                 'host'              => $firstParsed['host'],
-                'domain_id'         => $domainId,
+                'domain_id'         => $this->trackDomain($firstParsed['domain']),
                 'medium'            => null,
                 'source'            => null,
                 'search_terms_hash' => null,
@@ -71,7 +72,7 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
             }
 
             /** @var  \Arcanedev\LaravelTracker\Models\Referer  $referer */
-            $referer = $this->getModel()->firstOrCreate(
+            $referer = $this->getModel()->newQuery()->firstOrCreate(
                 Arr::only($attributes, ['url', 'search_terms_hash']),
                 $attributes
             );
@@ -96,7 +97,9 @@ class RefererTracker extends AbstractTracker implements RefererTrackerContract
     private function trackDomain($name)
     {
         return $this->makeModel(BindingManager::MODEL_DOMAIN)
-                    ->firstOrCreate(compact('name'))->id;
+            ->newQuery()
+            ->firstOrCreate(compact('name'))
+            ->getKey();
     }
 
     /**

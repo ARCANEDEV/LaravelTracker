@@ -11,10 +11,11 @@ use Arcanedev\LaravelTracker\Support\BindingManager;
  */
 class PathTracker extends AbstractTracker implements PathTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -25,10 +26,11 @@ class PathTracker extends AbstractTracker implements PathTrackerContract
         return $this->makeModel(BindingManager::MODEL_PATH);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the path.
      *
@@ -39,6 +41,8 @@ class PathTracker extends AbstractTracker implements PathTrackerContract
     public function track($path)
     {
         return $this->getModel()
-                    ->firstOrCreate(compact('path'))->id;
+                    ->newQuery()
+                    ->firstOrCreate(compact('path'))
+                    ->getKey();
     }
 }

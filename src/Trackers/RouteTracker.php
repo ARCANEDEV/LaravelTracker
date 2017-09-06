@@ -16,10 +16,11 @@ use Illuminate\Support\Str;
  */
 class RouteTracker extends AbstractTracker implements RouteTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -30,10 +31,11 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
         return $this->makeModel(BindingManager::MODEL_ROUTE);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Check if the route is trackable.
      *
@@ -62,10 +64,11 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
         );
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the current route.
      *
@@ -75,11 +78,10 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      */
     private function trackRoute(Route $route)
     {
-        return $this->getModel()
-                    ->firstOrCreate([
-                        'name'   => $this->getRouteName($route),
-                        'action' => $route->getActionName(),
-                    ])->id;
+        return $this->getModel()->newQuery()->firstOrCreate([
+            'name'   => $this->getRouteName($route),
+            'action' => $route->getActionName(),
+        ])->getKey();
     }
 
     /**
@@ -159,7 +161,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
         if ($model->wasRecentlyCreated)
             $this->trackRoutePathParameters($route, $model);
 
-        return $model->id;
+        return $model->getKey();
     }
 
     /**

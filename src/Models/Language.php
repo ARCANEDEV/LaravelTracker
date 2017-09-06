@@ -16,10 +16,11 @@ use Arcanedev\LaravelTracker\Contracts\Models\Language as LanguageContract;
  */
 class Language extends AbstractModel implements LanguageContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * The table associated with the model.
      *
@@ -36,9 +37,4 @@ class Language extends AbstractModel implements LanguageContract
         'preference',
         'language_range',
     ];
-
-    /* ------------------------------------------------------------------------------------------------
-     |  Relationships
-     | ------------------------------------------------------------------------------------------------
-     */
 }

@@ -2,6 +2,7 @@
 
 use Arcanedev\LaravelTracker\Contracts\Trackers\CookieTracker as CookieTrackerContract;
 use Arcanedev\LaravelTracker\Support\BindingManager;
+use Illuminate\Contracts\Cookie\QueueingFactory;
 use Ramsey\Uuid\Uuid;
 
 /**
@@ -12,10 +13,11 @@ use Ramsey\Uuid\Uuid;
  */
 class CookieTracker extends AbstractTracker implements CookieTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -26,10 +28,11 @@ class CookieTracker extends AbstractTracker implements CookieTrackerContract
         return $this->makeModel(BindingManager::MODEL_COOKIE);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the cookie.
      *
@@ -46,13 +49,16 @@ class CookieTracker extends AbstractTracker implements CookieTrackerContract
         }
 
         return $this->getModel()
-                    ->firstOrCreate(['uuid' => $cookie])->id;
+                    ->newQuery()
+                    ->firstOrCreate(['uuid' => $cookie])
+                    ->getKey();
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the cookie instance.
      *
@@ -60,6 +66,6 @@ class CookieTracker extends AbstractTracker implements CookieTrackerContract
      */
     private function cookie()
     {
-        return $this->make(\Illuminate\Contracts\Cookie\QueueingFactory::class);
+        return $this->make(QueueingFactory::class);
     }
 }

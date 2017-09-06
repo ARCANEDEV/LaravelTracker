@@ -12,10 +12,11 @@ use Exception;
  */
 class ErrorTracker extends AbstractTracker implements ErrorTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -26,10 +27,11 @@ class ErrorTracker extends AbstractTracker implements ErrorTrackerContract
         return $this->makeModel(BindingManager::MODEL_ERROR);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the exception error.
      *
@@ -39,17 +41,17 @@ class ErrorTracker extends AbstractTracker implements ErrorTrackerContract
      */
     public function track(Exception $exception)
     {
-        return $this->getModel()
-                    ->firstOrCreate([
-                        'code'    => $this->getCode($exception),
-                        'message' => $exception->getMessage(),
-                    ])->id;
+        return $this->getModel()->newQuery()->firstOrCreate([
+            'code'    => $this->getCode($exception),
+            'message' => $exception->getMessage(),
+        ])->getKey();
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the code from the exception.
      *

@@ -13,10 +13,11 @@ use Arcanedev\LaravelTracker\Support\BindingManager;
  */
 class DeviceTracker extends AbstractTracker implements DeviceTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters & Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -43,10 +44,11 @@ class DeviceTracker extends AbstractTracker implements DeviceTrackerContract
         return $this->make(UserAgentParser::class);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the device.
      *
@@ -55,13 +57,16 @@ class DeviceTracker extends AbstractTracker implements DeviceTrackerContract
     public function track()
     {
         return $this->getModel()
-                    ->firstOrCreate($this->getCurrentDeviceProperties())->id;
+                    ->newQuery()
+                    ->firstOrCreate($this->getCurrentDeviceProperties())
+                    ->getKey();
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the current device properties.
      *

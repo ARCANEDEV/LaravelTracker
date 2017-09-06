@@ -11,28 +11,36 @@ use Arcanedev\LaravelTracker\Contracts\Detectors\GeoIpDetector as GeoIpDetectorC
  */
 class GeoIpDetector implements GeoIpDetectorContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * @var \Arcanedev\GeoIP\Contracts\GeoIP
      */
-    private $geoip;
+    private $geoIp;
 
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Constructor
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
-    public function __construct(GeoIP $geoip)
+
+    /**
+     * GeoIpDetector constructor.
+     *
+     * @param  \Arcanedev\GeoIP\Contracts\GeoIP  $geoIp
+     */
+    public function __construct(GeoIP $geoIp)
     {
-        $this->geoip = $geoip;
+        $this->geoIp = $geoIp;
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the geoip data.
      *
@@ -43,8 +51,8 @@ class GeoIpDetector implements GeoIpDetectorContract
     public function search($ipAddress)
     {
         try {
-            if ($location = $this->geoip->location($ipAddress)) {
-                return $this->renderData($location);
+            if ($location = $this->geoIp->location($ipAddress)) {
+                return $this->transform($location);
             }
         }
         catch (\Exception $e) {
@@ -54,10 +62,11 @@ class GeoIpDetector implements GeoIpDetectorContract
         return null;
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Render the data.
      *
@@ -65,7 +74,7 @@ class GeoIpDetector implements GeoIpDetectorContract
      *
      * @return array
      */
-    private function renderData($location)
+    private function transform($location)
     {
         return [
             'iso_code'    => $location->iso_code,

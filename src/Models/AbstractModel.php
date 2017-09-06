@@ -9,15 +9,14 @@ use Arcanedev\Support\Bases\Model;
  * @author   ARCANEDEV <arcanedev.maroc@gmail.com>
  *
  * @property  int  id
- *
- * @method  static  \Arcanedev\LaravelTracker\Models\AbstractModel  firstOrCreate(array $attributes, array $values = [])
  */
 abstract class AbstractModel extends Model
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Constructor
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Create a new Eloquent model instance.
      *

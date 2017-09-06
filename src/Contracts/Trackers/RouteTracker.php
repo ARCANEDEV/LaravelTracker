@@ -1,4 +1,5 @@
 <?php namespace Arcanedev\LaravelTracker\Contracts\Trackers;
+
 use Illuminate\Http\Request;
 use Illuminate\Routing\Route;
 
@@ -10,10 +11,11 @@ use Illuminate\Routing\Route;
  */
 interface RouteTracker
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Check if the route is trackable.
      *

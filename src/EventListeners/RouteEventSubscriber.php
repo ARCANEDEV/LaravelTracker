@@ -12,17 +12,19 @@ use Illuminate\Routing\Route;
  */
 class RouteEventSubscriber
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /** @var \Arcanedev\LaravelTracker\Contracts\Tracker */
     private $tracker;
 
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Constructor
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * RouteEventSubscriber constructor.
      *
@@ -33,10 +35,11 @@ class RouteEventSubscriber
         $this->tracker = $manager;
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Register the listeners for the subscriber.
      *
@@ -46,8 +49,7 @@ class RouteEventSubscriber
     {
         $class = self::class;
 
-        $events->listen('Illuminate\Routing\Events\RouteMatched', "$class@handle");
-        $events->listen('router.matched',                         "$class@handleOldEvent");
+        $events->listen(RouteMatched::class, "$class@handle");
     }
 
     /**
@@ -58,15 +60,5 @@ class RouteEventSubscriber
     public function handle(RouteMatched $event)
     {
         $this->tracker->trackMatchedRoute($event->route, $event->request);
-    }
-
-    /**
-     * Track the matched route (old event on Laravel 5.1).
-     *
-     * @param  \Illuminate\Routing\Route  $route
-     */
-    public function handleOldEvent(Route $route)
-    {
-        $this->tracker->trackMatchedRoute($route, request());
     }
 }

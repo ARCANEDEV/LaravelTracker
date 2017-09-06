@@ -10,10 +10,11 @@ use Arcanedev\LaravelTracker\Contracts\Models\RefererSearchTerm as RefererSearch
  */
 class RefererSearchTerm extends AbstractModel implements RefererSearchTermContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * The table associated with the model.
      *

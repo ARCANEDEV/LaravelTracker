@@ -12,17 +12,19 @@ use Arcanedev\LaravelTracker\Models\Device;
  */
 class DeviceDetector implements DeviceDetectorContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /** @var \Arcanedev\Agent\Contracts\Agent */
     protected $agent;
 
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Constructor
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * DeviceDetector constructor.
      *
@@ -33,10 +35,11 @@ class DeviceDetector implements DeviceDetectorContract
         $this->agent = $agent;
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Detect kind, model and mobility.
      *
@@ -57,9 +60,14 @@ class DeviceDetector implements DeviceDetectorContract
      */
     public function getDeviceKind()
     {
-        if ($this->isTablet())   return Device::KIND_TABLET;
-        if ($this->isPhone())    return Device::KIND_PHONE;
-        if ($this->isComputer()) return Device::KIND_COMPUTER;
+        if ($this->isTablet())
+            return Device::KIND_TABLET;
+
+        if ($this->isPhone())
+            return Device::KIND_PHONE;
+
+        if ($this->isComputer())
+            return Device::KIND_COMPUTER;
 
         return Device::KIND_UNAVAILABLE;
     }

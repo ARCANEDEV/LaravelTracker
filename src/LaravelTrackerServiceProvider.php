@@ -16,6 +16,7 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      |  Properties
      | -----------------------------------------------------------------
      */
+
     /**
      * Package name.
      *
@@ -27,11 +28,14 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
      |  Main Methods
      | -----------------------------------------------------------------
      */
+
     /**
      * Register the service provider.
      */
     public function register()
     {
+        parent::register();
+
         $this->registerConfig();
         $this->registerProviders([
             Providers\PackagesServiceProvider::class,
@@ -95,12 +99,13 @@ class LaravelTrackerServiceProvider extends PackageServiceProvider
         $this->singleton(Contracts\Detectors\CrawlerDetector::class, function (AppContract $app) {
             /** @var  \Illuminate\Http\Request  $request */
             $request = $app['request'];
-            $crawler = new \Jaybizzle\CrawlerDetect\CrawlerDetect(
-                $request->headers->all(),
-                $request->server('HTTP_USER_AGENT')
-            );
 
-            return new Detectors\CrawlerDetector($crawler);
+            return new Detectors\CrawlerDetector(
+                new \Jaybizzle\CrawlerDetect\CrawlerDetect(
+                    $request->headers->all(),
+                    $request->server('HTTP_USER_AGENT')
+                )
+            );
         });
 
         $this->singleton(Contracts\Detectors\DeviceDetector::class,   Detectors\DeviceDetector::class);

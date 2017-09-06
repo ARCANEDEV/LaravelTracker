@@ -10,15 +10,18 @@ use Arcanedev\Support\ServiceProvider;
  */
 class PackagesServiceProvider extends ServiceProvider
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Register the dependencies.
      */
     public function register()
     {
+        parent::register();
+
         $this->registerProviders([
             \Arcanedev\GeoIP\GeoIPServiceProvider::class,
             \Arcanedev\Agent\AgentServiceProvider::class,

@@ -12,10 +12,11 @@ use Arcanedev\LaravelTracker\Support\BindingManager;
  */
 class UserAgentTracker extends AbstractTracker implements UserAgentTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -36,10 +37,11 @@ class UserAgentTracker extends AbstractTracker implements UserAgentTrackerContra
         return $this->make(UserAgentParser::class);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the user agent.
      *
@@ -48,13 +50,16 @@ class UserAgentTracker extends AbstractTracker implements UserAgentTrackerContra
     public function track()
     {
         return $this->getModel()
-                    ->firstOrCreate($data = $this->prepareData())->id;
+            ->newQuery()
+            ->firstOrCreate($this->prepareData())
+            ->getKey();
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Prepare the data.
      *

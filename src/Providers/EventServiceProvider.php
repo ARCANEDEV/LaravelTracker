@@ -10,10 +10,11 @@ use Arcanedev\Support\Providers\EventServiceProvider as ServiceProvider;
  */
 class EventServiceProvider extends ServiceProvider
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * The event listener mappings for the application.
      *
@@ -32,10 +33,11 @@ class EventServiceProvider extends ServiceProvider
         \Arcanedev\LaravelTracker\EventListeners\RouteEventSubscriber::class,
     ];
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Register the application's event listeners.
      */

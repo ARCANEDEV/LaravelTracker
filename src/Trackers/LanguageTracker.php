@@ -12,10 +12,11 @@ use Arcanedev\LaravelTracker\Support\BindingManager;
  */
 class LanguageTracker extends AbstractTracker implements LanguageTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -34,10 +35,11 @@ class LanguageTracker extends AbstractTracker implements LanguageTrackerContract
         return $this->make(LanguageDetector::class);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the language.
      *
@@ -46,8 +48,9 @@ class LanguageTracker extends AbstractTracker implements LanguageTrackerContract
     public function track()
     {
         return $this->getModel()
+            ->newQuery()
             ->firstOrCreate(
                 $this->getLanguageDetector()->detect()
-            )->id;
+            )->getKey();
     }
 }

@@ -18,12 +18,14 @@ class Tracker implements TrackerContract
      |  Traits
      | -----------------------------------------------------------------
      */
+
     use Traits\TrackersMaker;
 
     /* -----------------------------------------------------------------
      |  Properties
      | -----------------------------------------------------------------
      */
+
     /**
      * The application container.
      *
@@ -93,6 +95,7 @@ class Tracker implements TrackerContract
      |  Constructor
      | -----------------------------------------------------------------
      */
+
     /**
      * Tracker constructor.
      *
@@ -108,6 +111,7 @@ class Tracker implements TrackerContract
      |  Getters & Setters
      | -----------------------------------------------------------------
      */
+
     /**
      * Get the application instance.
      *
@@ -167,6 +171,7 @@ class Tracker implements TrackerContract
      |  Main Methods
      | -----------------------------------------------------------------
      */
+
     /**
      * Start the tracking.
      *
@@ -243,6 +248,7 @@ class Tracker implements TrackerContract
      |  Check Methods
      | -----------------------------------------------------------------
      */
+
     /**
      * Check if the tracker is enabled.
      *
@@ -273,6 +279,7 @@ class Tracker implements TrackerContract
      |  Other Methods
      | -----------------------------------------------------------------
      */
+
     /**
      * Merge visitor data.
      *

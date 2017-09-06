@@ -40,13 +40,6 @@
         }
     },
     "scripts": {
-        "testbench": "composer require --dev \"orchestra/testbench-browser-kit=~3.0\" \"orchestra/database=~3.0\""
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable" : true
+        "testbench": "composer require --dev \"orchestra/testbench-browser-kit=~3.4.0\" \"orchestra/database=~3.4.0\""
+    }
 }

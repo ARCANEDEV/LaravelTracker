@@ -17,10 +17,11 @@ use Arcanedev\LaravelTracker\Contracts\Models\RoutePathParameter as RoutePathPar
  */
 class RoutePathParameter extends AbstractModel implements RoutePathParameterContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * The table associated with the model.
      *

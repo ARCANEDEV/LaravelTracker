@@ -11,10 +11,11 @@ use Arcanedev\LaravelTracker\Support\BindingManager;
  */
 class VisitorActivityTracker extends AbstractTracker implements VisitorActivityTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -25,10 +26,11 @@ class VisitorActivityTracker extends AbstractTracker implements VisitorActivityT
         return $this->makeModel(BindingManager::MODEL_VISITOR_ACTIVITY);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the visitor activity.
      *
@@ -41,6 +43,6 @@ class VisitorActivityTracker extends AbstractTracker implements VisitorActivityT
         $model = $this->getModel()->fill($data);
         $model->save();
 
-        return $model->id;
+        return $model->getKey();
     }
 }

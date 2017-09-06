@@ -1,5 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Contracts\Trackers;
 
+use Exception;
+
 /**
  * Interface  ErrorTracker
  *
@@ -8,10 +10,11 @@
  */
 interface ErrorTracker
 {
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the exception error.
      *
@@ -19,5 +22,5 @@ interface ErrorTracker
      *
      * @return int
      */
-    public function track(\Exception $exception);
+    public function track(Exception $exception);
 }

@@ -13,10 +13,11 @@ use Illuminate\Support\Arr;
  */
 class GeoIpTracker extends AbstractTracker implements GeoIpTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -35,10 +36,11 @@ class GeoIpTracker extends AbstractTracker implements GeoIpTrackerContract
         return $this->make(GeoIpDetector::class);
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the ip address.
      *
@@ -50,7 +52,9 @@ class GeoIpTracker extends AbstractTracker implements GeoIpTrackerContract
     {
         if ($data = $this->getGeoIpDetector()->search($ipAddress)) {
             return $this->getModel()
-                        ->firstOrCreate(Arr::only($data, ['latitude', 'longitude']), $data)->id;
+                ->newQuery()
+                ->firstOrCreate(Arr::only($data, ['latitude', 'longitude']), $data)
+                ->getKey();
         }
 
         return null;

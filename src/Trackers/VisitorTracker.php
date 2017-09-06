@@ -14,17 +14,19 @@ use Ramsey\Uuid\Uuid;
  */
 class VisitorTracker extends AbstractTracker implements VisitorTrackerContract
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /** @var  array */
     private $visitorInfo = [];
 
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Getters and Setters
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /**
      * Get the model.
      *
@@ -79,10 +81,11 @@ class VisitorTracker extends AbstractTracker implements VisitorTrackerContract
         $this->visitorInfo['id'] = $id;
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Track the visitor.
      *
@@ -112,10 +115,11 @@ class VisitorTracker extends AbstractTracker implements VisitorTrackerContract
             : $newData;
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Other Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Other Methods
+     | -----------------------------------------------------------------
      */
+
     /**
      * Update the visitor data.
      *
@@ -151,7 +155,7 @@ class VisitorTracker extends AbstractTracker implements VisitorTrackerContract
      */
     private function checkIfUserChanged(array $data)
     {
-        $model = $this->getModel()->find($this->getVisitorData('id'));
+        $model = $this->getModel()->newQuery()->find($this->getVisitorData('id'));
 
         if (
             ! is_null($model) &&
@@ -247,7 +251,7 @@ class VisitorTracker extends AbstractTracker implements VisitorTrackerContract
 
         /** @var  \Arcanedev\LaravelTracker\Models\Visitor  $visitor */
         if ($this->isVisitorKnown()) {
-            $visitor = $model->find($id = $this->getVisitorData('id'));
+            $visitor = $model->newQuery()->find($id = $this->getVisitorData($model->getKeyName()));
             $visitor->updated_at = Carbon::now();
             $visitor->save();
 
@@ -256,8 +260,10 @@ class VisitorTracker extends AbstractTracker implements VisitorTrackerContract
             return true;
         }
 
-        $visitor = $model->firstOrCreate(Arr::only($this->visitorInfo, ['uuid']), $this->visitorInfo);
-        $this->setVisitorId($visitor->id);
+        $visitor = $model->newQuery()
+            ->firstOrCreate(Arr::only($this->visitorInfo, ['uuid']), $this->visitorInfo);
+
+        $this->setVisitorId($visitor->getKey());
         $this->putSessionData($this->visitorInfo);
 
         return false;

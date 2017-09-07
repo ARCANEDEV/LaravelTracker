@@ -23,7 +23,7 @@ interface RouteTracker
      *
      * @return bool
      */
-    public function isTrackable($route);
+    public function isTrackable(Route $route);
 
     /**
      * Track the matched route.
@@ -31,7 +31,7 @@ interface RouteTracker
      * @param  \Illuminate\Routing\Route  $route
      * @param  \Illuminate\Http\Request   $request
      *
-     * @return mixed
+     * @return int
      */
     public function track(Route $route, Request $request);
 }

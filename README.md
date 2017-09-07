@@ -28,7 +28,7 @@ If you discover any security related issues, please email arcanedev-maroc@gmail.
 
 Any ideas are welcome. Feel free to submit any issues or pull requests, please check the [contribution guidelines](CONTRIBUTING.md).
 
-[badge_laravel]:   https://img.shields.io/badge/For-Laravel%205.x-orange.svg?style=flat-square
+[badge_laravel]:   https://img.shields.io/badge/Laravel-5.4%20to%205.5-orange.svg?style=flat-square
 [badge_license]:   https://img.shields.io/packagist/l/arcanedev/laravel-tracker.svg?style=flat-square
 
 [badge_build]:     https://img.shields.io/travis/ARCANEDEV/LaravelTracker.svg?style=flat-square

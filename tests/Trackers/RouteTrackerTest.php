@@ -65,7 +65,19 @@ class RouteTrackerTest extends TestCase
     /** @test */
     public function it_can_track()
     {
-        // TODO: Add database assertions
+        $route = $this->makeContactRoute();
+
+        $this->assertSame(1, $this->tracker->track($route, request()));
+
+        $routes = \Arcanedev\LaravelTracker\Models\Route::all();
+
+        $this->assertCount(1, $routes);
+
+        /** @var  \Arcanedev\LaravelTracker\Models\Route  $route */
+        $route = $routes->first();
+
+        $this->assertSame('public::contact.get', $route->name);
+        $this->assertSame('Closure', $route->action);
     }
 
     /** @test */

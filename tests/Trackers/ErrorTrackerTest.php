@@ -8,17 +8,19 @@
  */
 class ErrorTrackerTest extends TestCase
 {
-    /* ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
      |  Properties
-     | ------------------------------------------------------------------------------------------------
+     | -----------------------------------------------------------------
      */
+
     /** @var  \Arcanedev\LaravelTracker\Contracts\Trackers\ErrorTracker */
     private $tracker;
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Main Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Main Methods
+     | -----------------------------------------------------------------
      */
+
     public function setUp()
     {
         parent::setUp();
@@ -33,10 +35,11 @@ class ErrorTrackerTest extends TestCase
         parent::tearDown();
     }
 
-    /* ------------------------------------------------------------------------------------------------
-     |  Test Functions
-     | ------------------------------------------------------------------------------------------------
+    /* -----------------------------------------------------------------
+     |  Tests
+     | -----------------------------------------------------------------
      */
+
     /** @test */
     public function it_can_be_instantiated()
     {
@@ -70,10 +73,18 @@ class ErrorTrackerTest extends TestCase
         try {
             $this->call('GET', 'page-not-found');
         }
-        catch (\Exception $e) {
+        catch (\Exception $e) {}
 
-        }
+        $errors = \Arcanedev\LaravelTracker\Models\Error::all();
 
-        // TODO: Complete the test assertions
+        $this->assertCount(1, $errors);
+
+        /** @var  \Arcanedev\LaravelTracker\Models\Error  $error */
+        $error = $errors->first();
+
+        $this->assertSame('404', $error->code);
+        $this->assertSame('', $error->message);
+
+        // TODO: Adding more test assertions ?
     }
 }

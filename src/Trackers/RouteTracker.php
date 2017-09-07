@@ -43,7 +43,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      *
      * @return bool
      */
-    public function isTrackable($route)
+    public function isTrackable(Route $route)
     {
         return ! $this->isInIgnoredRouteNames($route) &&
                ! $this->isInIgnoredUris($route);
@@ -91,7 +91,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      *
      * @return bool
      */
-    private function isInIgnoredRouteNames($route)
+    private function isInIgnoredRouteNames(Route $route)
     {
         return $this->checkPatterns(
             $route->getName(), $this->getConfig('routes.ignore.names', [])
@@ -105,7 +105,7 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
      *
      * @return bool
      */
-    private function isInIgnoredUris($route)
+    private function isInIgnoredUris(Route $route)
     {
         return $this->checkPatterns(
             $route->uri(), $this->getConfig('routes.ignore.uris', [])
@@ -174,11 +174,13 @@ class RouteTracker extends AbstractTracker implements RouteTrackerContract
     {
         $parameters = [];
 
-        foreach ($route->parameters() as $parameter => $value) {
-            $parameters[] = $this->makeModel(BindingManager::MODEL_ROUTE_PATH_PARAMETER)->fill([
-                'parameter' => $parameter,
-                'value'     => $this->checkIfValueIsEloquentModel($value),
-            ]);
+        if ($route->hasParameters()) {
+            foreach ($route->parameters() as $parameter => $value) {
+                $parameters[] = $this->makeModel(BindingManager::MODEL_ROUTE_PATH_PARAMETER)->fill([
+                    'parameter' => $parameter,
+                    'value'     => $this->checkIfValueIsEloquentModel($value),
+                ]);
+            }
         }
 
         if (count($parameters) > 0)

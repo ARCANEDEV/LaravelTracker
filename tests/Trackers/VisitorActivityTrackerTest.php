@@ -49,7 +49,7 @@ class VisitorActivityTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
@@ -68,7 +68,7 @@ class VisitorActivityTrackerTest extends TestCase
             'wants_json'  => false,
         ];
 
-        $this->assertSame(1, $this->tracker->track($activity));
+        static::assertSame(1, $this->tracker->track($activity));
 
         // TODO: add database assertions
     }

@@ -25,14 +25,14 @@ class ExceptionFactoryTest extends TestCase
         foreach ($exceptions as $code => $class) {
             $exception = ExceptionFactory::make($code, 'This is a message');
 
-            $this->assertInstanceOf($class, $exception);
+            static::assertInstanceOf($class, $exception);
         }
     }
 
     /** @test */
     public function it_can_make_default_if_not_supported()
     {
-        $this->assertInstanceOf(
+        static::assertInstanceOf(
             Errors\Error::class,
             ExceptionFactory::make(600, 'Kabooom!!')
         );

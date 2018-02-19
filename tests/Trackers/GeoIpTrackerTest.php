@@ -49,7 +49,7 @@ class GeoIpTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
@@ -58,9 +58,9 @@ class GeoIpTrackerTest extends TestCase
     {
         $ip = '128.101.101.101';
 
-        $this->assertSame(1, $this->tracker->track($ip));
+        static::assertSame(1, $this->tracker->track($ip));
 
-        $this->seeInDatabase('tracker_geoip', [
+        $this->assertDatabaseHas('tracker_geoip', [
             'iso_code'    => 'US',
             'country'     => 'United States',
             'city'        => 'Minneapolis',

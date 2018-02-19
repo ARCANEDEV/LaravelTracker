@@ -49,7 +49,7 @@ class ErrorTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
@@ -58,9 +58,9 @@ class ErrorTrackerTest extends TestCase
     {
         $exception = new \Exception('Page not found exception.', 404);
 
-        $this->assertSame(1, $this->tracker->track($exception));
+        static::assertSame(1, $this->tracker->track($exception));
 
-        $this->seeInDatabase('tracker_errors', [
+        $this->assertDatabaseHas('tracker_errors', [
             'id'      => 1,
             'code'    => $exception->getCode(),
             'message' => $exception->getMessage(),
@@ -77,13 +77,13 @@ class ErrorTrackerTest extends TestCase
 
         $errors = \Arcanedev\LaravelTracker\Models\Error::all();
 
-        $this->assertCount(1, $errors);
+        static::assertCount(1, $errors);
 
         /** @var  \Arcanedev\LaravelTracker\Models\Error  $error */
         $error = $errors->first();
 
-        $this->assertSame('404', $error->code);
-        $this->assertSame('', $error->message);
+        static::assertSame('404', $error->code);
+        static::assertSame('', $error->message);
 
         // TODO: Adding more test assertions ?
     }

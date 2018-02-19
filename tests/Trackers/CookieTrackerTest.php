@@ -49,7 +49,7 @@ class CookieTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
@@ -58,9 +58,9 @@ class CookieTrackerTest extends TestCase
     {
         $uuid = '25769c6c-d34d-4bfe-ba98-e0ee856f3e7a';
 
-        $this->assertSame(1, $this->tracker->track($uuid));
+        static::assertSame(1, $this->tracker->track($uuid));
 
-        $this->seeInDatabase('tracker_cookies', [
+        static::assertDatabaseHas('tracker_cookies', [
             'id'   => 1,
             'uuid' => $uuid,
         ]);

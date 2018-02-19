@@ -52,7 +52,7 @@ class QueryTrackerTest extends TestCase
             ],
         ];
 
-        $this->assertSame(1, $this->tracker->track($queries));
+        static::assertSame(1, $this->tracker->track($queries));
 
         // TODO: Add database assertions
     }

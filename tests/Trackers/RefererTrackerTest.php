@@ -49,7 +49,7 @@ class RefererTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
@@ -59,7 +59,7 @@ class RefererTrackerTest extends TestCase
         $refererUrl = 'http://www.google.com/search?q=laravel+tracking+package';
         $pageUrl    = 'https://github.com/ARCANEDEV/LaravelTracker';
 
-        $this->assertSame(1, $this->tracker->track($refererUrl, $pageUrl));
+        static::assertSame(1, $this->tracker->track($refererUrl, $pageUrl));
 
         // TODO: Add database assertions
     }

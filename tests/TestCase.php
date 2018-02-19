@@ -1,6 +1,6 @@
 <?php namespace Arcanedev\LaravelTracker\Tests;
 
-use Orchestra\Testbench\BrowserKit\TestCase as BaseTestCase;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 
 /**
  * Class     TestCase
@@ -60,24 +60,8 @@ abstract class TestCase extends BaseTestCase
     {
         \Arcanedev\LaravelTracker\Tracker::$runsMigrations = false;
 
-        $this->settingDatabase($app['config']);
         $this->settingConfigs($app['config']);
         $this->settingRoutes($app['router']);
-    }
-
-    /**
-     * Setting the database.
-     *
-     * @param  \Illuminate\Contracts\Config\Repository  $config
-     */
-    private function settingDatabase($config)
-    {
-        $config->set('database.default', 'testing');
-        $config->set('database.connections.testing', [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => '',
-        ]);
     }
 
     /**

@@ -23,11 +23,11 @@ class MigrationsTest extends TestCase
         $src        = $this->getMigrationsSrcPath();
         $dest       = $this->getMigrationsDestPath();
 
-        $this->assertCount(0, $filesystem->allFiles($dest));
+        static::assertCount(0, $filesystem->allFiles($dest));
 
         $this->publishMigrations();
 
-        $this->assertEquals(
+        static::assertEquals(
             count($filesystem->allFiles($src)),
             count($filesystem->allFiles($dest))
         );
@@ -41,7 +41,7 @@ class MigrationsTest extends TestCase
         $this->migrate();
 
         foreach ($this->getTablesNames() as $table) {
-            $this->assertTrue(Schema::hasTable($table), "The table [$table] not found in the database.");
+            static::assertTrue(Schema::hasTable($table), "The table [$table] not found in the database.");
         }
     }
 

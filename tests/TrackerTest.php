@@ -24,6 +24,7 @@ class TrackerTest extends TestCase
     public function setUp()
     {
         parent::setUp();
+
         $this->migrate();
 
         $this->tracker = $this->app->make(\Arcanedev\LaravelTracker\Contracts\Tracker::class);
@@ -51,9 +52,9 @@ class TrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
-        $this->assertTrue($this->tracker->isEnabled());
+        static::assertTrue($this->tracker->isEnabled());
     }
 
     /** @test */
@@ -67,23 +68,23 @@ class TrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
-        $this->assertTrue($this->tracker->isEnabled());
+        static::assertTrue($this->tracker->isEnabled());
     }
 
     /** @test */
     public function it_can_enable_and_disable()
     {
-        $this->assertTrue($this->tracker->isEnabled());
+        static::assertTrue($this->tracker->isEnabled());
 
         $this->tracker->disable();
 
-        $this->assertFalse($this->tracker->isEnabled());
+        static::assertFalse($this->tracker->isEnabled());
 
         $this->tracker->enable();
 
-        $this->assertTrue($this->tracker->isEnabled());
+        static::assertTrue($this->tracker->isEnabled());
     }
 
     /** @test */
@@ -94,9 +95,9 @@ class TrackerTest extends TestCase
 
         $activities = \Arcanedev\LaravelTracker\Models\VisitorActivity::all();
 
-        $this->assertCount(1, $activities);
+        static::assertCount(1, $activities);
 
-        $this->assertNull($activities->first()->error_id);
+        static::assertNull($activities->first()->error_id);
 
         // TODO: Adding more test assertions ?
     }

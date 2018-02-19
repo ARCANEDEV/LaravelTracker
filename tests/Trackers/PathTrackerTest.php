@@ -49,7 +49,7 @@ class PathTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
@@ -57,9 +57,9 @@ class PathTrackerTest extends TestCase
     public function it_can_track()
     {
         $path = 'http://www.arcanedev.net';
-        $this->assertSame(1, $this->tracker->track($path));
+        static::assertSame(1, $this->tracker->track($path));
 
-        $this->seeInDatabase('tracker_paths', [
+        $this->assertDatabaseHas('tracker_paths', [
             'id'   => 1,
             'path' => $path,
         ]);

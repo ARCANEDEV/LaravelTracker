@@ -49,14 +49,14 @@ class UserAgentTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
     /** @test */
     public function it_can_track()
     {
-        $this->assertSame(1, $this->tracker->track());
+        static::assertSame(1, $this->tracker->track());
 
         // TODO: Add database assertions
     }
@@ -72,7 +72,7 @@ class UserAgentTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $parser);
+            static::assertInstanceOf($expected, $parser);
         }
     }
 }

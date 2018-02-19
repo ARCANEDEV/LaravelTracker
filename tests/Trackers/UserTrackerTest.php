@@ -49,7 +49,7 @@ class UserTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
@@ -57,7 +57,7 @@ class UserTrackerTest extends TestCase
     public function it_can_track()
     {
         // No authenticated user
-        $this->assertSame(null, $this->tracker->track());
+        static::assertSame(null, $this->tracker->track());
 
         // TODO: Add an authenticated user
         // TODO: Add database assertions

@@ -18,16 +18,18 @@
     "require": {
         "php":                      ">=7.0",
         "arcanedev/agent":          "~3.0",
-        "arcanedev/geo-ip":         "~2.2",
-        "arcanedev/support":        "~4.2",
+        "arcanedev/geo-ip":         "~2.2.0",
+        "arcanedev/support":        "~4.2.0",
         "jaybizzle/crawler-detect": "~1.2",
         "ramsey/uuid":              "~3.6",
         "snowplow/referer-parser":  "~0.2",
         "ua-parser/uap-php" :       "~3.4"
     },
     "require-dev": {
-        "phpunit/phpcov":  "~4.0",
-        "phpunit/phpunit": "~6.0"
+        "orchestra/testbench": "~3.5.0",
+        "orchestra/database":  "~3.5.0",
+        "phpunit/phpunit":     "~6.0",
+        "phpunit/phpcov":      "~4.0"
     },
     "autoload": {
         "psr-4": {
@@ -43,13 +45,7 @@
         "laravel": {
             "providers": [
                 "Arcanedev\\LaravelTracker\\LaravelTrackerServiceProvider"
-            ],
-            "aliases": {
-                "Tracker": "Arcanedev\\LaravelTracker\\Facades\\Tracker"
-            }
+            ]
         }
-    },
-    "scripts": {
-        "testbench": "composer require --dev \"orchestra/testbench-browser-kit=~3.5.0\" \"orchestra/database=~3.5.0\""
     }
 }

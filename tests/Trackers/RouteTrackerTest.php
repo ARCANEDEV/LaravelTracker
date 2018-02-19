@@ -46,7 +46,7 @@ class RouteTrackerTest extends TestCase
         ];
 
         foreach ($expectations as $expected) {
-            $this->assertInstanceOf($expected, $this->tracker);
+            static::assertInstanceOf($expected, $this->tracker);
         }
     }
 
@@ -55,11 +55,11 @@ class RouteTrackerTest extends TestCase
     {
         $route = $this->makeContactRoute();
 
-        $this->assertTrue($this->tracker->isTrackable($route));
+        static::assertTrue($this->tracker->isTrackable($route));
 
         $route = $this->makeAdminRoute();
 
-        $this->assertFalse($this->tracker->isTrackable($route));
+        static::assertFalse($this->tracker->isTrackable($route));
     }
 
     /** @test */
@@ -67,25 +67,25 @@ class RouteTrackerTest extends TestCase
     {
         $route = $this->makeContactRoute();
 
-        $this->assertSame(1, $this->tracker->track($route, request()));
+        static::assertSame(1, $this->tracker->track($route, request()));
 
         $routes = \Arcanedev\LaravelTracker\Models\Route::all();
 
-        $this->assertCount(1, $routes);
+        static::assertCount(1, $routes);
 
         /** @var  \Arcanedev\LaravelTracker\Models\Route  $route */
         $route = $routes->first();
 
-        $this->assertSame('public::contact.get', $route->name);
-        $this->assertSame('Closure', $route->action);
+        static::assertSame('public::contact.get', $route->name);
+        static::assertSame('Closure', $route->action);
     }
 
     /** @test */
     public function it_can_track_route_with_parameters()
     {
-        $this->route('GET', 'blog::post.show', [1]);
+        $this->get(route('blog::post.show', [1]));
 
-        $this->seeInDatabase('tracker_route_path_parameters', [
+        $this->assertDatabaseHas('tracker_route_path_parameters', [
             'route_path_id' => 1,
             'parameter' => 'post',
             'value' => '1',

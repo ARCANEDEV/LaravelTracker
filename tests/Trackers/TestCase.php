@@ -1,6 +1,7 @@
 <?php namespace Arcanedev\LaravelTracker\Tests\Trackers;
 
 use Arcanedev\LaravelTracker\Tests\TestCase as BaseTestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 /**
  * Class     TestCase

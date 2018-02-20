@@ -32,7 +32,6 @@ abstract class TestCase extends BaseTestCase
     protected function getPackageProviders($app)
     {
         return [
-            \Orchestra\Database\ConsoleServiceProvider::class,
             \Arcanedev\LaravelTracker\LaravelTrackerServiceProvider::class,
         ];
     }
@@ -133,15 +132,13 @@ abstract class TestCase extends BaseTestCase
      */
     protected function migrate()
     {
-        $this->artisan('migrate', [
-            '--database' => 'testing',
-            '--realpath' => $this->getMigrationsSrcPath(),
-        ]);
+        $this->loadMigrationsFrom(
+            $this->getMigrationsSrcPath()
+        );
 
-        $this->artisan('migrate', [
-            '--database' => 'testing',
-            '--realpath' => realpath(__DIR__ . '/fixtures/migrations'),
-        ]);
+        $this->loadMigrationsFrom(
+            realpath(__DIR__ . '/fixtures/migrations')
+        );
     }
 
     /**
@@ -151,7 +148,7 @@ abstract class TestCase extends BaseTestCase
      */
     protected function getMigrationsSrcPath()
     {
-        return realpath(dirname(__DIR__) . '/database/migrations');
+        return realpath(__DIR__.'/../database/migrations');
     }
 
     /**

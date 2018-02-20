@@ -18,7 +18,18 @@ Feel free to check out the [releases](https://github.com/ARCANEDEV/LaravelTracke
 
 ## Features
 
-  - Coming soon&hellip;
+  * Multiple tracking features &hellip;
+  * Well tested with maximum code quality.
+  * Easy setup &amp; configuration.
+  * Laravel `5.1 | 5.2 | 5.3 | 5.4 | 5.5 | 5.6` are supported.
+  * Well documented &amp; IDE Friendly.
+  * Made with :heart: &amp; :coffee:.
+
+## Table of contents
+
+  1. [Installation and Setup](_docs/1-Installation-and-Setup.md)
+  2. [Configuration](_docs/2-Configuration.md)
+  3. [Usage](_docs/3-Usage.md)
 
 ## Security
 
@@ -28,7 +39,7 @@ If you discover any security related issues, please email arcanedev-maroc@gmail.
 
 Any ideas are welcome. Feel free to submit any issues or pull requests, please check the [contribution guidelines](CONTRIBUTING.md).
 
-[badge_laravel]:   https://img.shields.io/badge/Laravel-5.4%20to%205.5-orange.svg?style=flat-square
+[badge_laravel]:   https://img.shields.io/badge/Laravel-5.4%20to%205.6-orange.svg?style=flat-square
 [badge_license]:   https://img.shields.io/packagist/l/arcanedev/laravel-tracker.svg?style=flat-square
 
 [badge_build]:     https://img.shields.io/travis/ARCANEDEV/LaravelTracker.svg?style=flat-square
